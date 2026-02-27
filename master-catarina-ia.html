@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-PT"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Master Prompt - Sales Prospector Catarina IA</title><style>
+:root { --bg:#07090d; --panel:#111827; --card:#1f2937; --line:#374151; --text:#e5e7eb; --muted:#9ca3af; --ok:#22c55e; --warn:#eab308; --todo:#ef4444; --codex:#c084fc; --jules:#38bdf8; }
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}
+header{position:sticky;top:0;background:rgba(7,9,13,.95);backdrop-filter:blur(6px);padding:16px;border-bottom:1px solid var(--line);z-index:3}
+h1{margin:0 0 6px;font-size:24px} .meta{color:var(--muted);font-size:13px}
+.container{padding:18px;max-width:1400px;margin:auto}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 18px}
+button{background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px;cursor:pointer;font-size:12px}
+button.copy{background:#2563eb;border-color:#3b82f6}.project-checklist{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+.cycle{border:1px solid var(--line);border-radius:10px;margin-bottom:14px;overflow:hidden}.cycle>summary{list-style:none;cursor:pointer;padding:12px 14px;background:var(--panel);font-weight:700}
+.phase{border-top:1px solid var(--line)}.phase>summary{list-style:none;cursor:pointer;padding:10px 14px;background:#0f172a;color:#d1d5db}
+.prompt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 14px;background:#0b1220}.prompt{border:1px solid var(--line);border-radius:8px;padding:10px}
+.prompt h4{margin:0 0 8px}.tag{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid}.codex{color:var(--codex);border-color:var(--codex)}.jules{color:var(--jules);border-color:var(--jules)}
+.prompt pre{white-space:pre-wrap;font-size:12px;background:#030712;padding:10px;border-radius:6px;border:1px solid #1f2937;min-height:120px}
+.exec-list{padding:10px 14px 14px;background:#020617}.exec-row{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center;padding:8px;border-bottom:1px dashed #1f2937}
+.exec-row:last-child{border-bottom:none}.exec-row.locked{opacity:.45}.status{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--line)}
+.status.todo{color:var(--todo)} .status.done{color:var(--ok)}
+small{color:var(--muted)}
+</style></head>
+<body>
+<header><h1>MASTER PROMPT · Sales Prospector Catarina IA</h1><div class="meta">ZIP analisado: <strong>SALES PROSPECTOR CATARINA IA.zip</strong> · 10 ciclos + ciclo 0 · 10 fases por ciclo · 10 execuções por fase</div></header>
+<div class="container">
+  <div class="project-checklist">
+    <h3>Checklist macro do projeto</h3>
+    <label><input type="checkbox"> Código extraído do ZIP, organizado e versionado no GitHub</label><br>
+    <label><input type="checkbox"> Prompt Jules + Codex aplicado em todos os ciclos/fases</label><br>
+    <label><input type="checkbox"> Nenhum mock/placeholder/simulação: tudo real e funcional</label><br>
+    <label><input type="checkbox"> Testes e validações reais documentados por execução</label>
+    <div class="toolbar"><button id="copy-all" class="copy">Copiar prompt global</button></div>
+  </div>
+  <div id="app"></div>
+</div>
+<script>
+const CFG = {"slug": "master-catarina-ia", "name": "Sales Prospector Catarina IA", "zip": "SALES PROSPECTOR CATARINA IA.zip", "focus": "Plataforma de prospecção omnichannel com IA", "stack": "React + TypeScript + Vite, API Nest/Node"};
+const STORAGE_KEY = `master_prompt_${CFG.slug}`;
+const state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+function mkExecution(cycle, phase, exec){
+  const owner = exec % 2 === 0 ? 'codex' : 'jules';
+  const ownerLabel = owner.toUpperCase();
+  const checklist = [
+    'Código implementado e commitado no branch da execução',
+    'Teste real executado e evidência adicionada ao relatório',
+    'Sem mock, sem placeholder, sem simulação: funcional em ambiente real'
+  ];
+  const txt = `Projeto: ${CFG.name}
+Zip origem: ${CFG.zip}
+Ciclo ${cycle} · Fase ${phase} · Execução ${exec}
+Responsável: ${ownerLabel}
+Regras obrigatórias:
+- Implementar em código real e funcional
+- Proibido mock/placeholder/fake
+- Só avançar após checklist completo
+Checklist:
+${checklist.map((c,i)=>`[ ] ${i+1}. ${c}`).join('
+')}`;
+  return {id:`c${cycle}p${phase}e${exec}`, cycle, phase, exec, owner, txt};
+}
+
+function buildData(){
+  const out = [];
+  for(let cycle=0; cycle<=10; cycle++){
+    const phases=[];
+    for(let phase=1; phase<=10; phase++){
+      const executions=[];
+      for(let exec=1; exec<=10; exec++) executions.push(mkExecution(cycle,phase,exec));
+      phases.push({phase, executions});
+    }
+    out.push({cycle, phases});
+  }
+  return out;
+}
+
+function phasePrompt(agent, cycle, phase){
+  const role = agent==='jules'
+    ? 'Backend, DevOps, banco de dados, segurança, observabilidade, pipelines e qualidade técnica.'
+    : 'Frontend, UX, integração UI/API, fluxos de usuário, validações e clareza funcional.';
+  return `MASTER PROMPT ${agent.toUpperCase()}
+Projeto: ${CFG.name}
+Zip de referência: ${CFG.zip}
+Ciclo ${cycle} · Fase ${phase}
+Stack alvo: ${CFG.stack}
+Escopo: ${CFG.focus}
+Responsabilidades: ${role}
+
+ENTREGA OBRIGATÓRIA:
+1) Código real no repositório (sem mocks/placeholders).
+2) Checklist de execução 100% marcado antes de avançar.
+3) Testes reais passando e evidências no relatório.
+4) Pronto para produção com logs, erros e monitoramento.`;
+}
+
+function isDone(id){ return state[id]===true; }
+function setDone(id,val){ state[id]=val; localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); render(); }
+
+function copyText(t){ navigator.clipboard?.writeText(t).catch(()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();}); }
+
+function render(){
+  const app=document.getElementById('app');
+  const data=buildData();
+  app.innerHTML='';
+  data.forEach(c=>{
+    const cyc=document.createElement('details'); cyc.className='cycle';
+    cyc.innerHTML=`<summary>Ciclo ${c.cycle} ${c.cycle===0?'(Criação e extração do código do ZIP para GitHub)':''}</summary>`;
+    c.phases.forEach(p=>{
+      const ph=document.createElement('details'); ph.className='phase';
+      ph.innerHTML=`<summary>Fase ${p.phase} · 10 execuções com bloqueio sequencial</summary>`;
+      const pg=document.createElement('div'); pg.className='prompt-grid';
+      ['jules','codex'].forEach(agent=>{
+        const box=document.createElement('div'); box.className='prompt';
+        const pr=phasePrompt(agent,c.cycle,p.phase);
+        box.innerHTML=`<h4><span class='tag ${agent}'>${agent.toUpperCase()}</span></h4><pre>${pr}</pre><div><label><input type='checkbox'> Checklist do prompt validado</label> <button class='copy'>Copiar prompt</button></div>`;
+        box.querySelector('button').onclick=()=>copyText(pr);
+        pg.appendChild(box);
+      });
+      const ex=document.createElement('div'); ex.className='exec-list';
+      p.executions.forEach((e,idx)=>{
+        const prev = idx===0 ? true : isDone(p.executions[idx-1].id);
+        const done = isDone(e.id);
+        const row=document.createElement('div'); row.className='exec-row'+(prev?'':' locked');
+        row.innerHTML=`<span class='status ${done?'done':'todo'}'>${done?'Concluído':'Bloqueado até checklist'}</span><div><strong>Execução ${e.exec}</strong> · <small>${e.owner.toUpperCase()}</small><br><small>${e.id}</small></div><label><input type='checkbox' ${done?'checked':''} ${prev?'':'disabled'}> Checklist concluído</label><button class='copy' ${prev?'':'disabled'}>Copiar item</button>`;
+        row.querySelector('input').onchange=(ev)=>setDone(e.id,ev.target.checked);
+        row.querySelector('button').onclick=()=>copyText(e.txt);
+        ex.appendChild(row);
+      });
+      ph.appendChild(pg); ph.appendChild(ex); cyc.appendChild(ph);
+    });
+    app.appendChild(cyc);
+  });
+}
+
+document.getElementById('copy-all').onclick=()=>{
+  const txt = `MASTER PROMPT GLOBAL\nProjeto: ${CFG.name}\nZIP: ${CFG.zip}\nRegra central: concluir checklist por execução para liberar a próxima execução.`;
+  copyText(txt);
+};
+render();
+</script>
+</body></html>
