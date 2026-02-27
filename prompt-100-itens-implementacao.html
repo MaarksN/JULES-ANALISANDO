@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MASTER PROMPT — 100 Itens · 20 Ciclos · 5 Projetos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #080c10;
+  --bg2:      #0d1117;
+  --bg3:      #111820;
+  --border:   #1a2535;
+  --border2:  #243040;
+  --red:      #ff3b3b;
+  --red-dim:  #3a1010;
+  --red-mid:  #7a2020;
+  --yellow:   #f0b429;
+  --yellow-dim:#2e2000;
+  --yellow-mid:#5a3d00;
+  --green:    #2ecc71;
+  --green-dim:#072014;
+  --green-mid:#0e4a28;
+  --jules:    #4fc3f7;
+  --jules-dim:#092436;
+  --codex:    #ce93d8;
+  --codex-dim:#1e0928;
+  --muted:    #3a4a5a;
+  --text:     #c8d8e8;
+  --text2:    #6a8aaa;
+  --glow-r:   0 0 20px rgba(255,59,59,0.3);
+  --glow-y:   0 0 20px rgba(240,180,41,0.3);
+  --glow-g:   0 0 20px rgba(46,204,113,0.3);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── SCANLINES OVERLAY ── */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── HEADER ── */
+.masthead {
+  background: linear-gradient(135deg, #050810 0%, #0a1520 50%, #050810 100%);
+  border-bottom: 1px solid var(--border2);
+  padding: 40px 40px 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.masthead::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 100% at 80% 50%, rgba(79,195,247,0.06) 0%, transparent 70%),
+              radial-gradient(ellipse 40% 80% at 20% 50%, rgba(206,147,216,0.04) 0%, transparent 70%);
+}
+
+.masthead-inner { position: relative; z-index: 1; }
+
+.sys-line {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  margin-bottom: 16px;
+}
+
+.sys-line .blink { animation: blink 1.2s step-end infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.master-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: 0.9;
+  letter-spacing: 0.03em;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.master-title span.accent { color: var(--yellow); }
+
+.master-sub {
+  font-size: 12px;
+  color: var(--text2);
+  letter-spacing: 0.1em;
+  margin-bottom: 30px;
+}
+
+/* ── LEGEND ── */
+.legend {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text2);
+  letter-spacing: 0.1em;
+}
+
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-dot.red { background: var(--red); box-shadow: var(--glow-r); }
+.legend-dot.yellow { background: var(--yellow); box-shadow: var(--glow-y); }
+.legend-dot.green { background: var(--green); box-shadow: var(--glow-g); }
+.legend-dot.jules { background: var(--jules); }
+.legend-dot.codex { background: var(--codex); }
+
+.legend-sep { color: var(--border2); margin: 0 5px; }
+
+/* ── STATS BAR ── */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-bottom: 1px solid var(--border);
+}
+
+.stat-block {
+  padding: 20px 24px;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+
+.stat-block:last-child { border-right: none; }
+
+.stat-label {
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.stat-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  line-height: 1;
+  color: #fff;
+}
+
+.stat-val.red { color: var(--red); }
+.stat-val.yellow { color: var(--yellow); }
+.stat-val.green { color: var(--green); }
+
+.stat-bar-track {
+  height: 3px;
+  background: var(--border);
+  margin-top: 8px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.stat-bar-fill.red { background: var(--red); }
+.stat-bar-fill.yellow { background: var(--yellow); }
+.stat-bar-fill.green { background: var(--green); }
+
+/* ── TOOLBAR ── */
+.toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 14px 40px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.toolbar-label {
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+
+.filter-btn {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.filter-btn:hover {
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+
+.filter-btn.active {
+  background: var(--yellow);
+  border-color: var(--yellow);
+  color: var(--bg);
+  font-weight: 700;
+}
+
+.filter-btn.active.jules-btn { background: var(--jules); border-color: var(--jules); color: var(--bg); }
+.filter-btn.active.codex-btn { background: var(--codex); border-color: var(--codex); color: var(--bg); }
+.filter-btn.active.red-btn { background: var(--red); border-color: var(--red); color: #fff; }
+.filter-btn.active.yellow-btn { background: var(--yellow); border-color: var(--yellow); color: var(--bg); }
+.filter-btn.active.green-btn { background: var(--green); border-color: var(--green); color: var(--bg); }
+
+.toolbar-sep { width: 1px; height: 20px; background: var(--border); margin: 0 6px; }
+
+.reset-btn {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--red-mid);
+  color: var(--red);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.1em;
+}
+
+.reset-btn:hover { background: var(--red-dim); }
+
+/* ── PHASE 0 ── */
+.phase-zero {
+  margin: 30px 40px;
+  border: 1px solid var(--yellow);
+  background: linear-gradient(135deg, #0a0c00 0%, #0d1000 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.phase-zero::before {
+  content: 'FASE 0';
+  position: absolute;
+  right: 30px; top: 20px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 80px;
+  color: rgba(240,180,41,0.05);
+  line-height: 1;
+}
+
+.phase-zero-header {
+  padding: 20px 28px 16px;
+  border-bottom: 1px solid rgba(240,180,41,0.3);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.phase-tag {
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  padding: 3px 10px;
+  text-transform: uppercase;
+}
+
+.phase-tag.yellow { background: var(--yellow-dim); color: var(--yellow); border: 1px solid var(--yellow-mid); }
+.phase-tag.red { background: var(--red-dim); color: var(--red); border: 1px solid var(--red-mid); }
+
+.phase-zero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  color: var(--yellow);
+  letter-spacing: 0.1em;
+}
+
+.phase-zero-body { padding: 24px 28px; }
+
+.phase-zero-desc {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 20px;
+  max-width: 700px;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.project-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 14px;
+}
+
+.project-card-num {
+  font-size: 9px;
+  color: var(--yellow);
+  letter-spacing: 0.2em;
+  margin-bottom: 4px;
+}
+
+.project-card-name {
+  font-size: 11px;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+
+.project-card-repo {
+  font-size: 9px;
+  color: var(--muted);
+  word-break: break-all;
+}
+
+.code-block {
+  background: #020408;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--yellow);
+  padding: 20px 24px;
+  font-size: 12px;
+  line-height: 1.9;
+  overflow-x: auto;
+}
+
+.code-block .comment { color: #2a4a2a; }
+.code-block .cmd { color: var(--green); }
+.code-block .arg { color: var(--jules); }
+.code-block .str { color: var(--yellow); }
+.code-block .section { color: var(--yellow); font-size: 11px; letter-spacing: 0.2em; border-top: 1px solid #1a2010; padding-top: 12px; margin-top: 8px; }
+
+/* ── MAIN CONTENT ── */
+.main { padding: 0 40px 40px; }
+
+/* ── CYCLE BLOCK ── */
+.cycle-block {
+  margin-top: 24px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+}
+
+.cycle-block.hidden { display: none; }
+
+.cycle-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+  user-select: none;
+}
+
+.cycle-header:hover { background: #131d28; }
+
+.cycle-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  color: var(--muted);
+  line-height: 1;
+  min-width: 50px;
+}
+
+.cycle-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.03em;
+}
+
+.cycle-subtitle {
+  font-size: 10px;
+  color: var(--text2);
+  letter-spacing: 0.1em;
+  margin-top: 2px;
+}
+
+.cycle-agents {
+  display: flex;
+  gap: 6px;
+}
+
+.agent-pip {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.agent-pip.jules { background: var(--jules-dim); color: var(--jules); border: 1px solid rgba(79,195,247,0.3); }
+.agent-pip.codex { background: var(--codex-dim); color: var(--codex); border: 1px solid rgba(206,147,216,0.3); }
+
+.cycle-progress {
+  width: 100px;
+  text-align: right;
+}
+
+.cycle-progress-bar {
+  height: 2px;
+  background: var(--border);
+  border-radius: 1px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.cycle-progress-fill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 1px;
+  transition: width 0.4s ease;
+}
+
+.cycle-toggle {
+  font-size: 9px;
+  color: var(--muted);
+  transition: transform 0.2s;
+}
+
+.cycle-block.collapsed .cycle-toggle { transform: rotate(-90deg); }
+
+.cycle-items { padding: 4px 0; }
+.cycle-block.collapsed .cycle-items { display: none; }
+
+/* ── ITEM ROW ── */
+.item-row {
+  display: grid;
+  grid-template-columns: 28px 40px 60px 1fr auto auto;
+  align-items: start;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(26,37,53,0.5);
+  cursor: pointer;
+  transition: background 0.1s;
+  position: relative;
+}
+
+.item-row:last-child { border-bottom: none; }
+.item-row:hover { background: rgba(255,255,255,0.02); }
+
+.item-row.filter-hidden { display: none; }
+
+/* Status states */
+.item-row[data-status="red"] { border-left: 3px solid var(--red); }
+.item-row[data-status="yellow"] { border-left: 3px solid var(--yellow); }
+.item-row[data-status="green"] { border-left: 3px solid var(--green); }
+
+/* Background tints */
+.item-row[data-status="red"] { background: rgba(255,59,59,0.025); }
+.item-row[data-status="yellow"] { background: rgba(240,180,41,0.025); }
+.item-row[data-status="green"] { background: rgba(46,204,113,0.02); }
+
+.item-num {
+  font-size: 10px;
+  color: var(--muted);
+  padding-top: 2px;
+}
+
+.item-status-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-top: 3px;
+  flex-shrink: 0;
+  transition: box-shadow 0.2s, background 0.2s;
+  cursor: pointer;
+}
+
+.item-row[data-status="red"] .item-status-dot {
+  background: var(--red);
+  box-shadow: var(--glow-r);
+}
+
+.item-row[data-status="yellow"] .item-status-dot {
+  background: var(--yellow);
+  box-shadow: var(--glow-y);
+}
+
+.item-row[data-status="green"] .item-status-dot {
+  background: var(--green);
+  box-shadow: var(--glow-g);
+}
+
+.item-agent {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  padding: 2px 7px;
+  text-transform: uppercase;
+  align-self: start;
+  margin-top: 1px;
+}
+
+.item-agent.jules { color: var(--jules); background: var(--jules-dim); border: 1px solid rgba(79,195,247,0.2); }
+.item-agent.codex { color: var(--codex); background: var(--codex-dim); border: 1px solid rgba(206,147,216,0.2); }
+
+.item-content { flex: 1; min-width: 0; }
+
+.item-title {
+  font-size: 12px;
+  color: #e0eef8;
+  font-weight: 600;
+  line-height: 1.4;
+  transition: color 0.2s;
+}
+
+.item-row[data-status="green"] .item-title {
+  color: rgba(46,204,113,0.7);
+  text-decoration: line-through;
+  text-decoration-color: rgba(46,204,113,0.3);
+}
+
+.item-desc {
+  font-size: 11px;
+  color: var(--text2);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.item-prompt {
+  font-size: 10px;
+  color: #3a5a3a;
+  margin-top: 6px;
+  padding: 8px 12px;
+  background: #020802;
+  border-left: 2px solid #1a3a1a;
+  display: none;
+  line-height: 1.7;
+}
+
+.item-row.expanded .item-prompt { display: block; }
+
+.item-prompt .prompt-label {
+  font-size: 9px;
+  color: #2a4a2a;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.item-prompt .prompt-text { color: var(--green); }
+
+.item-project {
+  font-size: 9px;
+  color: var(--muted);
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  align-self: start;
+}
+
+.item-expand {
+  font-size: 9px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px 6px;
+  align-self: start;
+  transition: color 0.15s;
+}
+
+.item-expand:hover { color: var(--yellow); }
+.item-row.expanded .item-expand { color: var(--yellow); }
+
+/* Status label tooltip */
+.item-status-label {
+  position: absolute;
+  top: -24px;
+  left: 50px;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  font-size: 9px;
+  color: var(--text2);
+  padding: 2px 8px;
+  letter-spacing: 0.1em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.item-row:hover .item-status-label { opacity: 1; }
+
+/* ── PROJECT PROGRESS SIDEBAR ── */
+.progress-sidebar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin: 20px 40px;
+}
+
+.proj-progress-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 16px;
+}
+
+.proj-progress-name {
+  font-size: 10px;
+  color: var(--text2);
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.proj-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.proj-bar-label {
+  font-size: 9px;
+  width: 14px;
+  flex-shrink: 0;
+}
+
+.proj-bar-label.r { color: var(--red); }
+.proj-bar-label.y { color: var(--yellow); }
+.proj-bar-label.g { color: var(--green); }
+
+.proj-bar-track {
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.proj-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.proj-bar-count {
+  font-size: 10px;
+  width: 20px;
+  text-align: right;
+}
+
+.proj-bar-count.r { color: var(--red); }
+.proj-bar-count.y { color: var(--yellow); }
+.proj-bar-count.g { color: var(--green); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1000px) {
+  .stats-bar { grid-template-columns: repeat(3, 1fr); }
+  .projects-grid { grid-template-columns: repeat(2, 1fr); }
+  .progress-sidebar { grid-template-columns: repeat(2, 1fr); }
+  .item-row { grid-template-columns: 28px 14px 60px 1fr auto; }
+}
+
+@media (max-width: 700px) {
+  .masthead, .main { padding-left: 16px; padding-right: 16px; }
+  .phase-zero { margin: 16px; }
+  .master-title { font-size: 48px; }
+  .stats-bar { grid-template-columns: 1fr 1fr; }
+  .progress-sidebar { grid-template-columns: 1fr; margin: 16px; }
+  .item-row { grid-template-columns: 20px 14px 1fr auto; gap: 8px; }
+  .item-agent { display: none; }
+  .item-project { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════ MASTHEAD ══════ -->
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="sys-line">
+      <span>// SYSTEM BOOT 2026 ·</span>
+      <span class="blink">█</span>
+      <span> MASTER IMPLEMENTATION PROMPT LOADED · 5 PROJECTS · 100 ITEMS · 20 CYCLES</span>
+    </div>
+    <h1 class="master-title">MASTER<br>PROMPT<br><span class="accent">IMPL.</span></h1>
+    <p class="master-sub">// 100 ITENS · 20 CICLOS · JULES + CODEX · FASE 0 = GITHUB SETUP</p>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot red"></span> NÃO IMPLEMENTADO</div>
+      <div class="legend-item"><span class="legend-dot yellow"></span> IMPLEMENTADO — PRECISA MELHORIA</div>
+      <div class="legend-item"><span class="legend-dot green"></span> PRONTO PARA PRODUÇÃO</div>
+      <span class="legend-sep">|</span>
+      <div class="legend-item"><span class="legend-dot jules"></span> JULES</div>
+      <div class="legend-item"><span class="legend-dot codex"></span> CODEX</div>
+      <span class="legend-sep">|</span>
+      <div class="legend-item" style="color:var(--text2); font-size:10px;">▸ Clique no item para ver o prompt · Clique no ● para mudar status</div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════ STATS BAR ══════ -->
+<div class="stats-bar">
+  <div class="stat-block">
+    <div class="stat-label">// Total Items</div>
+    <div class="stat-val" id="stat-total">100</div>
+    <div class="stat-bar-track"><div class="stat-bar-fill green" style="width:100%"></div></div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-label">// Não Impl. ●</div>
+    <div class="stat-val red" id="stat-red">100</div>
+    <div class="stat-bar-track"><div class="stat-bar-fill red" id="bar-red" style="width:100%"></div></div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-label">// Em Melhoria ●</div>
+    <div class="stat-val yellow" id="stat-yellow">0</div>
+    <div class="stat-bar-track"><div class="stat-bar-fill yellow" id="bar-yellow" style="width:0%"></div></div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-label">// Prontos ●</div>
+    <div class="stat-val green" id="stat-green">0</div>
+    <div class="stat-bar-track"><div class="stat-bar-fill green" id="bar-green" style="width:0%"></div></div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-label">// Progresso</div>
+    <div class="stat-val" id="stat-pct">0%</div>
+    <div class="stat-bar-track"><div class="stat-bar-fill green" id="bar-pct" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- ══════ TOOLBAR ══════ -->
+<div class="toolbar">
+  <span class="toolbar-label">Projeto</span>
+  <button class="filter-btn active" data-filter-type="project" data-filter-val="all">TODOS</button>
+  <button class="filter-btn" data-filter-type="project" data-filter-val="vagas">VAGAS</button>
+  <button class="filter-btn" data-filter-type="project" data-filter-val="leads">LEADS</button>
+  <button class="filter-btn" data-filter-type="project" data-filter-val="jus">JUS</button>
+  <button class="filter-btn" data-filter-type="project" data-filter-val="birthub">BIRTHUB</button>
+  <button class="filter-btn" data-filter-type="project" data-filter-val="catarina">CATARINA</button>
+  <button class="filter-btn" data-filter-type="project" data-filter-val="all-projects">TODOS PROJ.</button>
+  <div class="toolbar-sep"></div>
+  <span class="toolbar-label">Agente</span>
+  <button class="filter-btn jules-btn" data-filter-type="agent" data-filter-val="all-agent">TODOS</button>
+  <button class="filter-btn jules-btn" data-filter-type="agent" data-filter-val="jules">JULES</button>
+  <button class="filter-btn codex-btn" data-filter-type="agent" data-filter-val="codex">CODEX</button>
+  <div class="toolbar-sep"></div>
+  <span class="toolbar-label">Status</span>
+  <button class="filter-btn red-btn" data-filter-type="status" data-filter-val="all-status">TODOS</button>
+  <button class="filter-btn red-btn" data-filter-type="status" data-filter-val="red">🔴 NÃO IMPL.</button>
+  <button class="filter-btn yellow-btn" data-filter-type="status" data-filter-val="yellow">🟡 MELHORIA</button>
+  <button class="filter-btn green-btn" data-filter-type="status" data-filter-val="green">🟢 PRONTO</button>
+  <button class="reset-btn" onclick="resetAll()">↺ RESET TUDO</button>
+</div>
+
+<!-- ══════ PHASE 0 ══════ -->
+<div class="phase-zero">
+  <div class="phase-zero-header">
+    <span class="phase-tag yellow">FASE 0</span>
+    <span class="phase-tag red">PRÉ-REQUISITO</span>
+    <span class="phase-zero-title">SETUP DO GITHUB — LER ZIPS E CRIAR REPOSITÓRIOS</span>
+  </div>
+  <div class="phase-zero-body">
+    <p class="phase-zero-desc">
+      Antes de qualquer ciclo de implementação, todos os 5 projetos devem estar em repositórios separados no GitHub com histórico limpo. 
+      O agente deve ler os arquivos ZIP, extrair o conteúdo, criar os repos, fazer o commit inicial e configurar proteção de branches. 
+      <strong style="color:var(--yellow)">Este passo é bloqueante — nenhum ciclo começa sem ele.</strong>
+    </p>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-card-num">PROJ 01</div>
+        <div class="project-card-name">Buscador de Vagas</div>
+        <div class="project-card-repo">github.com/org/buscador-vagas-automatico</div>
+      </div>
+      <div class="project-card">
+        <div class="project-card-num">PROJ 02</div>
+        <div class="project-card-name">Enriquecimento de Leads</div>
+        <div class="project-card-repo">github.com/org/enriquecimento-leads-ia</div>
+      </div>
+      <div class="project-card">
+        <div class="project-card-num">PROJ 03</div>
+        <div class="project-card-name">JUS 2026</div>
+        <div class="project-card-repo">github.com/org/jus-2026-suite-juridica</div>
+      </div>
+      <div class="project-card">
+        <div class="project-card-num">PROJ 04</div>
+        <div class="project-card-name">BirtHub 360</div>
+        <div class="project-card-repo">github.com/org/birthub-360-revops</div>
+      </div>
+      <div class="project-card">
+        <div class="project-card-num">PROJ 05</div>
+        <div class="project-card-name">Catarina IA</div>
+        <div class="project-card-repo">github.com/org/catarina-ia-sales-prospector</div>
+      </div>
+    </div>
+    <div class="code-block">
+<span class="comment"># ═══════════════════════════════════════════════════════════════════</span>
+<span class="comment"># PROMPT PARA JULES — FASE 0: GITHUB SETUP COMPLETO</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════════</span>
+
+<span class="section">## INSTRUÇÃO PARA JULES — FASE 0</span>
+
+<span class="comment">Você vai configurar os repositórios GitHub para os 5 projetos abaixo.</span>
+<span class="comment">Execute EXATAMENTE na ordem descrita. Confirme cada etapa antes de avançar.</span>
+
+<span class="section">### PASSO 1 — EXTRAIR OS ZIPS</span>
+
+<span class="cmd">for</span> <span class="arg">zip</span> in BUSCADOR-DE-VAGAS*.zip ENRIQUECIMENTO*.zip JUS_2026*.zip SAAS-BIRTHUB*.zip SALES_PROSPECTOR*.zip; <span class="cmd">do</span>
+  <span class="cmd">unzip</span> <span class="str">"$zip"</span> -d <span class="str">"./extracted/"</span>
+<span class="cmd">done</span>
+
+<span class="section">### PASSO 2 — CRIAR REPOS VIA GITHUB CLI</span>
+
+<span class="cmd">gh repo create</span> <span class="str">buscador-vagas-automatico</span> --private --description <span class="str">"Job finder automático · Cloudflare Worker + Chrome Extension"</span>
+<span class="cmd">gh repo create</span> <span class="str">enriquecimento-leads-ia</span> --private --description <span class="str">"CRM SPA com enriquecimento via Gemini/GPT · Zero-dependency"</span>
+<span class="cmd">gh repo create</span> <span class="str">jus-2026-suite-juridica</span> --private --description <span class="str">"SaaS jurídico brasileiro com IA · React 19 + Supabase + Gemini"</span>
+<span class="cmd">gh repo create</span> <span class="str">birthub-360-revops</span> --private --description <span class="str">"Revenue Operations · 8 Agentes IA · LangGraph · Monorepo"</span>
+<span class="cmd">gh repo create</span> <span class="str">catarina-ia-sales-prospector</span> --private --description <span class="str">"Sales Prospector · NestJS · Multi-tenant · RAG · Stripe"</span>
+
+<span class="section">### PASSO 3 — COMMIT INICIAL DE CADA PROJETO</span>
+
+<span class="cmd">cd</span> extracted/BUSCADOR-DE-VAGAS-EMPREGO-AUTOMATICO-main
+<span class="cmd">git init</span> && <span class="cmd">git add</span> . && <span class="cmd">git commit</span> -m <span class="str">"feat: initial commit from ZIP — v0.0.1"</span>
+<span class="cmd">git remote add origin</span> <span class="arg">https://github.com/org/buscador-vagas-automatico.git</span>
+<span class="cmd">git push</span> -u origin main
+
+<span class="comment"># Repetir para os outros 4 projetos...</span>
+
+<span class="section">### PASSO 4 — BRANCH PROTECTION</span>
+
+<span class="cmd">gh api</span> repos/org/<span class="arg">buscador-vagas-automatico</span>/branches/main/protection \
+  -X PUT -f required_status_checks=null \
+  -f enforce_admins=false \
+  -F required_pull_request_reviews.required_approving_review_count=1
+
+<span class="section">### PASSO 5 — CRIAR CHECKLIST ISSUE NO GITHUB</span>
+
+<span class="cmd">gh issue create</span> --title <span class="str">"🗺️ MASTER CHECKLIST — 100 Itens de Implementação"</span> \
+  --body <span class="str">"@see: prompt-100-itens-implementacao.html"</span> \
+  --label <span class="str">"roadmap,meta"</span>
+
+<span class="section">### VALIDAÇÃO FINAL</span>
+<span class="comment"># Confirme que todos os repos existem e têm o código correto:</span>
+<span class="cmd">gh repo list</span> --limit 10
+<span class="comment"># Esperado: 5 repos listados com commits recentes</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PROJECT PROGRESS ══════ -->
+<div class="progress-sidebar" id="progress-sidebar">
+  <div class="proj-progress-card" id="prog-vagas">
+    <div class="proj-progress-name">01 · BUSCADOR VAGAS</div>
+    <div class="proj-bar-row"><span class="proj-bar-label r">●</span><div class="proj-bar-track"><div class="proj-bar-fill" style="background:var(--red);width:100%"></div></div><span class="proj-bar-count r" id="pc-vagas-r">20</span></div>
+    <div class="proj-bar-row"><span class="proj-bar-label y">●</span><div class="proj-bar-track"><div class="proj-bar-fill" style="background:var(--yellow);width:0%"></div></div><span class="proj-bar-count y" id="pc-vagas-y">0</span></div>
+    <div class="proj-bar-row"><span class="proj-bar-label g">●</span><div class="proj-bar-track"><div class="proj-bar-fill" style="background:var(--green);width:0%"></div></div><span class="proj-bar-count g" id="pc-vagas-g">0</span></div>
+  </div>
+  <div class="proj-progress-card" id="prog-leads">
+    <div class="proj-progress-name">02 · ENRIQ. LEADS</div>
+    <div class="proj-bar-row"><span class="proj-bar-label r">●</span><div class="proj-bar-track"><div class="proj-bar-fill" style="background:var(--red);width:100%"></div></div><span class="proj-bar-count r" id="pc-leads-r">20</span></div>
+    <div class="proj-bar-row"><span class="proj-bar-label y">●</span><div class="proj-bar-track"><div class="proj-bar-fill" style="background:var(--yellow);width:0%"></div></div><span class="proj-bar-count y" id="pc-leads-y">0</span></div>
+    <div class="proj-bar-row"><span class="proj-bar-label g">●</span><div class="proj-bar-track"><div class="proj-bar-fill" style="background:var(--green);width:0%"></div></div><span class="proj-bar-count g" id="pc-leads-g">0</span></div>
+  </div>
+  <div class="proj-progress-card" id="prog-jus">
+    <div class="proj-progress-name">03 · JUS 2026</div>
+    <div class="proj-bar-row"><span class="proj-bar-label r">●</span><div class="proj-bar-track"><div class="proj-bar-fill" style="background:var(--red);width:100%"></div></div><span class="proj-bar-count r" id="pc-jus-r">20</span></div>
+    <div class="proj-bar-row"><span class="proj-bar-label y">●</span><div class="proj-bar-track"><div class="proj-bar-fill" style="background:var(--yellow);width:0%"></div></div><span class="proj-bar-count y" id="pc-jus-y">0</span></div>
+    <div class="proj-bar-row"><span class="proj-bar-label g">●</span><div class="proj-bar-track"><div class="proj-bar-fill" style="background:var(--green);width:0%"></div></div><span class="proj-bar-count g" id="pc-jus-g">0</span></div>
+  </div>
+  <div class="proj-progress-card" id="prog-birthub">
+    <div class="proj-progress-name">04 · BIRTHUB 360</div>
+    <div class="proj-bar-row"><span class="proj-bar-label r">●</span><div class="proj-bar-track"><div class="proj-bar-fill" style="background:var(--red);width:100%"></div></div><span class="proj-bar-count r" id="pc-birthub-r">20</span></div>
+    <div class="proj-bar-row"><span class="proj-bar-label y">●</span><div class="proj-bar-track"><div class="proj-bar-fill" style="background:var(--yellow);width:0%"></div></div><span class="proj-bar-count y" id="pc-birthub-y">0</span></div>
+    <div class="proj-bar-row"><span class="proj-bar-label g">●</span><div class="proj-bar-track"><div class="proj-bar-fill" style="background:var(--green);width:0%"></div></div><span class="proj-bar-count g" id="pc-birthub-g">0</span></div>
+  </div>
+  <div class="proj-progress-card" id="prog-catarina">
+    <div class="proj-progress-name">05 · CATARINA IA</div>
+    <div class="proj-bar-row"><span class="proj-bar-label r">●</span><div class="proj-bar-track"><div class="proj-bar-fill" style="background:var(--red);width:100%"></div></div><span class="proj-bar-count r" id="pc-catarina-r">20</span></div>
+    <div class="proj-bar-row"><span class="proj-bar-label y">●</span><div class="proj-bar-track"><div class="proj-bar-fill" style="background:var(--yellow);width:0%"></div></div><span class="proj-bar-count y" id="pc-catarina-y">0</span></div>
+    <div class="proj-bar-row"><span class="proj-bar-label g">●</span><div class="proj-bar-track"><div class="proj-bar-fill" style="background:var(--green);width:0%"></div></div><span class="proj-bar-count g" id="pc-catarina-g">0</span></div>
+  </div>
+</div>
+
+<!-- ══════ MAIN CYCLES ══════ -->
+<div class="main" id="cycles-container"></div>
+
+<footer style="background:var(--bg2);border-top:1px solid var(--border);padding:20px 40px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--muted);letter-spacing:0.15em;">
+  <span>// MASTER PROMPT · 100 ITENS · 20 CICLOS · JULES + CODEX · 2026</span>
+  <span id="footer-ts"></span>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA — 100 ITEMS IN 20 CYCLES (5 ITEMS EACH)
+// ═══════════════════════════════════════════════════════
+
+const CYCLES = [
+  {
+    num: '01', title: 'Repositórios & Estrutura Base',
+    subtitle: 'Setup inicial de todos os repos',
+    agents: ['jules', 'codex'],
+    items: [
+      { id: 1, agent: 'jules', project: 'all-projects', title: 'Criar repositórios GitHub para os 5 projetos a partir dos ZIPs',
+        desc: 'Extrair ZIPs, criar repos privados via GitHub CLI, commit inicial com mensagem semântica versionada.',
+        prompt: 'Jules: Extraia os 5 arquivos ZIP do diretório atual. Para cada projeto crie um repositório privado no GitHub usando `gh repo create`. Faça git init, adicione todos os arquivos, e faça o primeiro commit com mensagem "feat: initial commit from ZIP — v0.0.1". Configure a branch main como padrão e habilite proteção de branch (requer PR para merge). Ao final, liste os 5 repos criados com `gh repo list` para confirmar.' },
+      { id: 2, agent: 'jules', project: 'all-projects', title: 'Configurar CI/CD base com GitHub Actions (lint + test)',
+        desc: 'Criar workflow .github/workflows/ci.yml para cada projeto com lint, type-check e testes.',
+        prompt: 'Jules: Para cada um dos 5 projetos, crie o arquivo .github/workflows/ci.yml. O workflow deve executar em push e PR para main. Passos: checkout, setup Node.js 20 (ou Python 3.12 onde aplicável), install dependencies, lint (ESLint/Ruff), type-check (tsc --noEmit onde aplicável), e test. Use cache de dependências para acelerar o pipeline. O workflow deve falhar se lint ou testes falharem.' },
+      { id: 3, agent: 'codex', project: 'all-projects', title: 'Gerar README.md completo com diagrama de arquitetura ASCII',
+        desc: 'README com badges CI, arquitetura em ASCII art, quick start, variáveis de ambiente e contribuição.',
+        prompt: 'Codex: Para cada projeto, reescreva o README.md com: (1) badges de CI status, versão e licença, (2) descrição do produto em 2 parágrafos, (3) diagrama de arquitetura em ASCII art mostrando os componentes principais e fluxo de dados, (4) seção Quick Start com no máximo 3 comandos, (5) tabela completa de variáveis de ambiente, (6) seção de contribuição com link para CONTRIBUTING.md.' },
+      { id: 4, agent: 'jules', project: 'all-projects', title: 'Configurar .env.example e validação de variáveis na inicialização',
+        desc: 'Cada projeto deve validar todas as env vars na startup e falhar com mensagem clara se faltar alguma.',
+        prompt: 'Jules: Para cada projeto: (1) crie/atualize .env.example com TODAS as variáveis necessárias comentadas e com exemplo de valor, (2) implemente validação de env vars na startup usando zod (Node.js) ou pydantic BaseSettings (Python). Se uma variável obrigatória estiver faltando, o processo deve terminar com exit code 1 e mensagem clara: "Missing required env var: NOME_DA_VAR. See .env.example". Nunca deixe undefined silencioso chegar à aplicação.' },
+      { id: 5, agent: 'codex', project: 'all-projects', title: 'Criar CONTRIBUTING.md e PR template padronizados',
+        desc: 'Template de PR com checklist, tipos de commit semântico e instruções de setup local.',
+        prompt: 'Codex: Crie o arquivo .github/PULL_REQUEST_TEMPLATE.md para cada projeto com: checklist de (testes escritos, lint passando, .env.example atualizado, README atualizado se necessário), campo de descrição da mudança, tipo de mudança (feat/fix/chore/docs/refactor), e seção "Como testar". Crie também CONTRIBUTING.md com: setup local em 5 passos, convenção de commits (Conventional Commits), e processo de PR.' }
+    ]
+  },
+  {
+    num: '02', title: 'Segredos & Variáveis de Ambiente',
+    subtitle: 'Zero API keys no frontend',
+    agents: ['jules', 'codex'],
+    items: [
+      { id: 6, agent: 'codex', project: 'leads', title: 'Criar Cloudflare Worker proxy para chamadas Gemini/OpenAI',
+        desc: 'Worker de 50 linhas que recebe requests do frontend e encaminha para IA com keys seguras.',
+        prompt: 'Codex: No projeto Enriquecimento de Leads, crie um Cloudflare Worker em /worker/ai-proxy.js. Ele deve: (1) receber POST /ai/chat com { model, messages, system }, (2) rotear para Gemini ou OpenAI baseado no campo model, (3) usar as API keys como Worker Secrets (nunca no código), (4) implementar rate limit de 20 req/min por IP usando Cloudflare KV, (5) retornar streaming via SSE quando o cliente solicitar o header Accept: text/event-stream. Atualize o frontend para chamar VITE_AI_PROXY_URL em vez das APIs diretamente.' },
+      { id: 7, agent: 'jules', project: 'leads', title: 'Migrar API keys hardcoded do frontend para Worker Secrets',
+        desc: 'Remover GEMINI_API_KEY e OPENAI_API_KEY do código JS e configurar como Cloudflare Secrets.',
+        prompt: 'Jules: No projeto Enriquecimento de Leads, (1) localize todas as ocorrências de GEMINI_API_KEY, OPENAI_API_KEY e APOLLO_API_KEY no código frontend, (2) substitua por chamadas ao Worker proxy, (3) configure as keys como Cloudflare Secrets com `wrangler secret put GEMINI_API_KEY`, (4) adicione ao .gitignore qualquer arquivo que possa conter keys, (5) faça um git grep para garantir que nenhuma key hardcoded permanece. Adicione um teste que verifica que o bundle final não contém strings que parecem API keys (começam com "sk-" ou "AIza").' },
+      { id: 8, agent: 'jules', project: 'jus', title: 'Auditar e mover todas as secrets do JUS 2026 para .env seguro',
+        desc: 'Firebase Admin key, Gemini key e Twilio secret devem estar apenas em variáveis de ambiente.',
+        prompt: 'Jules: No projeto JUS 2026, faça um audit completo de segurança de credenciais: (1) faça grep recursivo por padrões de keys (AIza, sk-, SG., TWILIO_, FIREBASE_), (2) mova todos para variáveis de ambiente, (3) configure Firebase Admin SDK para ler as credenciais do env (não do arquivo service-account.json), (4) adicione *.json e *.pem ao .gitignore, (5) crie um script scripts/audit-secrets.sh que falha se encontrar patterns de API key no código, e adicione-o ao pre-commit hook.' },
+      { id: 9, agent: 'jules', project: 'birthub', title: 'Centralizar gestão de secrets do BirtHub com Docker Secrets',
+        desc: 'No docker-compose, usar secrets ao invés de env vars para credenciais sensíveis.',
+        prompt: 'Jules: No projeto BirtHub 360, migre as credenciais sensíveis (DATABASE_URL com senha, Redis password, LLM API keys) de variáveis de ambiente para Docker Secrets no docker-compose. Crie um diretório /secrets com arquivos individuais. Atualize docker-compose.yml para usar `secrets:` ao invés de `environment:` para credenciais. Nos serviços Node.js/Python, leia as secrets de /run/secrets/nome_da_secret. Documente o processo no README.' },
+      { id: 10, agent: 'codex', project: 'vagas', title: 'Implementar configuração do Worker via URL pública sem expor origins',
+        desc: 'O worker deve aceitar configuração CORS dinâmica sem hardcode de domínios no código.',
+        prompt: 'Codex: No Buscador de Vagas, melhore a segurança do Cloudflare Worker: (1) adicione validação de Origin com allowlist configurável via KV (não hardcoded), (2) implemente CORS headers corretos para permitir apenas origens autorizadas, (3) adicione header Content-Security-Policy no worker, (4) implemente request signing opcional: o frontend pode incluir um HMAC-SHA256 da query no header X-Request-Sig que o worker valida, prevenindo uso não autorizado da API. Documente como adicionar novas origens autorizadas sem redeploy.' }
+    ]
+  },
+  {
+    num: '03', title: 'Database Foundation',
+    subtitle: 'Schemas robustos e índices otimizados',
+    agents: ['jules', 'codex'],
+    items: [
+      { id: 11, agent: 'jules', project: 'jus', title: 'Provisionar Supabase e migrar schema do Firebase para PostgreSQL',
+        desc: 'Substituição de Firestore por Supabase com pgvector, auth integrado e RLS por organização.',
+        prompt: 'Jules: No JUS 2026, execute a migração Firebase → Supabase: (1) crie projeto Supabase via CLI `supabase init`, (2) converta cada Collection do Firestore em uma tabela PostgreSQL com Prisma schema (organizações, usuários, documentos, jurisprudencia, conversas), (3) habilite a extensão pgvector: `CREATE EXTENSION vector`, (4) configure Row Level Security: cada tabela deve ter uma policy `USING (org_id = auth.jwt()->>"org_id")`, (5) escreva um script de migração de dados do Firestore para o novo banco usando firebase-admin + prisma em paralelo.' },
+      { id: 12, agent: 'codex', project: 'catarina', title: 'Adicionar índices compostos faltantes no schema Prisma do Catarina',
+        desc: 'Communication(contactId, createdAt), Document(orgId), Embedding(documentId), PromptVersion(promptId).',
+        prompt: 'Codex: No Catarina IA, adicione ao schema.prisma todos os índices compostos identificados no bolt.md: (1) @@index([contactId, createdAt]) em Communication, (2) @@index([orgId, createdAt]) em Contact, (3) @@index([orgId]) em Document, (4) @@index([documentId]) em Embedding, (5) @@index([promptId]) em PromptVersion. Depois execute `npx prisma migrate dev --name add-missing-indexes` e escreva um teste de performance que valida que as queries mais usadas utilizam índice (EXPLAIN ANALYZE).' },
+      { id: 13, agent: 'jules', project: 'birthub', title: 'Remover Elasticsearch e substituir por pgvector + pg_trgm no BirtHub',
+        desc: 'Reduzir complexidade operacional eliminando Elasticsearch sem perda de funcionalidade de busca.',
+        prompt: 'Jules: No BirtHub 360, elimine a dependência do Elasticsearch: (1) habilite pg_trgm e pgvector no PostgreSQL, (2) crie índice GIN em colunas de texto livre (nome, empresa, notas), (3) crie coluna embedding vector(1536) na tabela de leads, (4) reescreva todas as queries que usavam Elasticsearch para usar pg_trgm (busca textual fuzzy) e pgvector (busca semântica), (5) remova o serviço elasticsearch do docker-compose.yml, (6) atualize os benchmarks para provar que a performance é equivalente até 100k registros.' },
+      { id: 14, agent: 'codex', project: 'leads', title: 'Migrar localStorage para IndexedDB com wrapper tipado',
+        desc: 'IndexedDB suporta até 500MB vs 5MB do localStorage, necessário para listas grandes de leads.',
+        prompt: 'Codex: No Enriquecimento de Leads, substitua localStorage por IndexedDB: (1) crie um wrapper TypeScript (db.js) com métodos get(key), set(key, value), delete(key), getAll(store), query(store, index, value), (2) crie os object stores: leads, settings, audit_log, cada um com índices nas colunas mais consultadas, (3) implemente migração automática de dados existentes do localStorage para IndexedDB na primeira abertura após update, (4) adicione suporte a transações para operações batch, (5) implemente fallback para localStorage se IndexedDB não estiver disponível.' },
+      { id: 15, agent: 'jules', project: 'vagas', title: 'Implementar Cloudflare Durable Objects para persistência de favoritos',
+        desc: 'Favoritos de vagas persistidos na edge por usuário identificado por fingerprint.',
+        prompt: 'Jules: No Buscador de Vagas, adicione Cloudflare Durable Objects para persistir favoritos por usuário: (1) crie a classe UserSession como Durable Object com métodos getFavorites(), addFavorite(job), removeFavorite(id), (2) identifique usuários por fingerprint (hash de User-Agent + timezone + screen size), (3) o frontend deve fazer GET /session/favorites e POST /session/favorites ao invés de usar localStorage, (4) implemente expiração de sessão de 90 dias, (5) atualize wrangler.toml para declarar o Durable Object e adicione testes unitários.' }
+    ]
+  },
+  {
+    num: '04', title: 'Autenticação & Multi-tenancy',
+    subtitle: 'Isolamento real entre organizações',
+    agents: ['jules', 'codex'],
+    items: [
+      { id: 16, agent: 'codex', project: 'catarina', title: 'Reforçar TenantGuard com validação de ownership em cada operação',
+        desc: 'Garantir que nenhum endpoint permita acesso a dados de outra organização.',
+        prompt: 'Codex: No Catarina IA, audite e reforce o isolamento multi-tenant: (1) adicione um decorator @RequireOwnership(model, idParam) que verifica automaticamente se o recurso pertence ao org_id do JWT antes de executar o handler, (2) aplique-o em todos os endpoints de READ/UPDATE/DELETE nos controllers de Contact, Communication, Document, Prompt, (3) escreva testes de integração que tentam acessar recursos de outro tenant e verificam que recebem 403, (4) adicione logging de auditoria quando uma tentativa de acesso cross-tenant é bloqueada.' },
+      { id: 17, agent: 'jules', project: 'jus', title: 'Configurar Row Level Security no Supabase para JUS 2026',
+        desc: 'Políticas RLS garantem isolamento de dados no nível do banco, não só na aplicação.',
+        prompt: 'Jules: No JUS 2026 com Supabase, configure Row Level Security completo: (1) habilite RLS em TODAS as tabelas com `ALTER TABLE x ENABLE ROW LEVEL SECURITY`, (2) crie policy de SELECT: `CREATE POLICY org_isolation ON documents USING (org_id = auth.uid()::text)`, (3) crie policies para INSERT, UPDATE e DELETE também, (4) teste as policies conectando diretamente ao banco com diferentes JWT tokens e verificando que usuário A não vê dados de usuário B mesmo via SQL direto, (5) documente as policies no schema.sql.' },
+      { id: 18, agent: 'codex', project: 'leads', title: 'Implementar auth multi-tenant real com JWT (substituir simulação)',
+        desc: 'A autenticação atual é simulada com código 123456. Implementar JWT real com Supabase Auth.',
+        prompt: 'Codex: No Enriquecimento de Leads, substitua a autenticação simulada por uma real: (1) integre Supabase Auth (ou use Cloudflare D1 + JWT manual para manter zero-server), (2) implemente login com email/senha e geração de JWT, (3) criptografe dados sensíveis no IndexedDB usando a senha do usuário como chave de derivação (PBKDF2), (4) implemente logout que limpa o token e a chave de criptografia da memória, (5) mantenha o 2FA simulado mas mova para TOTP real usando uma lib como otplib.' },
+      { id: 19, agent: 'jules', project: 'birthub', title: 'Implementar RBAC completo no BirtHub com roles por agente',
+        desc: 'Cada membro da equipe tem acesso apenas aos agentes e dados de sua função (SDR, AE, Manager).',
+        prompt: 'Jules: No BirtHub 360, implemente RBAC granular: (1) crie enum Role: OWNER | MANAGER | SDR | AE | BDR | VIEWER, (2) crie tabela permissions mapeando Role → List<Resource:Action>, (3) crie um middleware checkPermission(resource, action) que valida o role do JWT, (4) aplique nos endpoints: SDR só vê leads em stage <= QUALIFIED, AE só vê em stage >= DEMO, Manager vê tudo, (5) no frontend Next.js, use a permissão para esconder/mostrar seções do Sales OS dashboard.' },
+      { id: 20, agent: 'codex', project: 'all-projects', title: 'Padronizar gerenciamento de sessão com Redis em todos os projetos Node.js',
+        desc: 'JUS 2026, BirtHub e Catarina devem usar Redis para invalidação de sessão e blacklist de JWT.',
+        prompt: 'Codex: Para JUS 2026, BirtHub e Catarina, implemente gerenciamento de sessão com Redis: (1) ao fazer logout, adicione o JWT token à blacklist no Redis com TTL = tempo restante até expiração do token, (2) crie um middleware que verifica se o token está na blacklist antes de validar, (3) implemente refresh token rotation: ao usar um refresh token, invalide-o imediatamente e emita um novo par, (4) adicione endpoint POST /auth/logout-all que invalida todos os tokens ativos do usuário.' }
+    ]
+  },
+  {
+    num: '05', title: 'Segurança & Rate Limiting',
+    subtitle: 'Hardening e proteção de produção',
+    agents: ['jules', 'codex'],
+    items: [
+      { id: 21, agent: 'jules', project: 'all-projects', title: 'Adicionar Helmet.js e security headers em todos os servidores Express/Fastify',
+        desc: 'CSP, HSTS, X-Frame-Options, X-Content-Type-Options configurados por ambiente.',
+        prompt: 'Jules: Nos projetos JUS 2026, BirtHub e Catarina, adicione o middleware de segurança: (1) instale e configure helmet com CSP customizado para cada projeto, (2) habilite HSTS em produção, (3) configure rate limiting global com express-rate-limit: 100 req/15min por IP para rotas públicas, 1000 req/15min para rotas autenticadas, (4) adicione middleware para remover o header X-Powered-By, (5) implemente request size limit (10mb) para prevenir payload bombing. Teste com securityheaders.com.' },
+      { id: 22, agent: 'codex', project: 'catarina', title: 'Implementar validação de schema Zod em todos os DTOs do Catarina',
+        desc: 'Substituir validação manual por schemas Zod tipados e reutilizáveis em toda a API.',
+        prompt: 'Codex: No Catarina IA, padronize a validação com Zod: (1) crie schemas Zod para TODOS os DTOs de entrada (CreateContactDto, UpdateLeadDto, SendMessageDto, etc.), (2) configure o NestJS ValidationPipe global para usar Zod, (3) os schemas devem ser exportados do mesmo arquivo que o DTO e reutilizados no frontend para validação client-side, (4) adicione sanitização customizada: trim strings, normalize emails (lowercase), sanitize HTML em campos de texto livre, (5) escreva testes para casos de entrada maliciosa (SQL injection patterns, XSS strings, campos extras).' },
+      { id: 23, agent: 'jules', project: 'vagas', title: 'Configurar WAF rules no Cloudflare para o Buscador de Vagas',
+        desc: 'Rate limit por ASN, bloqueio de bots conhecidos e proteção contra abuso da API de scraping.',
+        prompt: 'Jules: No Buscador de Vagas, configure proteção avançada via Cloudflare Dashboard (ou Terraform): (1) crie regra WAF que bloqueia mais de 50 req/min por ASN para o endpoint /search, (2) adicione challenge para ASNs de datacenter (VPNs, proxies), (3) configure bot fight mode, (4) adicione custom rule que bloqueia requests com User-Agent vazio ou suspeito, (5) implemente no Worker: se o header CF-Threat-Score for > 30, retorne 429 antes de processar. Documente os IDs das regras para reprovisioning.' },
+      { id: 24, agent: 'codex', project: 'jus', title: 'Implementar rate limiting por organização no JUS 2026 baseado no plano',
+        desc: 'Plano Free: 50 req/dia, Pro: 500/dia, Enterprise: ilimitado — aplicado no banco e na API.',
+        prompt: 'Codex: No JUS 2026, implemente quota de uso por plano: (1) crie tabela usage_quota com org_id, date, ai_requests, doc_generated, (2) crie middleware checkQuota() que, antes de executar chamadas de IA, verifica se a organização atingiu o limite do dia baseado no plano (FREE: 50, PRO: 500, ENTERPRISE: -1), (3) se limite atingido, retorne 429 com body { error: "quota_exceeded", limit: 50, current: 51, reset_at: "2026-02-28T00:00:00Z", upgrade_url: "/billing" }, (4) mostre o consumo no dashboard.' },
+      { id: 25, agent: 'jules', project: 'birthub', title: 'Implementar circuit breaker para todas as integrações externas do BirtHub',
+        desc: 'Proteger o sistema de falhas em cascata quando HubSpot, Slack ou outros serviços ficam indisponíveis.',
+        prompt: 'Jules: No BirtHub 360, adicione circuit breakers com opossum.js em todas as integrações externas: (1) instale opossum, (2) crie um factory createCircuitBreaker(fn, name) que configura: timeout 5s, errorThresholdPercentage 50%, resetTimeout 30s, (3) aplique em: HubSpot API, Slack webhooks, envio de email, chamadas LLM, (4) quando o circuit abre, logue o evento e publique uma notificação no BullMQ para retry posterior, (5) adicione endpoint /health/circuits que mostra o estado de cada circuit breaker (closed/open/half-open).' }
+    ]
+  },
+  {
+    num: '06', title: 'Buscador de Vagas — Fontes Oficiais',
+    subtitle: 'APIs reais substituindo scraping frágil',
+    agents: ['codex', 'jules'],
+    items: [
+      { id: 26, agent: 'codex', project: 'vagas', title: 'Integrar Gupy API como fonte primária de vagas',
+        desc: 'Gupy tem API pública JSON para vagas — mais estável que scraping de HTML.',
+        prompt: 'Codex: No Buscador de Vagas, adicione a Gupy como fonte primária no worker/index.js: (1) implemente o adapter GupySource que chama https://portal.api.gupy.io/api/job?jobName=QUERY&city=CITY, (2) normalize a resposta para o schema padrão de vaga do worker { title, company, url, location, date, score }, (3) implemente cache específico de 30min para resultados Gupy no Cloudflare KV, (4) adicione Gupy à lista de sites padrão e documente os campos disponíveis, (5) escreva testes unitários para o adapter com mocks da API.' },
+      { id: 27, agent: 'codex', project: 'vagas', title: 'Integrar Greenhouse e Lever APIs para vagas de empresas tech',
+        desc: 'Greenhouse e Lever são os ATS mais usados em startups brasileiras e internacionais.',
+        prompt: 'Codex: Adicione adapters para Greenhouse e Lever no Buscador de Vagas: (1) Greenhouse: https://boards-api.greenhouse.io/v1/boards/{company}/jobs?content=true — crie adapter que busca as empresas configuradas e indexa todas as vagas abertas, (2) Lever: https://api.lever.co/v0/postings/{company}?mode=json — similar ao Greenhouse, (3) crie uma tabela de empresas conhecidas (array de slugs: greenhouse_boards, lever_slugs) no Worker KV que pode ser atualizada sem redeploy, (4) normalize respostas para o schema padrão.' },
+      { id: 28, agent: 'jules', project: 'vagas', title: 'Implementar Cloudflare Queues para scraping assíncrono e sem bloqueio',
+        desc: 'Requests de scraping nunca bloqueiam a resposta ao usuário — são processados em background.',
+        prompt: 'Jules: No Buscador de Vagas, migre o scraping para processamento assíncrono com Cloudflare Queues: (1) crie uma Queue "scraping-jobs" no wrangler.toml, (2) quando o worker recebe uma busca, retorna imediatamente resultados do cache se disponíveis e enfileira um job para atualizar, (3) o consumer worker processa os scraping jobs com concurrency controlada (máximo 3 sites simultâneos), (4) ao completar, atualiza o KV cache, (5) o frontend pode fazer polling no endpoint /results/{query-hash} para pegar resultados frescos.' },
+      { id: 29, agent: 'codex', project: 'vagas', title: 'Adicionar Workers AI para scoring semântico de relevância',
+        desc: 'Embeddings gratuitos via Cloudflare Workers AI para calcular similaridade semântica.',
+        prompt: 'Codex: No Buscador de Vagas, adicione scoring semântico: (1) use o modelo @cf/baai/bge-small-en-v1.5 do Workers AI (gratuito no plano Workers) para gerar embeddings da query do usuário, (2) para cada vaga retornada, calcule a similaridade cosine entre o embedding da query e um embedding pré-calculado do título+descrição, (3) use esse score como tiebreaker quando dois resultados têm score igual, (4) armazene embeddings de vagas populares no Workers AI Vectorize para reutilização, (5) adicione ao response o campo semantic_score.' },
+      { id: 30, agent: 'jules', project: 'vagas', title: 'Implementar ServiceWorker para notificações push de novas vagas',
+        desc: 'Usuário se inscreve para ser notificado quando surgem vagas para sua busca salva.',
+        prompt: 'Jules: No Buscador de Vagas (online-app), adicione notificações push: (1) registre um ServiceWorker em /sw.js, (2) implemente a solicitação de permissão de notificação após o usuário salvar uma busca, (3) envie a subscription para o Cloudflare Worker via POST /push/subscribe, (4) o Worker armazena a subscription no KV associada à busca, (5) um Cron Trigger diário (wrangler.toml: crons = ["0 8 * * *"]) executa as buscas salvas e envia Web Push para subscriptions com novas vagas usando a Web Push API do Worker.' }
+    ]
+  },
+  {
+    num: '07', title: 'Enriquecimento de Leads — IA & UX',
+    subtitle: 'Pipeline de enriquecimento robusto e rápido',
+    agents: ['codex', 'jules'],
+    items: [
+      { id: 31, agent: 'codex', project: 'leads', title: 'Implementar streaming SSE para respostas de IA no enriquecimento',
+        desc: 'Usuário vê o texto aparecendo em tempo real, sem esperar a resposta completa.',
+        prompt: 'Codex: No Enriquecimento de Leads, implemente streaming de respostas da IA: (1) o Worker proxy deve usar o modo streaming do Gemini (generateContentStream) e retornar Server-Sent Events, (2) no frontend, adicione um EventSource client que exibe o texto enquanto chega, (3) crie uma UI de "typing indicator" com o texto sendo escrito progressivamente no card do lead, (4) adicione um botão "Parar" que cancela o stream, (5) salve a resposta completa no IndexedDB apenas após o stream terminar.' },
+      { id: 32, agent: 'codex', project: 'leads', title: 'Construir fila de enriquecimento em batch com Promise.all limitado',
+        desc: 'Processar 50 leads simultaneamente com concurrency de 3 sem travar o browser.',
+        prompt: 'Codex: No Enriquecimento de Leads, crie um sistema de batch enrichment: (1) adicione botão "Enriquecer Todos" na interface, (2) implemente um scheduler que processa leads em chunks de 3 usando Promise.all (evita timeout e rate limit), (3) mostre uma barra de progresso: "Enriquecendo 12/50 leads...", (4) se um lead falhar, marque-o como erro mas continue o batch, (5) ao final, mostre um resumo: "48 enriquecidos, 2 com erro. Clique para ver os erros."' },
+      { id: 33, agent: 'jules', project: 'leads', title: 'Adicionar cache de consultas CNPJ no Worker KV com TTL de 24h',
+        desc: 'Mesma empresa consultada múltiplas vezes retorna do cache instantaneamente.',
+        prompt: 'Jules: No Worker proxy do Enriquecimento de Leads, adicione cache para consultas CNPJ: (1) antes de chamar a BrasilAPI, verifique se existe `cnpj:{numero_limpo}` no KV, (2) se existir e não tiver expirado (TTL 24h), retorne o cache, (3) se não existir, chame a BrasilAPI, armazene o resultado no KV com `await env.KV.put(key, JSON.stringify(data), {expirationTtl: 86400})`, (4) adicione header X-Cache: HIT | MISS na resposta, (5) crie endpoint GET /cnpj/stats para ver quantas consultas foram servidas do cache.' },
+      { id: 34, agent: 'codex', project: 'leads', title: 'Implementar extração de leads do LinkedIn via clipboard parsing',
+        desc: 'Usuário copia texto de perfil do LinkedIn e o sistema extrai Nome, Cargo, Empresa automaticamente.',
+        prompt: 'Codex: No Enriquecimento de Leads, melhore o importador de texto: (1) quando o usuário colar texto no campo de importação, detecte o formato (LinkedIn profile, email assinatura, vcard), (2) para LinkedIn: extraia nome (primeira linha), cargo (segunda linha), empresa (linha com "na "), local, e URL do perfil se presente, (3) use Gemini para os casos ambíguos: envie o texto colado com o prompt "Extraia em JSON: {nome, cargo, empresa, email, telefone, linkedin_url}. Texto: [...]", (4) mostre preview dos dados extraídos antes de confirmar.' },
+      { id: 35, agent: 'jules', project: 'leads', title: 'Implementar exportação para CSV/Excel com dados criptografados descriptografados',
+        desc: 'Exportar leads com todos os campos, descriptografando email e telefone para o arquivo.',
+        prompt: 'Jules: No Enriquecimento de Leads, implemente exportação segura: (1) adicione botão "Exportar CSV" e "Exportar Excel", (2) ao exportar, descriptografe os campos sensíveis (email, telefone) usando a chave derivada da sessão ativa do usuário, (3) gere o CSV com todos os campos incluindo dados enriquecidos, (4) para Excel, use SheetJS para gerar um .xlsx com formatação básica (header em negrito, colunas auto-width), (5) registre o evento de exportação no log de auditoria com timestamp, usuário e quantidade de registros.' }
+    ]
+  },
+  {
+    num: '08', title: 'JUS 2026 — Geração de Documentos com IA',
+    subtitle: 'O core do produto: petições geradas por IA',
+    agents: ['codex', 'jules'],
+    items: [
+      { id: 36, agent: 'codex', project: 'jus', title: 'Implementar pipeline RAG com corpus de jurisprudência STJ/TJSP',
+        desc: 'Base vetorial de decisões judiciais para contextualizar a geração de petições.',
+        prompt: 'Codex: No JUS 2026, construa o pipeline RAG jurídico: (1) crie um job de ingestão que processa decisões do STJ e TJSP (pode começar com dados públicos CSV), (2) faça chunking dos acórdãos por seção (ementa, fundamentação, dispositivo), (3) gere embeddings com Gemini text-embedding-004 e armazene em pgvector, (4) implemente a função searchJurisprudencia(query: string, topK: 5) que retorna os acórdãos mais relevantes usando similaridade cosine, (5) inclua os acórdãos encontrados como contexto no prompt de geração de petição.' },
+      { id: 37, agent: 'codex', project: 'jus', title: 'Criar endpoint de geração de petição com Gemini streaming',
+        desc: 'Advogado descreve o caso, sistema gera a petição completa com fundamentação legal.',
+        prompt: 'Codex: No JUS 2026, crie a feature principal de geração de petição: (1) endpoint POST /api/documents/generate que recebe { tipo_acao, partes, fatos, pedidos }, (2) o sistema faz RAG para buscar jurisprudência relevante, (3) monta o prompt com template especializado por tipo de ação (ação trabalhista, recurso, habeas corpus, etc.), (4) chama Gemini Pro com streaming e retorna SSE para o frontend, (5) ao finalizar, salva o documento no banco com status DRAFT e associa os acórdãos usados como referências.' },
+      { id: 38, agent: 'jules', project: 'jus', title: 'Configurar BullMQ para geração de documentos longos em background',
+        desc: 'Peças com 10+ páginas são geradas em background com notificação quando prontas.',
+        prompt: 'Jules: No JUS 2026, implemente geração assíncrona para documentos extensos: (1) se o documento estimado for > 3 páginas (detectado pelo tipo e quantidade de fatos), use BullMQ ao invés de resposta direta, (2) retorne imediatamente 202 Accepted com { job_id, status_url }, (3) o worker gera o documento e atualiza o status no Redis, (4) quando completo, envia notificação via Socket.io para o frontend do advogado, (5) o advogado vê um toast "Sua petição de Habeas Corpus foi gerada → Ver documento".' },
+      { id: 39, agent: 'codex', project: 'jus', title: 'Criar extensão TipTap com IA inline (Ctrl+K para sugestão)',
+        desc: 'Advogado seleciona texto na petição, pressiona Ctrl+K, IA sugere melhorias ou completa o trecho.',
+        prompt: 'Codex: No JUS 2026, crie uma extensão customizada para o TipTap: (1) implemente um CommandExtension que captura Ctrl+K com texto selecionado, (2) mostre um mini-popup com opções: "Melhorar texto", "Adicionar fundamentação", "Tornar mais formal", "Resumir", (3) ao selecionar uma opção, chame o backend via fetch SSE e substitua o texto selecionado com o resultado streamado, (4) adicione undo automático se o usuário pressionar Escape durante o streaming, (5) mostre contador de tokens usados no rodapé do editor.' },
+      { id: 40, agent: 'jules', project: 'jus', title: 'Implementar busca de jurisprudência com indexação periódica via Cron',
+        desc: 'Novas decisões do STJ/TJSP são indexadas automaticamente a cada semana.',
+        prompt: 'Jules: No JUS 2026, configure indexação automática de jurisprudência: (1) crie um job BullMQ agendado (cron: toda segunda-feira às 3am), (2) o job chama as APIs públicas do CNJ e TST para buscar decisões recentes, (3) filtra apenas decisões com impacto relevante (excluir decisões monocráticas simples), (4) faz chunking, geração de embedding e upsert no pgvector (upsert por hash do conteúdo para evitar duplicatas), (5) envia relatório semanal por email para o admin: "47 novos acórdãos indexados esta semana".' }
+    ]
+  },
+  {
+    num: '09', title: 'BirtHub 360 — LangGraph Integration',
+    subtitle: 'Orquestração de agentes com grafo de estados',
+    agents: ['codex', 'jules'],
+    items: [
+      { id: 41, agent: 'codex', project: 'birthub', title: 'Instalar e configurar LangGraph como orquestrador de agentes',
+        desc: 'Substituir callbacks manuais por um grafo de estados explícito e auditável.',
+        prompt: 'Codex: No BirtHub 360, migre a orquestração para LangGraph: (1) instale langgraph e langchain no ambiente Python, (2) defina o schema de estado do pipeline: LeadState = { lead_id, stage, score, history: List[Message], next_action, metadata }, (3) crie o grafo com os nós: classify → qualify → demo → close → nurture → won/lost, (4) defina as transições condicionais: se score < 30 → nurture, se stage == DEMO e no_show → reschedule, (5) exporte o grafo como PNG para documentação.' },
+      { id: 42, agent: 'codex', project: 'birthub', title: 'Reescrever SDR Agent como nó LangGraph com ferramentas específicas',
+        desc: 'O SDR agent deve qualificar leads, buscar informações e agendar próximos passos.',
+        prompt: 'Codex: No BirtHub 360, reescreva o SDR Agent como nó LangGraph: (1) defina as ferramentas disponíveis para o SDR: searchLeadInfo(company), updateLeadScore(id, score), scheduleFollowUp(id, date), sendEmail(template, lead), (2) o agente usa model GPT-4o-mini (custo baixo para qualificação), (3) implemente a lógica: recebe LeadState, analisa o histórico, decide a próxima ação, executa a ferramenta, atualiza o estado, (4) cada execução deve ser logada no LangSmith com o trace completo.' },
+      { id: 43, agent: 'jules', project: 'birthub', title: 'Configurar LangSmith para observabilidade de todas as chamadas LLM',
+        desc: 'Trace completo de cada chamada: prompt enviado, tokens usados, custo e latência.',
+        prompt: 'Jules: No BirtHub 360, configure LangSmith para observabilidade: (1) adicione LANGCHAIN_TRACING_V2=true e LANGCHAIN_API_KEY ao .env, (2) configure project name como "birthub-360-prod", (3) em cada execução de agente, adicione metadata: { lead_id, org_id, agent_type, stage }, (4) crie um dashboard customizado no LangSmith com métricas de negócio: taxa de conversão por agente, custo médio por lead, latência média por estágio, (5) configure alertas no LangSmith se o custo diário ultrapassar $50.' },
+      { id: 44, agent: 'codex', project: 'birthub', title: 'Implementar roteamento de modelo em cascata para redução de custo',
+        desc: 'Tarefas simples vão para Haiku/mini, tarefas complexas vão para modelos maiores.',
+        prompt: 'Codex: No BirtHub 360, implemente model routing inteligente: (1) crie um roteador ModelRouter com método selectModel(task_type, complexity_score): retorna o modelo adequado, (2) mapa: CLASSIFY → claude-haiku-3 (< $0.001/call), QUALIFY → gpt-4o-mini, GENERATE_PROPOSAL → claude-sonnet, STRATEGIC_ANALYSIS → claude-opus ou gpt-4o, (3) a complexity_score é calculada pelo tamanho do contexto e tipo de tarefa, (4) adicione tracking de custo real por modelo por lead para validar a economia, (5) meta: reduzir custo de IA em 60% vs usar sempre o modelo maior.' },
+      { id: 45, agent: 'jules', project: 'birthub', title: 'Implementar retry com exponential backoff para falhas de LLM',
+        desc: 'Rate limits e timeouts de LLM são tratados automaticamente sem falhar o pipeline.',
+        prompt: 'Jules: No BirtHub 360, adicione retry robusto para chamadas LLM: (1) crie um decorator @withRetry(maxAttempts=3, baseDelay=1000, factor=2) para Python e equivalente em JS, (2) aplique em todas as chamadas de LLM nos agentes, (3) para erros 429 (rate limit), use o valor de Retry-After do header se disponível, (4) para erros 5xx, use exponential backoff com jitter aleatório para evitar thundering herd, (5) após 3 falhas, publique o job na dead letter queue e notifique o canal de alertas no Slack.' }
+    ]
+  },
+  {
+    num: '10', title: 'BirtHub 360 — Pipeline de Vendas',
+    subtitle: 'Agentes AE e Closer com controle de estado',
+    agents: ['codex', 'codex'],
+    items: [
+      { id: 46, agent: 'codex', project: 'birthub', title: 'Implementar AE Agent com geração de proposta personalizada',
+        desc: 'O agente de Account Executive gera propostas comerciais baseadas no perfil do lead.',
+        prompt: 'Codex: No BirtHub 360, implemente o AE Agent: (1) o agente recebe o LeadState com stage=QUALIFIED, (2) usa ferramentas: getLeadEnrichment(id), getCompanyRevenue(domain), getCaseStudiesBySector(sector), generateProposal(template, lead, case_studies), (3) o prompt é especializado para gerar propostas B2B com: problema identificado, solução proposta, ROI estimado, próximos passos, (4) a proposta é salva como Document no banco com tipo PROPOSAL e enviada por email via SendGrid template, (5) cria um follow-up agendado automaticamente para 3 dias depois.' },
+      { id: 47, agent: 'codex', project: 'birthub', title: 'Criar tracking de custo por lead em tempo real no dashboard',
+        desc: 'Cada lead tem um custo total de IA calculado somando todas as chamadas de todos os agentes.',
+        prompt: 'Codex: No BirtHub 360, implemente cost tracking por lead: (1) adicione tabela ai_usage: { lead_id, agent_type, model, input_tokens, output_tokens, cost_usd, created_at }, (2) após cada chamada LLM, registre o custo (input_tokens * preço_input + output_tokens * preço_output), (3) no dashboard, adicione um card "Custo de IA" com: custo total do mês, custo médio por lead, custo médio por stage, breakdown por agente, (4) adicione alerta se um lead único ultrapassar $5 em custo de IA (possível loop de retry).' },
+      { id: 48, agent: 'codex', project: 'birthub', title: 'Implementar Closer Agent com gerenciamento de objeções',
+        desc: 'IA treina o closer com as objeções mais comuns e estratégias de resposta contextual.',
+        prompt: 'Codex: No BirtHub 360, crie o Closer Agent: (1) crie uma base de conhecimento de objeções comuns e scripts de resposta (ex: "Está caro" → técnica do custo por dia, "Preciso pensar" → urgência específica), (2) o Closer Agent recebe o histórico completo de interações do lead, (3) usa Claude Sonnet para gerar scripts personalizados de fechamento baseados nas objeções específicas desse lead, (4) sugere o timing ideal para follow-up baseado no padrão de resposta do lead (horários que ele respondeu), (5) integra com o calendário para criar evento de "closing call".' },
+      { id: 49, agent: 'jules', project: 'birthub', title: 'Remover Elasticsearch e validar performance com pgvector até 100k leads',
+        desc: 'Benchmark provando que pgvector substitui Elasticsearch para o volume do BirtHub.',
+        prompt: 'Jules: No BirtHub 360, valide a substituição do Elasticsearch por pgvector: (1) crie um script de seeding que insere 100.000 leads fictícios com embeddings reais no PostgreSQL, (2) execute benchmarks de: busca vetorial (top-10 por similaridade), busca textual fuzzy (pg_trgm), busca combinada (vector + filtros de org_id e stage), (3) meça p50, p95, p99 de latência, (4) compare com os logs históricos do Elasticsearch, (5) se pgvector for >= em performance para o P95, remova o Elasticsearch do docker-compose e atualize a documentação.' },
+      { id: 50, agent: 'codex', project: 'birthub', title: 'Implementar Sales OS Dashboard com KPIs em tempo real via WebSocket',
+        desc: 'Dashboard Next.js com métricas ao vivo: pipeline value, deals em cada stage, velocidade de conversão.',
+        prompt: 'Codex: No BirtHub 360 (apps/dashboard), implemente o Sales OS em /sales: (1) crie 4 colunas visuais: LDR → SDR → AE/BDR → Closer, (2) cada coluna mostra os leads em aquele stage com card resumindo: nome, empresa, score, último contato, próxima ação, (3) os cards atualizam em tempo real via Socket.io quando um agente muda o status do lead, (4) no topo, mostre KPIs calculados ao vivo: Pipeline Total ($), Win Rate (%), Average Deal Size ($), Sales Cycle (days), (5) implemente drag-and-drop para mover leads entre stages manualmente.' }
+    ]
+  },
+  {
+    num: '11', title: 'Catarina IA — Resiliência & Circuit Breakers',
+    subtitle: 'O sistema funciona mesmo quando serviços externos falham',
+    agents: ['codex', 'jules'],
+    items: [
+      { id: 51, agent: 'codex', project: 'catarina', title: 'Implementar circuit breaker para HubSpot com fallback graceful',
+        desc: 'Quando HubSpot cai, contatos são salvos localmente e sincronizados quando o serviço volta.',
+        prompt: 'Codex: No Catarina IA, implemente circuit breaker para HubSpot: (1) instale opossum, (2) crie HubSpotCircuitBreaker com fallback que salva operações pendentes numa tabela pending_sync, (3) quando o circuit abre, todas as tentativas de sync vão para a fila ao invés de falhar, (4) crie um job BullMQ que, quando o circuit fecha, processa a fila pending_sync em ordem cronológica, (5) adicione o estado do circuit breaker do HubSpot ao endpoint /health/circuits e ao dashboard de monitoramento.' },
+      { id: 52, agent: 'codex', project: 'catarina', title: 'Implementar Outbox Pattern para garantia de entrega de mensagens',
+        desc: 'Mensagens nunca se perdem mesmo se o WhatsApp ou servidor cair após salvar no banco.',
+        prompt: 'Codex: No Catarina IA, implemente o Outbox Pattern: (1) crie tabela outbox: { id, aggregate_type, aggregate_id, event_type, payload, status: PENDING|SENT|FAILED, attempts, created_at, processed_at }, (2) ao criar qualquer comunicação (WhatsApp, email), salve primeiro no outbox dentro da mesma transação do banco, (3) um job Debezium ou polling a cada 5s lê registros PENDING e os publica no canal correto, (4) em caso de erro, incrementa attempts e, após 5 tentativas, marca como FAILED e alerta, (5) o outbox garante at-least-once delivery.' },
+      { id: 53, agent: 'jules', project: 'catarina', title: 'Adicionar Idempotency Keys em todos os webhook handlers do Catarina',
+        desc: 'Stripe e Twilio reenviam webhooks — o sistema deve processar cada evento exatamente uma vez.',
+        prompt: 'Jules: No Catarina IA, adicione idempotência a todos os webhooks: (1) crie tabela processed_webhooks: { idempotency_key, processed_at, response_body }, (2) no WhatsAppController e StripeController, extraia o ID único do evento (Stripe: event.id, Twilio: MessageSid), (3) antes de processar, verifique se o ID já está na tabela; se sim, retorne 200 com o response original sem reprocessar, (4) se não, processe e salve na tabela com TTL de 30 dias, (5) adicione teste de integração que envia o mesmo webhook 3 vezes e verifica que o efeito colateral ocorreu apenas 1 vez.' },
+      { id: 54, agent: 'codex', project: 'catarina', title: 'Migrar geração de embeddings para job assíncrono com BullMQ',
+        desc: 'Upload de documento não bloqueia a resposta — embedding é gerado em background.',
+        prompt: 'Codex: No Catarina IA, torne a geração de embeddings assíncrona: (1) ao fazer upload de documento, salve no banco com status PENDING_EMBEDDING e retorne 202 imediatamente, (2) publique um job BullMQ { document_id, org_id } na fila embedding-jobs, (3) o worker processa: divide o documento em chunks, gera embeddings via OpenAI/Gemini, salva em Embedding, atualiza o documento para status READY, (4) notifica o frontend via Socket.io: "Documento processado e disponível para busca", (5) adicione retry automático se a API de embeddings falhar.' },
+      { id: 55, agent: 'jules', project: 'catarina', title: 'Configurar OpenTelemetry com traces distribuídos e Sentry',
+        desc: 'Rastrear uma requisição do frontend até o banco passando por múltiplos serviços.',
+        prompt: 'Jules: No Catarina IA, configure observabilidade completa: (1) instale @opentelemetry/sdk-node, @opentelemetry/auto-instrumentations-node, (2) configure o OTel SDK para instrumentar automaticamente: HTTP, Express/NestJS, Prisma, Redis, BullMQ, (3) exporte traces para Jaeger (local) ou Honeycomb (produção), (4) configure Sentry com release tracking e org/user context: Sentry.setUser({ id: member.id, org: member.orgId }), (5) crie um trace customizado para o pipeline de enriquecimento completo que mostra o tempo em cada etapa.' }
+    ]
+  },
+  {
+    num: '12', title: 'Catarina IA — Event Sourcing',
+    subtitle: 'Histórico imutável de cada interação com contato',
+    agents: ['codex', 'jules'],
+    items: [
+      { id: 56, agent: 'codex', project: 'catarina', title: 'Criar tabela CommunicationEvent imutável com append-only',
+        desc: 'Cada interação com um contato é um evento persistido, nunca editado ou deletado.',
+        prompt: 'Codex: No Catarina IA, implemente a base de Event Sourcing para o timeline: (1) crie tabela communication_events: { id UUID PK, org_id, contact_id, event_type (EMAIL_SENT|WHATSAPP_RECEIVED|CALL_MADE|NOTE_ADDED|STATUS_CHANGED), actor_id, payload JSONB, occurred_at TIMESTAMP, created_at TIMESTAMP }, (2) adicione constraint CHECK para garantir que occurred_at nunca é alterado, (3) adicione RLS para isolamento por org_id, (4) crie trigger que impede UPDATE e DELETE na tabela, (5) escreva a função materializeTimeline(contact_id) que constrói o estado atual a partir dos eventos.' },
+      { id: 57, agent: 'codex', project: 'catarina', title: 'Migrar TimelineController para ler de communication_events',
+        desc: 'A timeline exibida ao usuário é derivada dos eventos, não de um campo mutável.',
+        prompt: 'Codex: No Catarina IA, migre o TimelineController para event sourcing: (1) substitua a query atual por uma que lê de communication_events ordenado por occurred_at DESC, (2) adicione a capacidade de "filtrar por tipo": GET /contacts/:id/timeline?types=EMAIL,CALL, (3) implemente cursor-based pagination: cada resposta inclui next_cursor para carregar mais eventos antigos, (4) crie uma view materializada timeline_summary que agrega stats por contato (total de interações, último contato, próxima ação), (5) adicione índice @@index([contact_id, occurred_at]) para a query principal.' },
+      { id: 58, agent: 'jules', project: 'catarina', title: 'Implementar event replay para auditoria e debugging',
+        desc: 'Dado um contact_id e uma data, reconstruir exatamente qual era o estado do lead naquele momento.',
+        prompt: 'Jules: No Catarina IA, implemente event replay: (1) crie endpoint GET /contacts/:id/state-at?timestamp=ISO_DATE que retorna o estado do contato em qualquer ponto do passado, (2) implemente a lógica de replay: filtre communication_events onde occurred_at <= timestamp, aplique os eventos em ordem para reconstruir o estado, (3) adicione endpoint para auditores: GET /audit/contact/:id/changes que retorna um diff between the initial state e o estado atual, mostrando cada mudança com autor e timestamp, (4) use isto para investigar bugs: "o que aconteceu com este lead na sexta-feira?"' },
+      { id: 59, agent: 'codex', project: 'catarina', title: 'Transmitir novos eventos via WebSocket em tempo real para o frontend',
+        desc: 'Quando um colega adiciona uma nota num contato, todos que estão vendo aquele contato veem instantaneamente.',
+        prompt: 'Codex: No Catarina IA, conecte o event sourcing ao WebSocket: (1) após salvar um communication_event, publique o evento no canal Socket.io da organização: `io.to(org_id).emit("contact:event", event)`, (2) no frontend, ao abrir o modal de um contato, subscribe ao canal do org: socket.on("contact:event", handler), (3) se o evento for do contato aberto, adicione-o ao topo da timeline sem reload, (4) adicione indicador de "X pessoas vendo este contato agora" via presence, (5) implemente debounce de 500ms para evitar flood de eventos na UI.' },
+      { id: 60, agent: 'jules', project: 'catarina', title: 'Migrar dados históricos da tabela Communication para communication_events',
+        desc: 'Script de migração que converte registros existentes em eventos com timestamps preservados.',
+        prompt: 'Jules: No Catarina IA, escreva o script de migração histórica: (1) crie migration script em scripts/migrate-to-event-sourcing.ts, (2) para cada registro em Communication, crie um communication_event correspondente com: event_type baseado no campo type, actor_id do campo sentBy, occurred_at do createdAt original, payload contendo todos os campos do registro original, (3) execute em batch de 1000 registros com transaction por batch, (4) verifique ao final que count(communication_events) == count(communication), (5) mantenha a tabela Communication em modo read-only por 30 dias como fallback.' }
+    ]
+  },
+  {
+    num: '13', title: 'Jobs Assíncronos & Background Processing',
+    subtitle: 'Nada bloqueia o usuário, tudo acontece em background',
+    agents: ['jules', 'codex'],
+    items: [
+      { id: 61, agent: 'jules', project: 'all-projects', title: 'Padronizar filas BullMQ com naming convention e monitoramento',
+        desc: 'Todas as filas seguem o padrão {projeto}:{domínio}:{ação} e são visíveis no Bull Board.',
+        prompt: 'Jules: Nos projetos JUS, BirtHub e Catarina, padronize as filas BullMQ: (1) nomeie todas as filas com o padrão {project}:{domain}:{action} (ex: jus:documents:generate, catarina:leads:enrich, birthub:agents:qualify), (2) configure concurrency por fila: críticas (1-3 workers), background (5-10 workers), (3) instale e configure Bull Board em /admin/queues protegido por auth de admin, (4) adicione alertas: se uma fila acumular > 100 jobs pendentes por mais de 5 min, envie alerta no Slack, (5) configure rate limiting por fila para proteger APIs externas.' },
+      { id: 62, agent: 'codex', project: 'jus', title: 'Implementar geração de relatório de produtividade semanal em background',
+        desc: 'Toda segunda-feira às 8h, advogados recebem por email um relatório do escritório.',
+        prompt: 'Codex: No JUS 2026, crie o job de relatório semanal: (1) crie job agendado (cron: 0 8 * * 1) via BullMQ repeat, (2) o job agrega para cada organização: documentos gerados na semana, horas economizadas estimadas (baseado em tipo de documento), faturamento registrado, tarefas pendentes, (3) renderize o email como HTML com uma tabela de métricas e destaques, (4) envie via SendGrid com template transacional, (5) adicione botão de unsubscribe no email que desativa o relatório sem precisar de login.' },
+      { id: 63, agent: 'jules', project: 'all-projects', title: 'Configurar Dead Letter Queue e alertas para jobs falhos',
+        desc: 'Jobs que falham após 3 tentativas vão para DLQ e geram alerta imediato.',
+        prompt: 'Jules: Para JUS, BirtHub e Catarina, configure Dead Letter Queues: (1) em cada fila BullMQ, adicione configuração: { attempts: 3, backoff: { type: "exponential", delay: 2000 } }, (2) após esgotar tentativas, mova o job para uma fila DLQ específica, (3) publique um alerta no Slack quando um job vai para DLQ: { fila, job_id, payload, error, tentativas }, (4) crie um endpoint de admin para re-processar jobs da DLQ manualmente, (5) adicione dashboard no Bull Board mostrando taxa de falha por fila nas últimas 24h.' },
+      { id: 64, agent: 'codex', project: 'leads', title: 'Implementar job agendado de limpeza de dados LGPD no Leads',
+        desc: 'Leads inativos por mais de 2 anos são anonimizados automaticamente conforme LGPD.',
+        prompt: 'Codex: No Enriquecimento de Leads, implemente compliance LGPD automatizado: (1) crie job mensal que identifica leads sem nenhuma interação nos últimos 730 dias, (2) para cada lead identificado, substitua: nome por "Lead Anonimizado", email por hash SHA256, telefone por NULL, empresa por NULL, (3) registre no audit_log: { ação: LGPD_ANONIMIZATION, data, quantidade_registros }, (4) envie email para o admin informando quantos registros foram anonimizados, (5) adicione um relatório de compliance na UI mostrando quando foi a última anonimização e quantos registros foram afetados.' },
+      { id: 65, agent: 'jules', project: 'birthub', title: 'Implementar concurrency limits por tenant nos jobs do BirtHub',
+        desc: 'Um tenant com muitos leads não monopoliza os workers, afetando outros clientes.',
+        prompt: 'Jules: No BirtHub 360, implemente fairness nos workers: (1) ao enfileirar jobs de agentes, adicione o campo org_id ao job, (2) crie um middleware de worker que, antes de processar, verifica quantos jobs desse org_id já estão sendo processados simultaneamente (usando Redis INCR), (3) se o tenant já tem 10 jobs rodando, adie o novo job por 30 segundos ao invés de descartá-lo, (4) configure limite máximo por plano: FREE 2 concurrent, PRO 10, ENTERPRISE 50, (5) monitore o wait time médio por tenant no Grafana.' }
+    ]
+  },
+  {
+    num: '14', title: 'Observabilidade & Monitoramento',
+    subtitle: 'Visibilidade completa de tudo que acontece em produção',
+    agents: ['jules', 'codex'],
+    items: [
+      { id: 66, agent: 'jules', project: 'all-projects', title: 'Integrar Sentry em todos os projetos com contexto de tenant',
+        desc: 'Erros aparecem no Sentry com org_id, user_id e environment para triagem rápida.',
+        prompt: 'Jules: Configure Sentry em JUS, BirtHub e Catarina: (1) instale @sentry/node e @sentry/nextjs onde aplicável, (2) inicialize Sentry no startup com DSN, environment (development/production) e release tag, (3) no middleware de auth, após extrair o JWT, faça Sentry.setUser({ id, org_id, plan }), (4) adicione scope context em operações críticas: Sentry.withScope(scope => { scope.setTag("agent_type", "SDR"); scope.setContext("lead", { id, stage }); }), (5) configure alerts no Sentry: enviar no Slack quando um novo issue aparecer ou quando a taxa de erro subir 50%.' },
+      { id: 67, agent: 'codex', project: 'all-projects', title: 'Criar health check endpoints padronizados (/health, /health/ready, /health/live)',
+        desc: 'Kubernetes e load balancers precisam de endpoints para verificar se o serviço está funcional.',
+        prompt: 'Codex: Para JUS, BirtHub e Catarina, implemente health checks padronizados: (1) GET /health/live — retorna 200 se o processo está rodando, nada mais, (2) GET /health/ready — verifica: conexão com banco (query SELECT 1), conexão com Redis (PING), e se serviços críticos estão operacionais; retorna 200 ou 503, (3) GET /health — retorna JSON detalhado: { status, version, uptime, checks: { database, redis, queue } } com latência de cada check, (4) autentique /health com API key simples para evitar exposição pública.' },
+      { id: 68, agent: 'jules', project: 'all-projects', title: 'Configurar logging estruturado com pino e context de requisição',
+        desc: 'Todos os logs têm request_id, org_id, user_id para correlação em produção.',
+        prompt: 'Jules: Nos projetos Node.js (JUS, BirtHub, Catarina), standardize o logging: (1) instale pino e pino-http, (2) configure o logger base com level variável por env (debug em dev, info em prod), (3) adicione request_id único (UUID v4) a cada requisição via middleware e propagado para todos os logs da request usando AsyncLocalStorage, (4) adicione org_id e user_id ao contexto após autenticação, (5) configure serializers para sanitizar dados sensíveis (remover password, api_keys dos logs), (6) em produção, envie logs para Loki ou CloudWatch.' },
+      { id: 69, agent: 'codex', project: 'birthub', title: 'Criar dashboard Grafana com métricas de negócio do BirtHub',
+        desc: 'Painel com: leads por stage, custo de IA/dia, taxa de conversão, pipeline revenue.',
+        prompt: 'Codex: No BirtHub 360, crie um dashboard de métricas de negócio: (1) configure Prometheus para scraper as métricas da API (/metrics endpoint), (2) instrumente métricas customizadas: leads_by_stage (gauge), ai_cost_usd_total (counter), conversion_rate (gauge), pipeline_value_usd (gauge), agent_execution_duration_seconds (histogram), (3) crie um dashboard Grafana com 6 painéis: pipeline por stage, custo IA por dia, win/loss rate semanal, leads criados por dia, top 5 empresas em pipeline, latência dos agentes por tipo, (4) provisione o dashboard como código (JSON) no repositório.' },
+      { id: 70, agent: 'jules', project: 'vagas', title: 'Adicionar Cloudflare Analytics Engine para métricas do Worker de Vagas',
+        desc: 'Quantas buscas por dia, sites mais consultados, taxa de cache hit, top queries.',
+        prompt: 'Jules: No Buscador de Vagas, adicione analytics com Cloudflare Analytics Engine: (1) no worker, ao processar cada request, escreva um evento: { query, sites, resultCount, cacheHit, duration, userCountry }, (2) configure Analytics Engine no wrangler.toml, (3) crie um dashboard simples em /analytics que lê os dados via API do Analytics Engine e exibe: buscas por hora (linha), top 10 queries (tabela), distribuição de cache hit rate (gauge), resultados por site (barra), (4) proteja com Basic Auth.' }
+    ]
+  },
+  {
+    num: '15', title: 'Testes & Qualidade de Código',
+    subtitle: 'Cobertura mínima de 80% e testes de integração',
+    agents: ['codex', 'jules'],
+    items: [
+      { id: 71, agent: 'codex', project: 'birthub', title: 'Escrever testes unitários para todos os agentes do BirtHub',
+        desc: 'Cada agente LangGraph deve ter testes que verificam transições de estado corretamente.',
+        prompt: 'Codex: No BirtHub 360, escreva testes unitários para os agentes: (1) para cada agente (SDR, AE, Closer, Marketing), crie testes que mockam as chamadas LLM e verificam que: dado um LeadState de entrada, o agente executa as ferramentas corretas e retorna o estado esperado, (2) use pytest fixtures para estados pré-definidos: qualified_lead, hot_lead, cold_lead, no_show_lead, (3) teste as transições condicionais: score < 30 deve ir para nurture, meeting_no_show deve agendar re-tentativa, (4) adicione testes de regressão para bugs encontrados anteriormente.' },
+      { id: 72, agent: 'codex', project: 'catarina', title: 'Escrever testes de integração para isolamento multi-tenant',
+        desc: 'Testes automatizados que verificam que usuário de Org A nunca acessa dados de Org B.',
+        prompt: 'Codex: No Catarina IA, escreva testes de isolamento multi-tenant: (1) use Testcontainers para subir PostgreSQL real nos testes, (2) crie duas organizações (orgA, orgB) com dados diferentes, (3) para cada endpoint de READ (GET /contacts, GET /documents, GET /timeline), verifique que um token de orgA retorna APENAS dados de orgA, (4) para endpoints de WRITE, verifique que orgA não consegue criar dados com org_id de orgB (deve retornar 403), (5) adicione estes testes ao CI e configure para bloquear o merge se falharem.' },
+      { id: 73, agent: 'jules', project: 'all-projects', title: 'Configurar Testcontainers para testes de integração com banco real',
+        desc: 'Testes de integração rodam contra PostgreSQL e Redis reais em containers descartáveis.',
+        prompt: 'Jules: Para JUS, BirtHub e Catarina, configure Testcontainers: (1) instale testcontainers (Node) ou testcontainers (Python), (2) crie um setup global de testes que inicia PostgreSQL e Redis em containers antes dos testes e os destroi depois, (3) crie um helper createTestDatabase() que: sobe o container, roda as migrations Prisma, e retorna uma instância Prisma configurada, (4) configure para que testes paralelos usem databases diferentes (pg_schemas diferentes para isolamento), (5) configure o CI para disponibilizar Docker nos runners do GitHub Actions.' },
+      { id: 74, agent: 'codex', project: 'jus', title: 'Escrever testes E2E para o fluxo de geração de petição do JUS',
+        desc: 'Playwright verifica o fluxo completo: login → criar caso → gerar petição → baixar PDF.',
+        prompt: 'Codex: No JUS 2026, escreva testes E2E com Playwright: (1) crie o teste test_generate_petition.spec.ts, (2) o teste deve: fazer login com usuário de teste, criar um novo caso jurídico, preencher os fatos e pedidos, clicar em "Gerar Petição", aguardar o streaming da resposta (timeout 60s), verificar que o documento aparece no editor TipTap com pelo menos 500 palavras, clicar em "Baixar PDF" e verificar que o download ocorreu, (3) adicione testes para casos de erro: caso sem fatos suficientes, quota excedida, (4) execute no CI em headless mode.' },
+      { id: 75, agent: 'jules', project: 'all-projects', title: 'Configurar coverage reporting e threshold de 80% no CI',
+        desc: 'PRs que reduzem a cobertura abaixo de 80% são automaticamente rejeitadas.',
+        prompt: 'Jules: Nos projetos Node.js, configure code coverage: (1) instale c8 (Node) ou coverage.py (Python), (2) execute testes com cobertura: npx vitest run --coverage, (3) configure threshold mínimo: branches 80%, functions 80%, lines 80%, statements 80%, (4) no CI, após rodar os testes, envie o relatório de coverage para o Codecov ou GitHub Coverage Summary, (5) adicione ao PR template: checkbox "Cobertura de testes mantida >= 80%", e configure o CI para falhar se a cobertura cair abaixo do threshold em qualquer módulo novo.' }
+    ]
+  },
+  {
+    num: '16', title: 'Performance & Otimização',
+    subtitle: 'Cada lista carrega rápido, cada query é eficiente',
+    agents: ['codex', 'jules'],
+    items: [
+      { id: 76, agent: 'codex', project: 'catarina', title: 'Otimizar LeadList com React.memo e comparador customizado',
+        desc: 'O bug documentado no bolt.md: React.memo padrão não funciona quando objetos são recriados a cada fetch.',
+        prompt: 'Codex: No Catarina IA (frontend), corrija a performance do LeadList conforme documentado no bolt.md: (1) implemente React.memo com comparador customizado: primeiro verifica igualdade de function props (onClick callbacks), depois ID e updatedAt, (2) extraia o componente LeadGrid do LeadList e aplique memo nele, (3) use useMemo para pre-computar as versões lowercase de name e company usadas no filtro, (4) use useCallback em todos os handlers passados como props ao LeadGrid, (5) adicione um comentário no código explicando por que o memo com comparador customizado é necessário aqui.' },
+      { id: 77, agent: 'codex', project: 'all-projects', title: 'Implementar cursor-based pagination em todos os endpoints de listagem',
+        desc: 'Substituir offset pagination por cursor para melhor performance em tabelas grandes.',
+        prompt: 'Codex: Para JUS, BirtHub e Catarina, substitua offset por cursor pagination: (1) em todos os endpoints GET que retornam listas (contacts, documents, communications, leads), substitua { page, pageSize } por { cursor?, limit }, (2) retorne no response: { data: [...], nextCursor: string|null, hasMore: bool }, (3) o cursor é um base64 de { id, created_at } do último item retornado, (4) a query usa WHERE id > $cursor ORDER BY id ao invés de OFFSET, (5) atualize o frontend para usar "Load more" ao invés de paginação numerada.' },
+      { id: 78, agent: 'jules', project: 'all-projects', title: 'Configurar compressão gzip/brotli e cache headers para todas as APIs',
+        desc: 'Respostas grandes comprimidas e recursos estáticos com cache long-term.',
+        prompt: 'Jules: Configure compressão e cache em JUS, BirtHub e Catarina: (1) adicione compression middleware (fastify-compress ou express-compression), (2) configure brotli para respostas > 1kb, (3) adicione Cache-Control headers corretos: `no-store` para dados do usuário, `public, max-age=3600` para dados de referência (CNAE, estados), `immutable, max-age=31536000` para assets com hash no nome, (4) configure ETag para GET endpoints de recursos individuais, (5) adicione header Vary: Accept-Encoding onde necessário.' },
+      { id: 79, agent: 'codex', project: 'jus', title: 'Implementar prefetch de embeddings na inicialização do JUS',
+        desc: 'Os embeddings de templates de petição mais comuns são pré-calculados na inicialização do servidor.',
+        prompt: 'Codex: No JUS 2026, implemente prefetch de embeddings: (1) crie uma tabela document_templates com os 20 tipos mais comuns de petição, (2) na inicialização do servidor (onApplicationBootstrap), gere e armazene em memória os embeddings dos templates, (3) quando o advogado começa a descrever um caso, use cosine similarity contra os templates em memória para sugerir o tipo de ação mais adequado antes mesmo de ele terminar de digitar, (4) isso elimina uma chamada de API de embedding e melhora a UX com sugestão quase instantânea.' },
+      { id: 80, agent: 'jules', project: 'catarina', title: 'Adicionar índice HNSW no pgvector do Catarina para busca semântica rápida',
+        desc: 'Índice HNSW é muito mais rápido que ivfflat para o volume de embeddings do Catarina.',
+        prompt: 'Jules: No Catarina IA, otimize o pgvector: (1) substitua o índice ivfflat atual por HNSW: `CREATE INDEX CONCURRENTLY embedding_hnsw_idx ON embeddings USING hnsw (embedding vector_cosine_ops) WITH (m = 16, ef_construction = 64)`, (2) configure o parâmetro de busca: `SET hnsw.ef_search = 100`, (3) faça benchmark comparativo: execute 1000 queries vetoriais com ivfflat e com HNSW, meça p50 e p95, (4) se HNSW for > 20% mais rápido no p95, remova o índice ivfflat, (5) documente os parâmetros escolhidos e o motivo no schema.' }
+    ]
+  },
+  {
+    num: '17', title: 'Billing & Planos',
+    subtitle: 'Monetização correta com Stripe e feature flags',
+    agents: ['codex', 'jules'],
+    items: [
+      { id: 81, agent: 'codex', project: 'catarina', title: 'Implementar Stripe Webhook Handler com idempotência completa',
+        desc: 'Eventos Stripe são processados exatamente uma vez, com retry seguro.',
+        prompt: 'Codex: No Catarina IA, refaça o Stripe webhook handler: (1) valide sempre a assinatura Stripe com stripe.webhooks.constructEvent, (2) implemente idempotência via tabela processed_webhooks usando stripe_event.id como chave, (3) trate os eventos: checkout.session.completed → atualizar plano da org, invoice.payment_failed → enviar email de cobrança falha + bloquear acesso em 3 dias, customer.subscription.deleted → downgrade para FREE e arquivar dados excedentes, (4) responda SEMPRE 200 para o Stripe (erros de negócio são logados, não retornados), (5) escreva testes unitários para cada handler.' },
+      { id: 82, agent: 'codex', project: 'jus', title: 'Criar sistema de feature flags por plano no JUS 2026',
+        desc: 'Cada funcionalidade tem um flag que é habilitado baseado no plano da organização.',
+        prompt: 'Codex: No JUS 2026, implemente feature flags por plano: (1) crie tabela plan_features: { plan: FREE|PRO|ENTERPRISE, feature: string, limit: number|null }, (2) popule com: FREE (3 docs/mês, 1 usuário, sem colaboração), PRO (50 docs/mês, 5 usuários, com colaboração), ENTERPRISE (ilimitado), (3) crie decorator @RequiresFeature("COLLABORATION") e @RequiresQuota("docs", 50) que verificam o plano antes de executar, (4) no frontend, use um hook useFeature("VOICE_CONSULTANT") que retorna { enabled, upgradeRequired } para mostrar/esconder features.' },
+      { id: 83, agent: 'jules', project: 'catarina', title: 'Implementar metering de uso de IA por organização no Catarina',
+        desc: 'Cada chamada de IA consome créditos. Créditos são repostos mensalmente conforme o plano.',
+        prompt: 'Jules: No Catarina IA, implemente usage-based billing para IA: (1) crie tabela credits_ledger: { org_id, delta, reason, balance_after, created_at } — append-only, (2) ao iniciar cada mês, credite automaticamente baseado no plano: FREE=100, PRO=5000, ENTERPRISE=ilimitado, (3) antes de cada chamada de IA, decremente os créditos e verifique se não ficou negativo, (4) mostre o saldo de créditos restantes no dashboard e no header da aplicação, (5) quando créditos < 20%, envie email de aviso; quando = 0, mostre modal de upgrade.' },
+      { id: 84, agent: 'codex', project: 'catarina', title: 'Criar Billing Portal redirect para Stripe Customer Portal',
+        desc: 'Usuário consegue gerenciar assinatura, trocar plano e ver faturas sem sair do Catarina.',
+        prompt: 'Codex: No Catarina IA, integre o Stripe Customer Portal: (1) crie endpoint POST /billing/portal que chama stripe.billingPortal.sessions.create com o customer ID da org e return_url, (2) retorne a URL do portal no response, (3) no frontend, adicione botão "Gerenciar Assinatura" na página de Settings que faz a chamada e redireciona para o portal Stripe, (4) quando o usuário retorna do portal, verifique o plano atualizado e atualize o estado da aplicação, (5) adicione página /billing com: plano atual, próxima cobrança, histórico de faturas (via Stripe API).' },
+      { id: 85, agent: 'jules', project: 'all-projects', title: 'Configurar backups automáticos diários de todos os bancos de dados',
+        desc: 'Backups com retenção de 30 dias, testados mensalmente com restore automático.',
+        prompt: 'Jules: Configure backups automáticos para todos os projetos: (1) JUS e Catarina (Supabase/PostgreSQL): configure pg_dump via GitHub Actions Cron (diário às 2am), envie para S3 ou Supabase Storage com nome {projeto}_{data}.sql.gz, (2) BirtHub (PostgreSQL + Redis): pg_dump para banco + redis-cli SAVE para Redis, (3) implemente retenção automática: delete backups mais antigos que 30 dias, (4) crie um teste mensal automatizado: restaure o backup mais recente num banco temporário e execute a suite de testes, (5) notifique via Slack o sucesso ou falha de cada backup.' }
+    ]
+  },
+  {
+    num: '18', title: 'Developer Experience',
+    subtitle: 'Setup rápido, lint consistente, docs automáticas',
+    agents: ['jules', 'codex'],
+    items: [
+      { id: 86, agent: 'jules', project: 'all-projects', title: 'Configurar husky + lint-staged + commitlint em todos os projetos',
+        desc: 'Commits com mensagem errada e código com lint error são bloqueados antes do push.',
+        prompt: 'Jules: Configure o pre-commit workflow em todos os 5 projetos: (1) instale husky, lint-staged e @commitlint/cli, (2) configure o hook pre-commit para rodar lint-staged: arquivos .ts/.tsx → ESLint --fix + Prettier, arquivos .py → ruff check --fix + black, (3) configure o hook commit-msg para validar a mensagem com Conventional Commits (feat:/fix:/chore:/docs:/refactor:), (4) adicione o hook pre-push para rodar os testes rápidos (não E2E), (5) documente como fazer bypass temporário com git commit --no-verify quando necessário.' },
+      { id: 87, agent: 'codex', project: 'catarina', title: 'Gerar documentação OpenAPI automática para toda a API do Catarina',
+        desc: 'Swagger UI disponível em /api/docs com todos os endpoints, schemas e autenticação.',
+        prompt: 'Codex: No Catarina IA, gere documentação OpenAPI completa: (1) configure @nestjs/swagger e crie o documento com titulo "Catarina IA API", descrição, versão e bearer auth, (2) adicione decoradores @ApiOperation, @ApiResponse, @ApiBody em todos os controllers e DTOs, (3) configure Swagger UI em /api/docs (protegido por auth em produção, aberto em dev), (4) adicione exemplos de request/response em cada endpoint crítico, (5) configure geração automática do cliente TypeScript via openapi-typescript para ser usado pelo frontend.' },
+      { id: 88, agent: 'jules', project: 'all-projects', title: 'Criar Docker Compose unificado para desenvolvimento local completo',
+        desc: 'Um único docker-compose up -d sobe todos os serviços necessários para dev.',
+        prompt: 'Jules: Para cada projeto com backend, crie um docker-compose.dev.yml completo: (1) JUS: api + supabase (pg + auth + storage) + redis + mailhog (email local), (2) BirtHub: api + postgres + redis + worker (BullMQ) + grafana + prometheus + jaeger, (3) Catarina: api + postgres + redis + bull-board + mailhog, (4) adicione um Makefile com targets: make dev (sobe tudo), make logs (segue logs), make reset (apaga volumes e reinicia), make test (roda testes), (5) documente no README o processo: make dev em 30 segundos.' },
+      { id: 89, agent: 'codex', project: 'all-projects', title: 'Escrever runbooks para os 5 cenários de incidente mais comuns',
+        desc: 'Guia passo a passo para: banco offline, API de IA fora, fila travada, rate limit atingido, deployment falho.',
+        prompt: 'Codex: Para cada projeto, crie o arquivo docs/RUNBOOKS.md com runbooks para: (1) Banco offline: como verificar o status, como failover para réplica, como restaurar backup, (2) API de IA indisponível (Gemini/OpenAI): como ativar o fallback para o modelo alternativo, (3) Fila BullMQ travada: como diagnosticar, como limpar jobs travados, como reiniciar workers, (4) Rate limit atingido na API de terceiros: como reduzir throughput, como notificar usuários, (5) Deployment falho: como fazer rollback, como verificar o estado do banco pós-rollback.' },
+      { id: 90, agent: 'jules', project: 'all-projects', title: 'Configurar deploy automatizado com zero-downtime via GitHub Actions',
+        desc: 'Push para main faz deploy automático com health check e rollback automático se falhar.',
+        prompt: 'Jules: Configure CI/CD com zero-downtime para cada projeto: (1) crie .github/workflows/deploy.yml que roda após o CI passar na branch main, (2) para Cloudflare Workers: wrangler deploy com flag --dry-run primeiro, (3) para Node.js/Next.js: deploy para Fly.io ou Railway com rolling deploy (máximo 50% das instâncias substituídas por vez), (4) após deploy, execute smoke tests automáticos: GET /health/ready deve retornar 200, (5) se smoke tests falharem, acione rollback automático: restaure a versão anterior e notifique no Slack.' }
+    ]
+  },
+  {
+    num: '19', title: 'LGPD & Compliance',
+    subtitle: 'Conformidade com a Lei Geral de Proteção de Dados',
+    agents: ['codex', 'jules'],
+    items: [
+      { id: 91, agent: 'codex', project: 'all-projects', title: 'Implementar endpoint de exportação de dados pessoais (Art. 18 LGPD)',
+        desc: 'Usuário pode solicitar todos os dados que o sistema tem sobre ele em formato JSON/CSV.',
+        prompt: 'Codex: Para JUS, BirtHub e Catarina, implemente o direito de portabilidade LGPD: (1) crie endpoint POST /user/data-export que gera um export assíncrono (BullMQ job), (2) o job coleta TODOS os dados do usuário: perfil, organizações, documentos criados, histórico de IA, comunicações, logs de auditoria, (3) empacota em um ZIP com arquivos JSON por categoria, (4) envia link de download seguro por email (expira em 24h), (5) registra no audit_log o evento LGPD_DATA_EXPORT com timestamp.' },
+      { id: 92, agent: 'codex', project: 'all-projects', title: 'Implementar direito ao esquecimento — anonimização de dados (Art. 18 §2)',
+        desc: 'Usuário pode solicitar exclusão de todos seus dados pessoais identificáveis.',
+        prompt: 'Codex: Para JUS, BirtHub e Catarina, implemente o direito ao esquecimento: (1) crie endpoint DELETE /user/account que inicia o processo de exclusão, (2) o processo: cancela assinatura ativa no Stripe, anonimiza dados pessoais (nome → "Usuário Removido", email → hash, telefone → NULL), deleta documentos pessoais (mantém documentos organizacionais), revoga todos os tokens ativos, (3) o processo é assíncrono e o usuário recebe email de confirmação quando completo, (4) mantenha os eventos de auditoria mas anonimize o actor.' },
+      { id: 93, agent: 'jules', project: 'all-projects', title: 'Criar Política de Privacidade e Termos de Serviço gerados e versionados',
+        desc: 'Documentos legais versionados com timestamp de aceite por usuário.',
+        prompt: 'Jules: Para todos os projetos com autenticação: (1) crie tabela legal_acceptance: { user_id, document_type: PRIVACY_POLICY|TERMS, version, accepted_at, ip }, (2) na primeira vez que um usuário autentica, force a exibição dos documentos e solicite aceite explícito (não checkbox pré-marcado), (3) quando os documentos são atualizados (incremento de versão), notifique usuários no login e solicite novo aceite, (4) armazene os textos versionados dos documentos no banco para auditoria futura, (5) exporte o histórico de aceites no data export.' },
+      { id: 94, agent: 'codex', project: 'leads', title: 'Adicionar consentimento explícito e base legal para processamento no Leads',
+        desc: 'Cada lead deve ter uma base legal registrada (consentimento, contrato, interesse legítimo).',
+        prompt: 'Codex: No Enriquecimento de Leads, adicione campos de base legal LGPD: (1) adicione ao modelo de lead: legal_basis: CONSENT|CONTRACT|LEGITIMATE_INTEREST|LEGAL_OBLIGATION, consent_date?, consent_channel?, (2) torne legal_basis campo obrigatório ao criar um lead, (3) adicione a UI um seletor de base legal com descrição de cada opção, (4) no relatório de compliance, mostre distribuição de leads por base legal, (5) ao usar "interesse legítimo" como base, exija que o usuário documente o interesse legítimo específico no campo notes.' },
+      { id: 95, agent: 'jules', project: 'catarina', title: 'Implementar Data Retention Policy automática no Catarina',
+        desc: 'Dados de contatos inativos são arquivados após 2 anos e excluídos após 5 anos.',
+        prompt: 'Jules: No Catarina IA, implemente retenção de dados automatizada: (1) crie job mensal que identifica contatos sem nenhuma interação em > 730 dias, (2) fase 1 (730 dias): mova contatos para status ARCHIVED, removendo da listagem padrão mas mantendo dados, (3) fase 2 (1825 dias): anonimize dados pessoais do contato mas mantenha metadados de negócio (stage, revenue associado), (4) notifique o admin da organização antes de cada operação: "12 contatos serão arquivados em 30 dias", (5) permita que o admin "reactive" um contato antes da operação acontecer.' }
+    ]
+  },
+  {
+    num: '20', title: 'Launch Readiness',
+    subtitle: 'Os últimos ajustes antes de ir para produção',
+    agents: ['codex', 'jules'],
+    items: [
+      { id: 96, agent: 'codex', project: 'jus', title: 'Criar fluxo de onboarding guiado para novos escritórios no JUS',
+        desc: 'Novos usuários são guiados em 5 passos para criar a primeira petição com sucesso.',
+        prompt: 'Codex: No JUS 2026, crie um onboarding flow para novos usuários: (1) após o primeiro login, mostre um modal de boas-vindas com 5 passos: (1) Configurar perfil do escritório, (2) Convidar colegas, (3) Configurar preferências de documentos, (4) Criar primeiro caso de teste, (5) Gerar primeira petição — cada passo tem um CTA claro, (2) use um progress indicator persistente no sidebar até completar todos os passos, (3) cada passo completado dispara um evento de analytics, (4) usuários que não completam o onboarding em 3 dias recebem um email de ajuda.' },
+      { id: 97, agent: 'jules', project: 'all-projects', title: 'Executar pentest automatizado com OWASP ZAP antes do launch',
+        desc: 'Varredura automática de vulnerabilidades em todos os endpoints antes de colocar em produção.',
+        prompt: 'Jules: Configure pentest automatizado no CI: (1) adicione workflow .github/workflows/security.yml que roda semanalmente, (2) suba a aplicação em modo de staging com docker-compose, (3) execute OWASP ZAP em modo API scan: zap-api-scan.py -t http://staging-url/api/openapi.json, (4) parse o relatório XML e falhe o workflow se encontrar vulnerabilidades de severidade HIGH ou CRITICAL, (5) gere relatório HTML de segurança como artefato do GitHub Actions e notifique o canal de segurança no Slack com o sumário.' },
+      { id: 98, agent: 'codex', project: 'all-projects', title: 'Implementar status page pública para cada serviço',
+        desc: 'Página pública mostrando uptime histórico e incidentes dos últimos 90 dias.',
+        prompt: 'Codex: Para os projetos com usuários finais (JUS, BirtHub, Catarina), crie uma status page: (1) crie uma página /status pública que mostra os componentes do sistema (API, Banco, Filas, IA), (2) o status de cada componente é atualizado a cada 30 segundos via fetch ao endpoint /health, (3) armazene histórico de uptime no banco (a cada 5 min, registre o status de cada componente), (4) mostre um gráfico de uptime dos últimos 90 dias por componente, (5) quando há um incidente, permita que admin poste um update de status que aparece na página.' },
+      { id: 99, agent: 'jules', project: 'all-projects', title: 'Configurar alertas de anomalia com limites automáticos por serviço',
+        desc: 'Alertas disparam automaticamente quando métricas saem do padrão normal.',
+        prompt: 'Jules: Configure alertas inteligentes de monitoramento: (1) no Grafana, configure alertas para: latência p95 > 2x a média das últimas 24h, taxa de erro > 5% por 5 minutos, uso de CPU > 80% por 10 minutos, Redis memory > 80%, fila BullMQ com > 500 jobs pendentes, (2) todos os alertas vão para um canal Slack #alertas-prod com severity (INFO/WARNING/CRITICAL), (3) configure PagerDuty ou similar para alertas CRITICAL com escalation automático, (4) implemente runbook links nos alertas: cada alerta inclui o link para o runbook correspondente.' },
+      { id: 100, agent: 'codex', project: 'all-projects', title: 'Criar landing page de produto para cada projeto com métricas de valor',
+        desc: 'Página de marketing mostrando o produto, benefícios e call-to-action para cada SaaS.',
+        prompt: 'Codex: Para JUS, BirtHub e Catarina, crie landing pages de produto: (1) hero section com headline claro, subheadline de valor e CTA principal (Iniciar grátis / Solicitar demo), (2) seção de problema/solução com 3 benefícios principais, (3) seção de features com screenshots/mockups, (4) seção de pricing com os planos FREE/PRO/ENTERPRISE e tabela comparativa de features, (5) seção de social proof (depoimentos, logos de clientes), (6) footer com links legais (Privacidade, Termos, LGPD), (7) configure SEO: meta tags, og:image, sitemap.xml, robots.txt.' }
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════════════════
+// STATE MANAGEMENT
+// ═══════════════════════════════════════════════════════
+
+const STORAGE_KEY = 'master_prompt_status_v2';
+
+function loadState() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  } catch { return {}; }
+}
+
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+let state = loadState();
+
+function getItemStatus(id) {
+  return state[id] || 'red';
+}
+
+function cycleStatus(id) {
+  const current = getItemStatus(id);
+  const next = current === 'red' ? 'yellow' : current === 'yellow' ? 'green' : 'red';
+  state[id] = next;
+  saveState(state);
+  return next;
+}
+
+function resetAll() {
+  if (!confirm('Resetar TODOS os 100 itens para vermelho (não implementado)?')) return;
+  state = {};
+  saveState(state);
+  renderAll();
+}
+
+// ═══════════════════════════════════════════════════════
+// FILTER STATE
+// ═══════════════════════════════════════════════════════
+
+let filters = { project: 'all', agent: 'all-agent', status: 'all-status' };
+
+// ═══════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════
+
+function renderAll() {
+  const container = document.getElementById('cycles-container');
+  container.innerHTML = '';
+
+  CYCLES.forEach(cycle => {
+    const block = document.createElement('div');
+    block.className = 'cycle-block';
+    block.id = `cycle-${cycle.num}`;
+
+    // Count progress
+    const counts = { red: 0, yellow: 0, green: 0 };
+    cycle.items.forEach(item => counts[getItemStatus(item.id)]++);
+    const greenPct = (counts.green / cycle.items.length) * 100;
+
+    block.innerHTML = `
+      <div class="cycle-header" onclick="toggleCycle('${cycle.num}')">
+        <div class="cycle-num">${cycle.num}</div>
+        <div>
+          <div class="cycle-title">${cycle.title}</div>
+          <div class="cycle-subtitle">${cycle.subtitle}</div>
+        </div>
+        <div class="cycle-agents">
+          ${cycle.agents.includes('jules') ? '<span class="agent-pip jules">JULES</span>' : ''}
+          ${cycle.agents.includes('codex') ? '<span class="agent-pip codex">CODEX</span>' : ''}
+        </div>
+        <div class="cycle-progress">
+          <span style="font-size:10px;color:var(--muted)">${counts.green}/${cycle.items.length} ✓</span>
+          <div class="cycle-progress-bar"><div class="cycle-progress-fill" style="width:${greenPct}%"></div></div>
+        </div>
+        <span class="cycle-toggle">▼</span>
+      </div>
+      <div class="cycle-items" id="cycle-items-${cycle.num}">
+        ${cycle.items.map(item => renderItem(item)).join('')}
+      </div>
+    `;
+
+    container.appendChild(block);
+  });
+
+  updateStats();
+  applyFilters();
+}
+
+function renderItem(item) {
+  const status = getItemStatus(item.id);
+  const statusLabel = { red: '● NÃO IMPLEMENTADO', yellow: '● EM MELHORIA', green: '● PRONTO PARA PROD' }[status];
+  const numStr = String(item.id).padStart(3, '0');
+
+  return `
+    <div class="item-row" data-id="${item.id}" data-status="${status}" data-agent="${item.agent}" data-project="${item.project}"
+      onclick="expandItem(event, ${item.id})">
+      <span class="item-status-label">${statusLabel} — clique no ● para avançar</span>
+      <span class="item-num">#${numStr}</span>
+      <div class="item-status-dot" onclick="event.stopPropagation(); advanceItem(${item.id})"></div>
+      <span class="item-agent ${item.agent}">${item.agent.toUpperCase()}</span>
+      <div class="item-content">
+        <div class="item-title">${item.title}</div>
+        <div class="item-desc">${item.desc}</div>
+        <div class="item-prompt">
+          <div class="prompt-label">// PROMPT PARA ${item.agent.toUpperCase()}</div>
+          <div class="prompt-text">${item.prompt}</div>
+        </div>
+      </div>
+      <span class="item-project">${item.project.toUpperCase()}</span>
+      <span class="item-expand">▸ PROMPT</span>
+    </div>
+  `;
+}
+
+function advanceItem(id) {
+  const newStatus = cycleStatus(id);
+  const rows = document.querySelectorAll(`.item-row[data-id="${id}"]`);
+  rows.forEach(row => {
+    row.dataset.status = newStatus;
+  });
+  updateStats();
+  applyFilters();
+}
+
+function expandItem(e, id) {
+  const row = e.currentTarget;
+  row.classList.toggle('expanded');
+}
+
+function toggleCycle(num) {
+  const block = document.getElementById(`cycle-${num}`);
+  block.classList.toggle('collapsed');
+}
+
+// ═══════════════════════════════════════════════════════
+// FILTER
+// ═══════════════════════════════════════════════════════
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const type = this.dataset.filterType;
+    const val = this.dataset.filterVal;
+
+    // Toggle active in group
+    document.querySelectorAll(`.filter-btn[data-filter-type="${type}"]`).forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+
+    filters[type] = val;
+    applyFilters();
+  });
+});
+
+function applyFilters() {
+  const { project, agent, status } = filters;
+
+  document.querySelectorAll('.item-row').forEach(row => {
+    const rProject = row.dataset.project;
+    const rAgent = row.dataset.agent;
+    const rStatus = row.dataset.status;
+
+    const pMatch = project === 'all' || project === 'all-projects' || rProject === project || rProject === 'all-projects';
+    const aMatch = agent === 'all-agent' || rAgent === agent;
+    const sMatch = status === 'all-status' || rStatus === status;
+
+    row.classList.toggle('filter-hidden', !(pMatch && aMatch && sMatch));
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════════════════════
+
+function updateStats() {
+  let counts = { red: 0, yellow: 0, green: 0 };
+  let projCounts = { vagas: {r:0,y:0,g:0}, leads: {r:0,y:0,g:0}, jus: {r:0,y:0,g:0}, birthub: {r:0,y:0,g:0}, catarina: {r:0,y:0,g:0} };
+
+  CYCLES.forEach(cycle => {
+    cycle.items.forEach(item => {
+      const s = getItemStatus(item.id);
+      counts[s === 'red' ? 'red' : s === 'yellow' ? 'yellow' : 'green']++;
+
+      // Project attribution
+      const projs = item.project === 'all-projects' ? ['vagas','leads','jus','birthub','catarina'] : [item.project];
+      projs.forEach(p => {
+        if (projCounts[p]) projCounts[p][s === 'red' ? 'r' : s === 'yellow' ? 'y' : 'g']++;
+      });
+    });
+  });
+
+  document.getElementById('stat-red').textContent = counts.red;
+  document.getElementById('stat-yellow').textContent = counts.yellow;
+  document.getElementById('stat-green').textContent = counts.green;
+  const pct = Math.round((counts.green / 100) * 100);
+  document.getElementById('stat-pct').textContent = pct + '%';
+
+  document.getElementById('bar-red').style.width = counts.red + '%';
+  document.getElementById('bar-yellow').style.width = counts.yellow + '%';
+  document.getElementById('bar-green').style.width = counts.green + '%';
+  document.getElementById('bar-pct').style.width = pct + '%';
+
+  // Update cycle headers
+  CYCLES.forEach(cycle => {
+    const block = document.getElementById(`cycle-${cycle.num}`);
+    if (!block) return;
+    const c = { red: 0, yellow: 0, green: 0 };
+    cycle.items.forEach(item => c[getItemStatus(item.id) === 'red' ? 'red' : getItemStatus(item.id) === 'yellow' ? 'yellow' : 'green']++);
+    const gPct = (c.green / cycle.items.length) * 100;
+    const fill = block.querySelector('.cycle-progress-fill');
+    const label = block.querySelector('.cycle-progress span');
+    if (fill) fill.style.width = gPct + '%';
+    if (label) label.textContent = `${c.green}/${cycle.items.length} ✓`;
+  });
+
+  // Footer
+  document.getElementById('footer-ts').textContent = `// LAST UPDATE: ${new Date().toLocaleString('pt-BR')} · ${counts.green}/100 COMPLETE`;
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+renderAll();
+</script>
+</body>
+</html>
