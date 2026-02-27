@@ -1,0 +1,27 @@
+name = "buscador-vagas-worker"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+WORKER_VERSION = "5.0.0"
+CACHE_TTL_SECONDS = 300
+RATE_LIMIT_REQUESTS = 10
+RATE_LIMIT_WINDOW_SECONDS = 60
+
+[[kv_namespaces]]
+binding = "KV_CACHE"
+id = "SUBSTITUIR_PELO_ID_REAL"
+preview_id = "SUBSTITUIR_PELO_ID_PREVIEW"
+
+[[kv_namespaces]]
+binding = "KV_METRICS"
+id = "SUBSTITUIR_PELO_ID_REAL"
+preview_id = "SUBSTITUIR_PELO_ID_PREVIEW"
+
+[[kv_namespaces]]
+binding = "KV_FAVORITES"
+id = "SUBSTITUIR_PELO_ID_REAL"
+preview_id = "SUBSTITUIR_PELO_ID_PREVIEW"
+
+[scripts]
+test = "vitest --environment miniflare"

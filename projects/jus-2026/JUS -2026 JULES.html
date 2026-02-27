@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JusArtificial · Jules — Segurança & Arquitetura</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg:      #08080e;
+    --surface: #0d0d18;
+    --border:  rgba(255,255,255,0.06);
+    --text:    #e8e4d9;
+    --muted:   #7a7a9a;
+    --acc:     #c9a84c;
+    --acc-s:   #f5d78e;
+    --danger:  #e05555;
+    --warn:    #e0a030;
+    --ok:      #3dba72;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; overflow: hidden;
+    padding: 64px 32px 48px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 70%);
+  }
+  .hero::before {
+    content: '§'; position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-size: 500px; font-weight: 900;
+    color: rgba(201,168,76,0.035);
+    top: -90px; left: 50%; transform: translateX(-50%);
+    pointer-events: none; user-select: none; line-height: 1;
+  }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--acc); border: 1px solid rgba(201,168,76,0.3);
+    padding: 4px 16px; border-radius: 3px; margin-bottom: 22px;
+  }
+  .eyebrow::before, .eyebrow::after { content:''; width:18px; height:1px; background:rgba(201,168,76,0.4); }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px,4vw,54px); font-weight: 900;
+    line-height: 1.06; letter-spacing: -0.02em;
+    background: linear-gradient(150deg, var(--acc-s) 0%, #fff 50%, #e8d9b0 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 14px;
+  }
+
+  .hero-sub { max-width: 560px; margin: 0 auto 24px; color: var(--muted); font-size: 15px; }
+
+  .pills { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .pill {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+    padding: 4px 12px; border-radius: 3px; border: 1px solid;
+  }
+  .p0  { color: var(--danger); border-color: rgba(224,85,85,0.35);  background: rgba(224,85,85,0.08); }
+  .p1  { color: var(--warn);   border-color: rgba(224,160,48,0.35); background: rgba(224,160,48,0.08); }
+
+  /* ── AGENT BADGE ── */
+  .agent-bar {
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    padding: 16px 24px; border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .agent-ico {
+    width: 42px; height: 42px; border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    background: linear-gradient(135deg,#3a2c0a,#7a5c18);
+    box-shadow: 0 0 24px rgba(201,168,76,0.2);
+  }
+  .agent-name {
+    font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700;
+  }
+  .agent-desc { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  /* ── CONTAINER ── */
+  .wrap { max-width: 960px; margin: 0 auto; padding: 44px 24px 64px; }
+
+  /* ── PROMPT CARD ── */
+  .pcard {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden; margin-bottom: 32px;
+    position: relative;
+  }
+  .pcard::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background: linear-gradient(90deg, var(--acc), var(--acc-s), var(--acc));
+  }
+
+  .pcard-top {
+    padding: 14px 24px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 10px; background: rgba(0,0,0,0.2);
+  }
+  .plabel { font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .tags { display:flex; gap:7px; flex-wrap:wrap; }
+  .tag {
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px;
+    padding:2px 9px; border-radius:3px; border:1px solid;
+    color:var(--acc); border-color:rgba(201,168,76,0.3); background:rgba(201,168,76,0.07);
+  }
+
+  /* ── TOOLBAR ── */
+  .toolbar {
+    display: flex; align-items: center; justify-content: flex-end;
+    padding: 10px 24px; background: rgba(0,0,0,0.3);
+    border-bottom: 1px solid var(--border);
+  }
+  .copy-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 500;
+    padding: 7px 18px; border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04);
+    color: var(--muted); cursor: pointer; transition: all 0.18s ease;
+  }
+  .copy-btn:hover { background: rgba(255,255,255,0.09); color: var(--text); transform: translateY(-1px); }
+  .copy-btn svg { width:12px; height:12px; flex-shrink:0; }
+  .copy-btn.done { background:rgba(201,168,76,0.12); border-color:rgba(201,168,76,0.4); color:var(--acc); }
+
+  /* ── PROMPT BODY ── */
+  .pbody {
+    padding: 28px; font-family:'IBM Plex Mono',monospace;
+    font-size: 13px; line-height: 1.85; white-space: pre-wrap; color: #c0bcb0;
+  }
+
+  /* ── CHIPS ── */
+  .chips-title {
+    font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--muted);
+    margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--border);
+  }
+  .chips { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:8px; margin-bottom:8px; }
+  .chip {
+    background:rgba(255,255,255,0.03); border:1px solid var(--border);
+    border-radius:8px; padding:9px 12px;
+    display:flex; flex-direction:column; gap:3px;
+  }
+  .cid { font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; color:var(--acc); }
+  .cid.p0 { color:var(--danger) !important; }
+  .cdesc { color:var(--muted); font-size:11.5px; line-height:1.3; }
+
+  /* ── DIVIDER ── */
+  .div-sep { display:flex; align-items:center; gap:16px; margin:48px 0; }
+  .div-line { flex:1; height:1px; background:var(--border); }
+  .div-mid { font-family:'Playfair Display',serif; font-size:20px; color:rgba(201,168,76,0.25); }
+
+  /* ══ CHECKLIST ══ */
+  .cl-wrap {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:14px; overflow:hidden; margin-top:8px;
+  }
+  .cl-head {
+    padding:16px 24px; background:rgba(0,0,0,0.35);
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+  }
+  .cl-title-row { display:flex; align-items:center; gap:12px; }
+  .cl-ico {
+    width:38px; height:38px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center; font-size:17px;
+    background:linear-gradient(135deg,#1a1a0a,#2a2a12);
+    border:1px solid rgba(201,168,76,0.2);
+  }
+  .cl-title { font-family:'Playfair Display',serif; font-size:15px; font-weight:700; }
+  .cl-sub { font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); margin-top:2px; }
+
+  .cl-legend { display:flex; gap:14px; flex-wrap:wrap; }
+  .lg-item { display:flex; align-items:center; gap:6px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--muted); }
+  .lgdot { width:9px; height:9px; border-radius:50%; }
+  .lg-g { background:var(--ok);     box-shadow:0 0 5px rgba(61,186,114,0.5); }
+  .lg-y { background:var(--warn);   box-shadow:0 0 5px rgba(224,160,48,0.5); }
+  .lg-r { background:var(--danger); box-shadow:0 0 5px rgba(224,85,85,0.5); }
+
+  .cl-reset {
+    font-family:'IBM Plex Mono',monospace; font-size:11px; padding:5px 12px;
+    border-radius:5px; border:1px solid var(--border); background:transparent;
+    color:var(--muted); cursor:pointer; transition:all .15s;
+  }
+  .cl-reset:hover { border-color:rgba(224,85,85,0.4); color:var(--danger); }
+
+  .cl-body { padding:18px 24px; }
+  .cl-grp { margin-bottom:22px; }
+  .cl-glbl {
+    font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.12em;
+    text-transform:uppercase; color:#35354a;
+    margin-bottom:9px; padding-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.03);
+  }
+  .cl-list { display:flex; flex-direction:column; gap:5px; }
+
+  .cl-row {
+    display:flex; align-items:center; gap:13px;
+    padding:10px 13px; border-radius:8px; border:1px solid transparent;
+    cursor:pointer; transition:all .15s ease; user-select:none;
+    background:rgba(255,255,255,0.015);
+  }
+  .cl-row:hover { background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.05); }
+  .cl-row[data-state="green"]  { background:rgba(61,186,114,0.07);  border-color:rgba(61,186,114,0.2); }
+  .cl-row[data-state="yellow"] { background:rgba(224,160,48,0.07);  border-color:rgba(224,160,48,0.2); }
+  .cl-row[data-state="red"]    { background:rgba(224,85,85,0.07);   border-color:rgba(224,85,85,0.2); }
+
+  .tl {
+    width:18px; height:18px; border-radius:50%; flex-shrink:0;
+    border:2px solid rgba(255,255,255,0.07); background:rgba(255,255,255,0.05); transition:all .2s;
+  }
+  .cl-row[data-state="green"]  .tl { background:var(--ok);     border-color:#2a9a56; box-shadow:0 0 8px rgba(61,186,114,0.5); }
+  .cl-row[data-state="yellow"] .tl { background:var(--warn);   border-color:#b07a18; box-shadow:0 0 8px rgba(224,160,48,0.5); }
+  .cl-row[data-state="red"]    .tl { background:var(--danger); border-color:#a03030; box-shadow:0 0 8px rgba(224,85,85,0.5); }
+
+  .cl-txt { flex:1; }
+  .cl-t { font-size:13px; color:var(--text); line-height:1.3; }
+  .cl-d { font-size:11px; color:var(--muted); font-family:'IBM Plex Mono',monospace; margin-top:2px; }
+
+  .cl-row[data-state="green"]  .cl-t { color:#86efac; }
+  .cl-row[data-state="yellow"] .cl-t { color:#fde68a; }
+  .cl-row[data-state="red"]    .cl-t { color:#fca5a5; }
+
+  .cl-badge {
+    font-family:'IBM Plex Mono',monospace; font-size:10px;
+    padding:2px 7px; border-radius:3px; white-space:nowrap; opacity:0; transition:opacity .15s;
+  }
+  .cl-row[data-state="green"]  .cl-badge { opacity:1; background:rgba(61,186,114,0.15); color:#86efac; }
+  .cl-row[data-state="yellow"] .cl-badge { opacity:1; background:rgba(224,160,48,0.15); color:#fde68a; }
+  .cl-row[data-state="red"]    .cl-badge { opacity:1; background:rgba(224,85,85,0.15);  color:#fca5a5; }
+
+  .sc-bar {
+    margin:14px 0 0; background:rgba(0,0,0,0.3); border-radius:8px;
+    padding:11px 16px; display:flex; align-items:center; gap:13px;
+    border:1px solid var(--border);
+  }
+  .sc-lbl { font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); white-space:nowrap; }
+  .sc-track { flex:1; height:5px; background:rgba(255,255,255,0.05); border-radius:999px; overflow:hidden; }
+  .sc-fill  { height:100%; border-radius:999px; transition:width .4s ease, background .4s; background:var(--ok); }
+  .sc-num   { font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:600; color:var(--text); min-width:36px; text-align:right; }
+
+  footer {
+    text-align:center; padding:24px;
+    color:var(--muted); font-size:12px; font-family:'IBM Plex Mono',monospace;
+    border-top:1px solid var(--border); letter-spacing:.04em;
+  }
+
+  @media(max-width:600px) { .pbody{font-size:11.5px;} .chips{grid-template-columns:1fr 1fr;} }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">JusArtificial · Segurança & Arquitetura</div>
+  <h1>Jules<br>Engenheiro de Backend</h1>
+  <p class="hero-sub">Responsável por eliminar os blockers críticos de produção — autenticação, IDOR, multitenancy e infraestrutura do JusArtificial.</p>
+  <div class="pills">
+    <span class="pill p0">🔴 P0 — Auth Permissivo (demo mode)</span>
+    <span class="pill p0">🔴 P0 — IDOR em sessões e documentos</span>
+    <span class="pill p0">🔴 P0 — Orquestração de IA no frontend</span>
+    <span class="pill p1">🟡 P1 — Upload em memória RAM (OOM)</span>
+    <span class="pill p1">🟡 P1 — Multitenancy sem firmId</span>
+    <span class="pill p1">🟡 P1 — Socket.io sem Redis (sem escala)</span>
+  </div>
+</div>
+
+<div class="agent-bar">
+  <div class="agent-ico">⚖️</div>
+  <div>
+    <div class="agent-name">Jules — Google AI Coding Agent</div>
+    <div class="agent-desc">Arquitetura · Segurança · Infra · LGPD · Multitenancy · Backend Node.js</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="pcard">
+  <div class="pcard-top">
+    <span class="plabel">prompt · jules · JusArtificial · pt-BR</span>
+    <div class="tags">
+      <span class="tag">Segurança P0</span>
+      <span class="tag">Multitenancy</span>
+      <span class="tag">Backend</span>
+      <span class="tag">LGPD</span>
+      <span class="tag">Infra</span>
+    </div>
+  </div>
+  <div class="toolbar">
+    <button class="copy-btn" id="copy-btn" onclick="doCopy()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      Copiar Prompt Jules
+    </button>
+  </div>
+  <div class="pbody" id="prompt"># CONTEXTO — JusArtificial
+Plataforma SaaS jurídica com IA para advogados. Stack:
+  Backend : Node.js + Express.js (Monolito Modular)
+  Frontend : React 19 + Vite + TailwindCSS
+  Auth     : Firebase Auth (Frontend) + Firebase Admin SDK (Backend)
+  BD       : Firestore (NoSQL)
+  IA       : Google Gemini API (via @google/genai)
+  Realtime : Socket.io + Yjs (CRDT)
+  Upload   : Multer (memoryStorage — CRÍTICO)
+  OCR      : pdf-parse / Tesseract
+
+Diagnóstico: MVP avançado com segurança em modo "demo".
+Backend/Segurança: 20% pronto. Infra/Escala: 10% pronta.
+A plataforma NÃO pode ser vendida ou colocada em produção no estado atual.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# MISSÃO (Jules)
+Você é o engenheiro de segurança e arquitetura responsável por eliminar os
+blockers de produção e elevar o JusArtificial a padrão enterprise seguro.
+Seu foco exclusivo: segurança crítica, autenticação, IDOR, multitenancy,
+infraestrutura robusta e conformidade com LGPD.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ITENS ATRIBUÍDOS AO JULES
+
+━━━━━━ 🔴 CRÍTICO P0 — SEGURANÇA IMEDIATA ━━━━━━
+
+### J01 — Ativar autenticação em 100% das rotas /api
+CONTEXTO: server.js roda em modo "demo" com auth não forçada em rotas como
+/api/sessions e /api/documents. Qualquer pessoa sem token acessa a API.
+
+ARQUIVO ALVO: backend/server.js · backend/routes/*.js
+
+TAREFA:
+1. Remover TODA lógica condicional de "demo mode" que bypassa auth.
+2. Aplicar middleware `authenticate` (authMiddleware.js) em TODAS as rotas /api/*.
+3. Única rota pública permitida: /health (uptime check).
+4. Teste de integração verificando que requisições sem token retornam 401.
+
+ENTREGÁVEL:
+  - backend/server.js sem bypass de demo.
+  - router.use(authenticate) no início de cada router.
+  - tests/auth.integration.test.js com 5 casos:
+    sem token, token expirado, token inválido, token válido, rota pública.
+
+CRITÉRIO: Requisição sem token em qualquer /api/* → 401. Zero exceção. Zero bypass.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### J02 — Corrigir IDOR em sessões e documentos
+CONTEXTO: backend/sessions.js e sessionRoutes.js aceitam userId/IDs enviados
+pelo CLIENTE sem verificar se o recurso pertence ao usuário autenticado.
+Qualquer usuário autenticado pode listar/deletar sessões de outro usuário.
+
+ARQUIVO ALVO: backend/sessions.js · backend/routes/sessionRoutes.js
+              backend/routes/documentRoutes.js
+
+TAREFA:
+1. Em TODAS as operações de leitura/escrita/deleção:
+   - IGNORAR userId vindo de req.params, req.body ou req.query.
+   - USAR SEMPRE req.user.uid extraído pelo middleware de autenticação.
+2. Verificação obrigatória de propriedade antes de qualquer operação:
+   const resource = await getResource(resourceId);
+   if (!resource || resource.ownerId !== req.user.uid) {
+     return res.status(403).json({ error: 'Acesso negado' });
+   }
+3. Aplicar mesmo padrão para firmId quando multitenancy estiver ativo (J04).
+
+ENTREGÁVEL:
+  - Todos os controllers com verificação de propriedade.
+  - tests/idor.security.test.js com cenários:
+    usuário A acessa recurso do B (403), acessa próprio (200), ID inexistente (404).
+
+CRITÉRIO: Nenhum recurso acessível por UID diferente do dono. Zero IDOR.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### J03 — Migrar orquestração de IA para o backend
+CONTEXTO: services/gemini.ts no FRONTEND contém Chain of Thought, Critic Loop,
+fallback de modelo, retry e parâmetros de temperatura.
+Um usuário avançado pode manipular o comportamento do agente via DevTools.
+
+ARQUIVO ALVO: services/gemini.ts (frontend) → backend/services/aiOrchestrator.js
+              backend/routes/chatRoutes.js
+
+TAREFA:
+1. Criar backend/services/aiOrchestrator.js com toda a lógica de gemini.ts:
+   - Retry com backoff exponencial (máx 3 tentativas).
+   - Fallback: Gemini Pro falhou → Gemini Flash.
+   - Critic Loop: validação server-side após geração.
+   - Temperatura, system prompts e configuração do modelo: NUNCA no frontend.
+2. Frontend (services/gemini.ts) → thin client apenas com POST /api/chat.
+3. System prompts ficam em backend/data/prompts.js (nunca no bundle do cliente).
+
+ENTREGÁVEL:
+  - backend/services/aiOrchestrator.js com orquestração completa + JSDoc.
+  - services/gemini.ts reduzido a thin client (< 50 linhas).
+  - Testes: fallback funciona, retry respeita backoff exponencial.
+
+CRITÉRIO: Zero lógica de negócio de IA no frontend. System prompts não aparecem no bundle.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━ 🟡 P1 — PRÉ-VENDA ENTERPRISE ━━━━━━
+
+### J04 — Implementar Multitenancy real com firmId (Escritório)
+CONTEXTO: Banco usa apenas userId como partição. Não existe conceito de firmId.
+Advogados do mesmo escritório não podem colaborar com isolamento garantido.
+Se um advogado sair, seus dados ficam órfãos.
+
+TAREFA:
+1. Criar collection firms no Firestore:
+   firms/{firmId}: name, planId, createdAt, ownerId.
+2. Adicionar firmId em TODAS as collections: sessions, documents, auditLogs.
+3. Criar middleware resolveTenant:
+   - Lê firmId do token customizado ou perfil do usuário.
+   - Injeta req.firmId em todas as rotas.
+4. Todas as queries com filtro duplo: firmId + userId.
+5. Endpoints: POST /api/firms · POST /api/firms/invite.
+
+ENTREGÁVEL:
+  - Script de migration para adicionar firmId a dados existentes.
+  - middleware/resolveTenant.js.
+  - Todos os controllers com filtro firmId.
+  - Testes: advogado da firma A não acessa dados da firma B.
+
+CRITÉRIO: Zero cross-tenant data leak. Dados isolados por firmId em 100% das queries.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### J05 — Migrar upload para Stream (eliminar memoryStorage)
+CONTEXTO: server.js usa multer.memoryStorage(). 100 uploads simultâneos de 10MB
+= 1GB de RAM instantaneamente + OCR = crash por OOM (Out of Memory).
+
+ARQUIVO ALVO: backend/server.js · backend/routes/uploadRoutes.js
+
+TAREFA:
+1. Substituir memoryStorage por stream direto para Firebase Storage via busboy.
+   Arquivo nunca fica inteiramente em memória do servidor.
+2. OCR como job assíncrono:
+   - Upload retorna imediatamente com { jobId }.
+   - OCR processado em background (Firestore Queue ou Cloud Tasks).
+   - Status via GET /api/uploads/:jobId/status.
+3. Limite de tamanho de arquivo: 30MB por upload.
+
+ENTREGÁVEL:
+  - Upload refatorado sem memoryStorage.
+  - OCR como worker assíncrono.
+  - tests/upload.load.test.js simulando 20 uploads simultâneos sem OOM.
+
+CRITÉRIO: Upload de 20MB não aloca > 2MB de RAM no processo Node.js.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### J06 — Redis Adapter para Socket.io (escala horizontal)
+CONTEXTO: WebSocket roda na mesma instância da API. Sem Redis Adapter, escalar
+horizontalmente fará usuários em instâncias diferentes não se comunicarem.
+
+TAREFA:
+1. Instalar @socket.io/redis-adapter + ioredis.
+2. Configurar adapter com pubClient + subClient.
+3. Extrair config de Socket.io para backend/services/realtimeService.js.
+4. REDIS_URL em .env.example + validação de env no boot.
+5. Sem Redis configurado: fallback para modo single-instance (dev).
+
+ENTREGÁVEL:
+  - Socket.io com Redis Adapter.
+  - backend/services/realtimeService.js isolado.
+  - docker-compose.yml com Redis para dev local.
+
+CRITÉRIO: 2 instâncias do backend + Redis → usuários em instâncias diferentes
+se comunicam. Zero mensagens perdidas entre instâncias.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### J07 — Migrar compliance LGPD para o backend
+CONTEXTO: services/compliance.ts (FRONTEND) chama SDK do Firebase diretamente
+para deletar dados do usuário. Se regras do Firestore não estiverem corretas,
+um usuário malicioso pode limpar dados de outros.
+
+TAREFA:
+1. Criar backend/routes/complianceRoutes.js:
+   - DELETE /api/compliance/wipe — apaga TODOS os dados do usuário autenticado.
+   - GET /api/compliance/export — exporta todos os dados em JSON (portabilidade LGPD).
+2. Ambas auditadas no audit.js antes de executar.
+3. Deleção cobre: sessões, documentos, logs de chat, preferências, embeddings.
+4. Remover wipeClientData do frontend (nunca chamar Firestore diretamente para ops destrutivas).
+
+ENTREGÁVEL:
+  - backend/routes/complianceRoutes.js com as 2 rotas.
+  - Frontend atualizado para chamar backend (não SDK diretamente).
+  - Runbook: SLA de deleção máx 30 dias conforme LGPD.
+
+CRITÉRIO: Wipe e export 100% server-side. Frontend nunca chama Firestore
+diretamente para operações de dados sensíveis.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### J08 — Sanitizar audit logs para conformidade LGPD
+CONTEXTO: backend/audit.js grava logs no Firestore. Se o campo details gravar
+prompts do usuário, dados pessoais de clientes dos advogados (terceiros)
+serão persistidos sem consentimento — violação direta da LGPD.
+
+TAREFA:
+1. Auditar todos os campos gravados por audit.js.
+2. Nunca gravar: conteúdo de mensagens, texto de documentos, nomes de partes.
+3. Logs apenas: userId, firmId, action, resourceId, timestamp, ipHash (hash, não IP bruto).
+4. Política de retenção: logs > 2 anos deletados automaticamente (Cloud Function).
+5. docs/lgpd-audit-policy.md documentando o que é e não é gravado.
+
+ENTREGÁVEL:
+  - audit.js refatorado com schema de campos permitidos.
+  - Cloud Function de limpeza de logs antigos.
+  - docs/lgpd-audit-policy.md.
+  - Testes: mensagem do usuário não aparece no log.
+
+CRITÉRIO: Zero dado pessoal de clientes em logs. Retenção automatizada.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━ 🟢 P2 — ESCALA E QUALIDADE ━━━━━━
+
+### J09 — Rate Limiting real por usuário e escritório
+CONTEXTO: Rate limit atual é "permissivo para demo". Um único usuário ou ataque
+pode exaurir a quota da Gemini API (custo) ou derrubar o servidor.
+
+TAREFA:
+1. Instalar express-rate-limit + rate-limit-redis.
+2. Limites por camada:
+   - Global: 300 req/min por IP.
+   - Autenticado: 100 req/min por userId.
+   - Chat (IA): 20 mensagens/min por userId — protege custo da Gemini.
+   - Upload: 5 arquivos/min por userId.
+3. Resposta 429 com Retry-After e body RFC 7807.
+4. Limites configuráveis via env vars.
+
+CRITÉRIO: Quota da Gemini protegida. DDoS por usuário bloqueado em < 1 segundo.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### J10 — CI/CD com quality gates de segurança
+CONTEXTO: Código vai direto para produção sem verificação de vulnerabilidades,
+cobertura de testes ou análise de segurança estática.
+
+TAREFA:
+1. .github/workflows/ci.yml com:
+   install → lint (ESLint) → test (Vitest ≥70% cobertura) →
+   audit (npm audit zero criticals) → build → deploy (só na main).
+2. eslint-plugin-security para detectar eval, path traversal, etc.
+3. Validação de env vars obrigatórias no startup (falha rápida).
+4. Smoke test pós-deploy: /health, POST /api/chat, GET /api/sessions.
+
+CRITÉRIO: PR sem testes passando não é mergeável. npm audit com criticals bloqueia deploy.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# PADRÕES OBRIGATÓRIOS — Jules
+
+1. Nunca usar `any` no TypeScript. Nunca `catch(e: any)`.
+2. Todos os erros retornam RFC 7807 com requestId obrigatório.
+3. Logs em JSON estruturado: { userId, firmId, action, requestId, severity, ts }.
+4. Secrets NUNCA no código. Validar todas as envs no boot com falha rápida.
+5. Commits prefixados: security/ · infra/ · fix/ · refactor/
+6. Toda PR com [JULES-J0x] no título.
+
+# SEQUÊNCIA OBRIGATÓRIA
+P0 primeiro (bloqueador): J01 → J02 → J03 (nessa ordem, sem pular)
+P1 em paralelo após P0:   J04, J05, J07, J08
+P2 após P1:               J06, J09, J10</div>
+</div>
+
+<!-- chips -->
+<div style="margin-top:28px;">
+  <div class="chips-title">📋 10 itens atribuídos ao Jules — ordenados por prioridade</div>
+  <div class="chips">
+    <div class="chip"><span class="cid p0">J01 🔴 P0</span><span class="cdesc">Ativar auth 100% das rotas /api</span></div>
+    <div class="chip"><span class="cid p0">J02 🔴 P0</span><span class="cdesc">Corrigir IDOR sessões/documentos</span></div>
+    <div class="chip"><span class="cid p0">J03 🔴 P0</span><span class="cdesc">Migrar orquestração IA → backend</span></div>
+    <div class="chip"><span class="cid">J04 🟡 P1</span><span class="cdesc">Multitenancy real com firmId</span></div>
+    <div class="chip"><span class="cid">J05 🟡 P1</span><span class="cdesc">Upload stream (sem memoryStorage)</span></div>
+    <div class="chip"><span class="cid">J06 🟡 P1</span><span class="cdesc">Redis Adapter para Socket.io</span></div>
+    <div class="chip"><span class="cid">J07 🟡 P1</span><span class="cdesc">Compliance LGPD → backend</span></div>
+    <div class="chip"><span class="cid">J08 🟡 P1</span><span class="cdesc">Sanitizar audit logs LGPD</span></div>
+    <div class="chip"><span class="cid">J09 🟢 P2</span><span class="cdesc">Rate limiting real por usuário</span></div>
+    <div class="chip"><span class="cid">J10 🟢 P2</span><span class="cdesc">CI/CD com quality gates segurança</span></div>
+  </div>
+</div>
+
+<div class="div-sep"><div class="div-line"></div><div class="div-mid">§</div><div class="div-line"></div></div>
+
+<!-- CHECKLIST -->
+<div class="cl-wrap">
+  <div class="cl-head">
+    <div class="cl-title-row">
+      <div class="cl-ico">🚦</div>
+      <div>
+        <div class="cl-title">Checklist de Interação — Jules</div>
+        <div class="cl-sub">Preencha em TODA sessão com Jules · Clique para alternar estado</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+      <div class="cl-legend">
+        <div class="lg-item"><div class="lgdot lg-g"></div>Concluído</div>
+        <div class="lg-item"><div class="lgdot lg-y"></div>Em andamento</div>
+        <div class="lg-item"><div class="lgdot lg-r"></div>Bloqueado</div>
+      </div>
+      <button class="cl-reset" onclick="resetAll()">↺ Resetar</button>
+    </div>
+  </div>
+
+  <div class="cl-body">
+
+    <div class="cl-grp">
+      <div class="cl-glbl">📋 Antes de enviar</div>
+      <div class="cl-list">
+        <div class="cl-row" data-state="none" data-key="j01" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">ID do item referenciado (J01–J10)</div>
+            <div class="cl-d">sem ID a IA não sabe qual arquivo ou vulnerabilidade resolver</div>
+          </div><div class="cl-badge" id="b-j01">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="j02" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Arquivo alvo explicitado (ex: backend/sessions.js)</div>
+            <div class="cl-d">nunca genérico — sempre o path relativo do arquivo</div>
+          </div><div class="cl-badge" id="b-j02">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="j03" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Prioridade declarada (P0 / P1 / P2)</div>
+            <div class="cl-d">P0 = bloqueador — deve ser resolvido antes de qualquer feature nova</div>
+          </div><div class="cl-badge" id="b-j03">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="j04" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Impacto de segurança descrito com cenário real</div>
+            <div class="cl-d">ex: "usuário A pode deletar sessões do B alterando o ID na URL"</div>
+          </div><div class="cl-badge" id="b-j04">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="j05" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Critério de aceite verificável por teste</div>
+            <div class="cl-d">ex: "req sem token retorna 401" — não apenas "fazer funcionar"</div>
+          </div><div class="cl-badge" id="b-j05">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cl-grp">
+      <div class="cl-glbl">⚙️ Durante a execução</div>
+      <div class="cl-list">
+        <div class="cl-row" data-state="none" data-key="j06" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">IDOR eliminado: nenhum controller usa userId do cliente</div>
+            <div class="cl-d">sempre req.user.uid — nunca req.body.userId ou req.params.userId</div>
+          </div><div class="cl-badge" id="b-j06">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="j07" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">firmId em todas as queries do Firestore</div>
+            <div class="cl-d">cross-tenant leak = Sev0 — isolamento obrigatório em 100% das queries</div>
+          </div><div class="cl-badge" id="b-j07">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="j08" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Dados de clientes dos advogados nunca em logs</div>
+            <div class="cl-d">LGPD: nomes de partes, conteúdo de peças = dados de terceiros</div>
+          </div><div class="cl-badge" id="b-j08">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="j09" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Zero secret ou API key no código ou diff da PR</div>
+            <div class="cl-d">grep no diff: "API_KEY|secret|password|firebase_key"</div>
+          </div><div class="cl-badge" id="b-j09">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cl-grp">
+      <div class="cl-glbl">✅ Antes de fechar</div>
+      <div class="cl-list">
+        <div class="cl-row" data-state="none" data-key="j10" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">PR aberta com [JULES-J0x] no título</div>
+            <div class="cl-d">sem prefixo a PR não é revisada — rastreabilidade obrigatória</div>
+          </div><div class="cl-badge" id="b-j10">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="j11" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Testes de segurança escritos (não apenas happy path)</div>
+            <div class="cl-d">token inválido, IDOR attempt, input malicioso — todos cobertos</div>
+          </div><div class="cl-badge" id="b-j11">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="j12" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Smoke test verde: /health + /api/chat + /api/sessions</div>
+            <div class="cl-d">antes de qualquer merge na main — pipeline não pode estar vermelho</div>
+          </div><div class="cl-badge" id="b-j12">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="j13" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Readiness atualizado: Backend X% · Infra Y%</div>
+            <div class="cl-d">registrar progresso real — começamos em Backend 20%, Infra 10%</div>
+          </div><div class="cl-badge" id="b-j13">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="j14" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">J01 + J02 + J03 concluídos antes de iniciar P1</div>
+            <div class="cl-d">os 3 P0 devem estar verdes antes de qualquer item P1 começar</div>
+          </div><div class="cl-badge" id="b-j14">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sc-bar">
+      <div class="sc-lbl">Progresso da sessão Jules</div>
+      <div class="sc-track"><div class="sc-fill" id="sc-fill" style="width:0%"></div></div>
+      <div class="sc-num" id="sc-num">0 / 14</div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<footer>JusArtificial · Jules · 10 itens · 3 P0 bloqueadores · Backend 20% → 100%</footer>
+
+<script>
+function doCopy() {
+  const text = document.getElementById('prompt').innerText.trim();
+  const btn = document.getElementById('copy-btn');
+  navigator.clipboard.writeText(text).then(() => {
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><polyline points="20 6 9 17 4 12"/></svg> Copiado!`;
+    btn.classList.add('done');
+    setTimeout(() => {
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copiar Prompt Jules`;
+      btn.classList.remove('done');
+    }, 2200);
+  });
+}
+
+const STATES = ['none','green','yellow','red'];
+const LABELS = { none:'—', green:'✓ OK', yellow:'⚠ Atenção', red:'✗ Bloqueado' };
+
+function cycle(row) {
+  const key = row.dataset.key;
+  const next = STATES[(STATES.indexOf(row.dataset.state) + 1) % STATES.length];
+  row.dataset.state = next;
+  const b = document.getElementById('b-' + key);
+  if (b) b.textContent = LABELS[next];
+  try { localStorage.setItem('jus_j_' + key, next); } catch(e) {}
+  updateScore();
+}
+
+function updateScore() {
+  const rows = document.querySelectorAll('.cl-row[data-key]');
+  let done = 0; rows.forEach(r => { if (r.dataset.state === 'green') done++; });
+  const pct = Math.round(done / rows.length * 100);
+  const f = document.getElementById('sc-fill');
+  const n = document.getElementById('sc-num');
+  if (f) { f.style.width = pct + '%'; f.style.background = pct===100?'#3dba72':pct>=60?'#e0a030':'#e05555'; }
+  if (n) n.textContent = done + ' / ' + rows.length;
+}
+
+function resetAll() {
+  document.querySelectorAll('.cl-row[data-key]').forEach(r => {
+    r.dataset.state = 'none';
+    const b = document.getElementById('b-' + r.dataset.key);
+    if (b) b.textContent = '—';
+    try { localStorage.removeItem('jus_j_' + r.dataset.key); } catch(e) {}
+  });
+  updateScore();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.cl-row[data-key]').forEach(r => {
+    let s = 'none';
+    try { s = localStorage.getItem('jus_j_' + r.dataset.key) || 'none'; } catch(e) {}
+    if (!STATES.includes(s)) s = 'none';
+    r.dataset.state = s;
+    const b = document.getElementById('b-' + r.dataset.key);
+    if (b) b.textContent = LABELS[s];
+  });
+  updateScore();
+});
+</script>
+</body>
+</html>

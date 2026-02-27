@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fase 14.2 — Auditoria Técnica SaaS (CTO)</title>
+  <style>
+    body { font-family: Inter, Arial, sans-serif; margin: 24px; line-height: 1.45; }
+    h1, h2, h3 { margin-top: 1.2rem; }
+    .card { border: 1px solid #d6d6d6; border-radius: 10px; padding: 16px; margin: 12px 0; }
+    .muted { color: #555; font-size: 0.95rem; }
+    code, pre { background: #f7f7f7; border-radius: 8px; }
+    pre { padding: 12px; overflow-x: auto; white-space: pre-wrap; }
+    li { margin: 6px 0; }
+  </style>
+</head>
+<body>
+  <h1>Consultoria de Engenharia de Software e Arquitetura SaaS — JusArtificial</h1>
+
+  <div class="card">
+    <h2>Registro de Auditoria (Thinking Process Auditável)</h2>
+    <ol>
+      <li>Inventário técnico inicial: leitura da documentação e mapeamento de frontend, backend, dados e integração IA.</li>
+      <li>Mapeamento de riscos: segurança, observabilidade, confiabilidade, custos, compliance e lock-in tecnológico.</li>
+      <li>Classificação de lacunas: o que otimiza o estado atual (melhoria) versus o que cria nova capacidade (implementação).</li>
+      <li>Priorização por impacto: proteção de dados e disponibilidade primeiro; escala e monetização em seguida.</li>
+      <li>Conversão em backlog operacional com 100 itens acionáveis e prompts de execução para CODEX, Jules e Claude.</li>
+    </ol>
+    <p class="muted"><strong>Natureza de apoio:</strong> esta entrega não constitui decisão final; é um roteiro técnico para execução. <strong>Base legal explícita:</strong> LGPD Lei 13.709/2018 (arts. 6, 7, 37, 46, 48, 50), Marco Civil Lei 12.965/2014 (arts. 7, 10, 13, 15), CDC Lei 8.078/1990 (arts. 6, 14, 20), Lei 14.063/2020 (assinaturas eletrônicas), CPC/2015 (arts. 369 e 411 para prova digital), Código Civil (art. 422).</p>
+  </div>
+
+  <div class="card">
+    <h2>Item 1 — Checklist mestre de evolução dos 100 pontos (detalhado)</h2>
+    <ul>
+      <li>ID único por ação (M01-M50 e I01-I50), com owner, data-alvo e dependências.</li>
+      <li>Status obrigatório: backlog, em execução, validado em staging, validado em produção.</li>
+      <li>Severidade: S0 bloqueante, S1 alto risco, S2 médio, S3 otimização.</li>
+      <li>Critério de pronto: PR aprovado, teste automatizado, métrica observável, runbook e rollback.</li>
+      <li>Gate de segurança: SAST, DAST, secrets scan e revisão manual para mudanças críticas.</li>
+      <li>Gate de dados: minimização, base legal, retenção e trilha de tratamento (LGPD arts. 6, 37).</li>
+      <li>Gate de disponibilidade: SLO atualizado, alertas validados e teste de degradação controlada.</li>
+      <li>Evidências anexas: commit, dashboard, logs com trace-id, teste de carga e post-mortem (se incidente).</li>
+      <li>Ritmo executivo: daily técnica de bloqueios + revisão semanal de progresso e risco.</li>
+      <li>Meta trimestral: 100% dos itens S0/S1 concluídos e pelo menos 70% dos 100 itens totais.</li>
+    </ul>
+  </div>
+
+
+  <div class="card">
+    <h2>Atualização de execução — Próximos 20 planos lógicos (implementados)</h2>
+    <ol>
+      <li>[Concluído] Middleware global de correlação com <code>x-request-id</code>.</li>
+      <li>[Concluído] Propagação de <code>requestId</code> no handler central de erro.</li>
+      <li>[Concluído] Trilha de auditoria com <code>requestId</code> nos detalhes auditáveis.</li>
+      <li>[Concluído] Logging estruturado JSON com níveis padronizados.</li>
+      <li>[Concluído] Middleware de request logging com latência por request.</li>
+      <li>[Concluído] CORS com allowlist por ambiente e negação explícita.</li>
+      <li>[Concluído] Ampliação de métodos CORS para PATCH/OPTIONS.</li>
+      <li>[Concluído] Rate limit por tenant + endpoint.</li>
+      <li>[Concluído] Rate limit crítico para rotas sensíveis.</li>
+      <li>[Concluído] Exclusão de health check do rate limiting.</li>
+      <li>[Concluído] Resposta 429 padronizada com <code>requestId</code>.</li>
+      <li>[Concluído] Versionamento de API via header <code>X-API-Version</code>.</li>
+      <li>[Concluído] Endpoint <code>/health/live</code> para liveness.</li>
+      <li>[Concluído] Endpoint <code>/health/ready</code> para readiness.</li>
+      <li>[Concluído] Health principal enriquecido com dependências e <code>requestId</code>.</li>
+      <li>[Concluído] Verificação HMAC com timestamp e nonce em webhooks.</li>
+      <li>[Concluído] Proteção anti-replay para webhooks assinados.</li>
+      <li>[Concluído] Idempotência por header <code>idempotency-key</code>.</li>
+      <li>[Concluído] Cache de replay idempotente com TTL configurável.</li>
+      <li>[Concluído] Cobertura de testes automatizados para request context e erro seguro.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>50 itens de melhoria (otimização do que já existe)</h2>
+    <ol>
+      <li>Padronizar logs JSON com correlation-id e tenant-id em todo request (LGPD art. 37).</li>
+      <li>Aplicar validação de schema em 100% das rotas HTTP e eventos socket (CDC art. 14).</li>
+      <li>Unificar tratamento de erros sem vazar stacktrace ao cliente (LGPD art. 46).</li>
+      <li>Adicionar timeout, retry com jitter e circuit breaker para provedores externos (CDC art. 20).</li>
+      <li>Fortalecer CORS por ambiente com allowlist fechada e bloqueio por default (MCI art. 7).</li>
+      <li>Rotacionar secrets de API com vencimento curto e auditoria de uso (LGPD art. 46).</li>
+      <li>Implementar rate limiting por tenant + endpoint crítico (MCI art. 13).</li>
+      <li>Reduzir dados sensíveis em localStorage e migrar para sessão efêmera (LGPD arts. 6 e 46).</li>
+      <li>Expandir testes de autenticação, autorização e isolamento de tenant.</li>
+      <li>Refatorar controladores para extrair regra de negócio em serviços testáveis.</li>
+      <li>Eliminar imports circulares que degradam bootstrap e observabilidade.</li>
+      <li>Introduzir idempotência em webhooks e operações financeiras (CDC art. 20).</li>
+      <li>Aplicar retenção e descarte por categoria de dado (LGPD art. 16).</li>
+      <li>Criptografar documentos em repouso com chave por domínio (LGPD art. 46).</li>
+      <li>Aplicar CSP, HSTS e X-Frame-Options com política explícita.</li>
+      <li>Instrumentar latência p50/p95/p99 por endpoint e por tenant.</li>
+      <li>Implementar controle de concorrência otimista em edição simultânea.</li>
+      <li>Definir política de cache por camada com TTL e invalidação formal.</li>
+      <li>Adicionar dead-letter queue e retry classificado por tipo de falha.</li>
+      <li>Padronizar contratos de API com versionamento semântico.</li>
+      <li>Criar ADRs curtos para decisões arquiteturais críticas.</li>
+      <li>Integrar OpenTelemetry no backend com traces distribuídos.</li>
+      <li>Adicionar tracing de frontend para jornada de erros críticos.</li>
+      <li>Configurar alertas SLO orientados por erro de usuário final.</li>
+      <li>Estabelecer budgets de performance no pipeline de release.</li>
+      <li>Otimizar consultas Firestore para leitura indexada e custo previsível.</li>
+      <li>Versionar prompts de IA com teste de regressão de qualidade.</li>
+      <li>Reforçar sanitização de entrada para mitigar prompt injection.</li>
+      <li>Implementar política de fallback de modelo por indisponibilidade.</li>
+      <li>Revisar RBAC para evitar privilégios excessivos (LGPD art. 46).</li>
+      <li>Adicionar confirmação forte para ações destrutivas (LGPD art. 48).</li>
+      <li>Criar score de risco para feature flags em produção.</li>
+      <li>Documentar runbooks S0-S3 com tempo alvo de resposta.</li>
+      <li>Adicionar checklist de PR para segurança e compliance.</li>
+      <li>Padronizar nomenclatura de eventos de domínio.</li>
+      <li>Reduzir acoplamento entre UI e providers externos.</li>
+      <li>Implementar rollback automático para deploy com erro acima de limiar.</li>
+      <li>Revisar pipelines CI para paralelização e menor tempo de feedback.</li>
+      <li>Inserir testes de contrato entre frontend e backend.</li>
+      <li>Monitorar custo por endpoint e custo por tenant em dashboard único.</li>
+      <li>Padronizar paginação e ordenação determinística em listagens.</li>
+      <li>Fortalecer upload de arquivos com verificação MIME e antimalware (MCI art. 10).</li>
+      <li>Reforçar políticas de sessão com expiração e revogação imediata.</li>
+      <li>Adicionar validação de assinatura eletrônica quando aplicável (Lei 14.063/2020).</li>
+      <li>Revisar textos de erro para transparência sem exposição técnica (CDC art. 6).</li>
+      <li>Adicionar trilha de auditoria imutável para operações sensíveis (CPC art. 369).</li>
+      <li>Refinar painéis de produto com métricas de adoção por fluxo.</li>
+      <li>Mapear pontos únicos de falha e desenhar mitigação por prioridade.</li>
+      <li>Executar chaos testing controlado em componentes não críticos.</li>
+      <li>Consolidar política de backup/restauração com teste mensal (MCI art. 15).</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>50 itens de implementação (novas capacidades de plataforma)</h2>
+    <ol>
+      <li>Arquitetar tenancy híbrido (row-level + chave por tenant) com isolamento forte.</li>
+      <li>Implementar SSO corporativo SAML/OIDC + SCIM para provisionamento.</li>
+      <li>Criar serviço de billing recorrente com medição por uso e overage (CDC art. 6).</li>
+      <li>Desenvolver antifraude transacional em tempo real com score adaptativo.</li>
+      <li>Criar API pública com quotas, analytics e chaves rotativas.</li>
+      <li>Implementar webhook gateway com assinatura HMAC e replay protection.</li>
+      <li>Construir trilha forense de decisões de IA com hash de evidências (CPC art. 411).</li>
+      <li>Implementar motor de roteamento multi-modelo para reduzir lock-in.</li>
+      <li>Criar avaliação contínua de LLM (qualidade, custo, latência e risco jurídico).</li>
+      <li>Construir pipeline RAG robusto com chunking jurídico e reranking.</li>
+      <li>Implementar cache semântico com invalidação por fonte normativa.</li>
+      <li>Desenvolver indexação incremental de documentos com jobs resilientes.</li>
+      <li>Criar módulo de versionamento semântico de peças com diff jurídico.</li>
+      <li>Implementar editor colaborativo CRDT com reconciliação offline-first.</li>
+      <li>Construir data warehouse analítico para métricas de negócio e produto.</li>
+      <li>Implementar catálogo de eventos com schema registry.</li>
+      <li>Desenvolver observabilidade full-stack com OTel + Grafana + alertas SLO.</li>
+      <li>Criar plataforma de feature flags com segmentação por tenant.</li>
+      <li>Implementar DR multi-região com RPO/RTO testados trimestralmente.</li>
+      <li>Construir KMS/HSM para ciclo de vida de chaves sensíveis.</li>
+      <li>Implementar data residency configurável por região de cliente.</li>
+      <li>Criar central de consentimento e preferências de dados (LGPD art. 7).</li>
+      <li>Implementar DLP para detecção de vazamento de PII em logs e payloads.</li>
+      <li>Construir módulo de governança de prompts com aprovação em duas etapas.</li>
+      <li>Criar avaliação adversarial (red teaming) para fluxos críticos de IA.</li>
+      <li>Implementar mecanismo de explicabilidade com fonte normativa rastreável.</li>
+      <li>Construir motor de regras processuais por tribunal/estado.</li>
+      <li>Implementar integração com diários oficiais e tribunais via conectores.</li>
+      <li>Criar orquestrador de jobs jurídicos com prioridade e SLA por fila.</li>
+      <li>Desenvolver serviço de notificações omnicanal com trilha auditável.</li>
+      <li>Implementar governança de contratos enterprise com renovação automática.</li>
+      <li>Criar módulo de pricing dinâmico por segmento e consumo.</li>
+      <li>Construir painel de unit economics (CAC, LTV, margem, NRR).</li>
+      <li>Implementar onboarding guiado com telemetria de ativação.</li>
+      <li>Criar centro de comando de incidentes com timeline automatizada.</li>
+      <li>Implementar catálogo de runbooks conectado ao on-call.</li>
+      <li>Construir automação de pós-mortem com plano de prevenção vinculante.</li>
+      <li>Implementar ambientes efêmeros por PR com seed de dados sintéticos.</li>
+      <li>Criar suíte de testes E2E multi-tenant com dados mascarados.</li>
+      <li>Implementar validação contínua de segurança em CI/CD (SAST/DAST/IaC).</li>
+      <li>Construir mecanismo de detecção de abuso de API em tempo real.</li>
+      <li>Implementar cofre de segredos com autorização just-in-time.</li>
+      <li>Criar marketplace de agentes com governança e SLA por plugin.</li>
+      <li>Implementar controle de qualidade documental com scoring automático.</li>
+      <li>Construir assistente de compliance contínuo com alertas de não conformidade (LGPD art. 50).</li>
+      <li>Implementar base de conhecimento corporativa com precedentes internos.</li>
+      <li>Criar pipeline de migração sem downtime para evoluções críticas.</li>
+      <li>Implementar autoscaling preditivo por sazonalidade de carga.</li>
+      <li>Construir programa de confiabilidade com error budget policy.</li>
+      <li>Implementar portal enterprise com políticas customizadas por cliente.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>Prompts especializados — CODEX</h2>
+<pre>Você é GPT-5.2-Codex atuando como Principal Engineer em um SaaS jurídico multi-tenant. Tarefa: aplicar hardening real no backend Node/Express e frontend React.
+Entregáveis obrigatórios:
+1) Patches reais (não pseudocódigo) para validação de schema por rota, padronização de erro, rate limiting por tenant e auditoria imutável.
+2) Testes automatizados cobrindo autenticação, autorização e isolamento entre tenants.
+3) Observabilidade com OpenTelemetry (trace-id propagado HTTP/WebSocket), dashboards p95/p99 e alertas SLO.
+4) Plano de rollout: canário, rollback automático e critérios de promoção.
+Restrições: não usar placeholders; justificar trade-offs de latência/custo; explicitar riscos residuais e mitigação.</pre>
+
+    <h2>Prompts especializados — Jules</h2>
+<pre>Atue como arquiteto SaaS focado em evolução incremental orientada a produto. Quero um plano de execução em 12 semanas para escalar globalmente o JusArtificial.
+Instruções:
+- Quebre em épicos e milestones semanais com dependências técnicas reais.
+- Para cada milestone, defina: impacto em receita, risco operacional, esforço estimado e métrica líder.
+- Inclua plano de billing por uso, SSO enterprise, data residency e DR multi-região.
+- Produza checklist operacional para squads Backend, Frontend, SRE, Segurança e Dados.
+- Gere backlog pronto para Jira (histórias, critérios de aceite, definição de pronto).
+Sem generalidades: usar padrões concretos (OTel, HMAC webhook, SAML/OIDC, SCIM, SAST/DAST, error budget).</pre>
+
+    <h2>Prompts especializados — Claude</h2>
+<pre>Você é um Staff+ Engineer especialista em confiabilidade e governança de IA aplicada ao Direito. Analise a arquitetura e proponha um blueprint de produção com foco em segurança jurídica e escalabilidade.
+Exijo:
+- Matriz de risco técnico/jurídico com probabilidade x impacto e plano de mitigação.
+- Estratégia de RAG jurídico com avaliação contínua de factualidade e rastreabilidade de fontes (CPC arts. 369 e 411).
+- Política de proteção de dados alinhada à LGPD (arts. 6, 37, 46, 48, 50), incluindo retenção, anonimização e resposta a incidentes.
+- Arquitetura de governança de prompts, red teaming e prevenção de prompt injection.
+- Roadmap de implementação com quick wins (30 dias), escala (90 dias) e maturidade (180 dias).
+Formato: objetivo, direto, sem placeholders, com decisões arquiteturais justificadas por trade-offs.</pre>
+  </div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "@birthub/integrations",
+  "version": "0.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@hubspot/api-client": "^13.4.0",
+    "pipedrive": "^31.2.1",
+    "resend": "^3.2.0",
+    "stripe": "^15.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "typescript": "^5.4.5"
+  }
+}

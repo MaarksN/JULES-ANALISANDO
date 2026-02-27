@@ -1,0 +1,8 @@
+{
+  "name": "buscador-vagas-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest --environment miniflare"
+  }
+}

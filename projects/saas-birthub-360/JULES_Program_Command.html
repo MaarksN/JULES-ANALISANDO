@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JULES // Program Command — BirthHub 360</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05070d;
+    --bg2: #090d17;
+    --bg3: #0f1420;
+    --bg4: #141924;
+    --border: #1e2535;
+    --border-bright: #2a3347;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-dim: rgba(201,168,76,0.15);
+    --teal: #4dd9ac;
+    --blue: #5b8dee;
+    --red-soft: #e05c5c;
+    --text: #d8dff0;
+    --text-dim: #7a8499;
+    --text-muted: #3d4560;
+    --wave1: #5b8dee;
+    --wave2: #4dd9ac;
+    --wave3: #c9a84c;
+    --wave4: #bc6ef7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Radial glow top */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(91,141,238,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+  }
+
+  .container {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ═══ HEADER ═══ */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 18px 0;
+    position: sticky;
+    top: 0;
+    background: rgba(5,7,13,0.96);
+    backdrop-filter: blur(16px);
+    z-index: 100;
+  }
+
+  .header-inner {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-gem {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--gold) 0%, #a0742a 100%);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 0 20px rgba(201,168,76,0.3);
+  }
+
+  .logo-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+
+  .logo-name span { color: var(--gold); }
+
+  .logo-role {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 1px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .header-nav {
+    display: flex;
+    gap: 4px;
+  }
+
+  .nav-btn {
+    padding: 7px 16px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+
+  .nav-btn:hover, .nav-btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: var(--gold-dim);
+  }
+
+  /* ═══ HERO ═══ */
+  .hero {
+    padding: 80px 0 60px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-top-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(44px, 5.5vw, 80px);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+  }
+
+  .hero-title .gold { color: var(--gold); }
+  .hero-title .dim { color: var(--text-muted); }
+
+  .hero-desc {
+    font-size: 15px;
+    color: var(--text-dim);
+    max-width: 720px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+  }
+
+  /* Prompt block */
+  .prompt-master {
+    background: var(--bg3);
+    border: 1px solid var(--border-bright);
+    border-top: 2px solid var(--gold);
+    border-radius: 10px;
+    padding: 28px 32px;
+    position: relative;
+    max-width: 860px;
+  }
+
+  .prompt-master::before {
+    content: 'MASTER PROMPT · JULES';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    background: var(--bg);
+    padding: 0 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 2px;
+  }
+
+  .prompt-master pre {
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.9;
+    color: var(--text-dim);
+    white-space: pre-wrap;
+  }
+
+  .pm-role { color: var(--gold); }
+  .pm-task { color: var(--teal); }
+  .pm-out { color: var(--blue); }
+  .pm-cmt { color: var(--text-muted); font-style: italic; }
+
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    padding: 8px 18px;
+    background: transparent;
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 6px;
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .copy-btn:hover {
+    background: var(--gold-dim);
+    border-color: var(--gold);
+  }
+
+  /* ═══ KPI ROW ═══ */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 48px 0;
+  }
+
+  .kpi-cell {
+    background: var(--bg2);
+    padding: 24px 28px;
+    transition: background 0.2s;
+    position: relative;
+  }
+
+  .kpi-cell::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--color, var(--gold));
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+
+  .kpi-cell:hover { background: var(--bg3); }
+  .kpi-cell:hover::after { transform: scaleX(1); }
+
+  .kpi-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .kpi-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .kpi-sub { font-size: 12px; color: var(--text-muted); }
+
+  /* ═══ SECTION SYSTEM ═══ */
+  .section { margin-bottom: 64px; }
+
+  .section-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+
+  .section-desc {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    max-width: 640px;
+    line-height: 1.7;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 64px 0;
+  }
+
+  /* ═══ WAVES ═══ */
+  .waves-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .wave-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .wave-card:hover {
+    border-color: var(--border-bright);
+    transform: translateY(-2px);
+  }
+
+  .wave-header {
+    padding: 24px 24px 20px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .wave-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .wave-1 .wave-header::before { background: var(--wave1); }
+  .wave-2 .wave-header::before { background: var(--wave2); }
+  .wave-3 .wave-header::before { background: var(--wave3); }
+  .wave-4 .wave-header::before { background: var(--wave4); }
+
+  .wave-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .wave-1 .wave-num { color: var(--wave1); }
+  .wave-2 .wave-num { color: var(--wave2); }
+  .wave-3 .wave-num { color: var(--wave3); }
+  .wave-4 .wave-num { color: var(--wave4); }
+
+  .wave-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .wave-period {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .wave-body { padding: 20px 24px; }
+
+  .wave-objective {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    background: var(--bg3);
+    border-radius: 6px;
+    border-left: 2px solid var(--border-bright);
+  }
+
+  .wave-items {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .wave-item {
+    display: flex;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .wave-item-bullet {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+  }
+
+  .wave-1 .wave-item-bullet { background: rgba(91,141,238,0.15); color: var(--wave1); }
+  .wave-2 .wave-item-bullet { background: rgba(77,217,172,0.15); color: var(--wave2); }
+  .wave-3 .wave-item-bullet { background: rgba(201,168,76,0.15); color: var(--wave3); }
+  .wave-4 .wave-item-bullet { background: rgba(188,110,247,0.15); color: var(--wave4); }
+
+  .wave-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .wave-meta-item {
+    font-size: 11px;
+  }
+
+  .wmi-label {
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .wmi-val { color: var(--text); }
+
+  /* ═══ RACI TABLE ═══ */
+  .raci-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  table.raci {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .raci thead tr {
+    background: var(--bg3);
+  }
+
+  .raci th {
+    padding: 14px 16px;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 400;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .raci th:first-child {
+    min-width: 200px;
+    position: sticky;
+    left: 0;
+    background: var(--bg3);
+    z-index: 2;
+  }
+
+  .raci td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim);
+    transition: background 0.15s;
+  }
+
+  .raci tbody tr:last-child td { border-bottom: none; }
+
+  .raci tbody tr:hover td { background: var(--bg3); }
+
+  .raci td:first-child {
+    position: sticky;
+    left: 0;
+    background: var(--bg2);
+    font-weight: 500;
+    color: var(--text);
+    z-index: 1;
+  }
+
+  .raci tbody tr:hover td:first-child { background: var(--bg3); }
+
+  .raci-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px; height: 24px;
+    border-radius: 5px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .rb-R { background: rgba(91,141,238,0.2); color: var(--blue); }
+  .rb-A { background: rgba(201,168,76,0.2); color: var(--gold); }
+  .rb-C { background: rgba(77,217,172,0.15); color: var(--teal); }
+  .rb-I { background: rgba(255,255,255,0.05); color: var(--text-muted); }
+  .rb-n { color: var(--text-muted); font-size: 16px; }
+
+  /* ═══ MILESTONE TIMELINE ═══ */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    bottom: 10px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--wave1), var(--wave2), var(--wave3), var(--wave4));
+  }
+
+  .milestone {
+    position: relative;
+    margin-bottom: 24px;
+    padding: 20px 24px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: border-color 0.2s;
+  }
+
+  .milestone:hover { border-color: var(--border-bright); }
+
+  .milestone::before {
+    content: '';
+    position: absolute;
+    left: -26px;
+    top: 24px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+    background: var(--color, var(--gold));
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.2);
+  }
+
+  .ms-week {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .ms-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .ms-criteria {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .ms-go-nogo {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  .gng-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: var(--bg4);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+
+  .gng-item.go { border-color: rgba(77,217,172,0.3); color: var(--teal); background: rgba(77,217,172,0.05); }
+  .gng-item.nogo { border-color: rgba(224,92,92,0.3); color: var(--red-soft); background: rgba(224,92,92,0.05); }
+
+  /* ═══ RISK MATRIX ═══ */
+  .risk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 12px;
+  }
+
+  .risk-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    transition: all 0.2s;
+  }
+
+  .risk-card:hover {
+    border-color: var(--border-bright);
+    transform: translateY(-1px);
+  }
+
+  .risk-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .risk-rank {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .risk-1 { background: rgba(224,92,92,0.2); color: var(--red-soft); }
+  .risk-2 { background: rgba(224,92,92,0.17); color: #e08050; }
+  .risk-3 { background: rgba(201,168,76,0.2); color: var(--gold); }
+  .risk-4 { background: rgba(201,168,76,0.15); color: #b09040; }
+  .risk-5 { background: rgba(91,141,238,0.15); color: var(--blue); }
+  .risk-low { background: rgba(77,217,172,0.1); color: var(--teal); }
+
+  .risk-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.4;
+  }
+
+  .risk-domain {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .risk-body {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  .risk-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .risk-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .rp-impact { background: rgba(224,92,92,0.12); color: var(--red-soft); }
+  .rp-prob { background: rgba(91,141,238,0.12); color: var(--blue); }
+  .rp-effort { background: rgba(201,168,76,0.12); color: var(--gold); }
+
+  .risk-mitigation {
+    font-size: 12px;
+    color: var(--teal);
+    padding-left: 12px;
+    border-left: 2px solid rgba(77,217,172,0.3);
+    line-height: 1.5;
+  }
+
+  /* ═══ GOVERNANCE CHECKLIST ═══ */
+  .gov-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  .gov-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .gov-card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg3);
+  }
+
+  .gov-icon {
+    font-size: 18px;
+    width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg4);
+    border-radius: 7px;
+  }
+
+  .gov-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .gov-card-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .gov-items {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .gov-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    cursor: pointer;
+    padding: 8px 10px;
+    border-radius: 6px;
+    transition: background 0.15s;
+    border: 1px solid transparent;
+  }
+
+  .gov-item:hover { background: var(--bg3); border-color: var(--border); }
+
+  .gov-check {
+    width: 18px; height: 18px;
+    border: 1.5px solid var(--border-bright);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    font-size: 10px;
+  }
+
+  .gov-item.checked .gov-check {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--bg);
+  }
+
+  .gov-item.checked { opacity: 0.6; }
+  .gov-item.checked span { text-decoration: line-through; }
+
+  /* ═══ M-SERIES PLANNING TASKS ═══ */
+  .planning-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .planning-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 400;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg3);
+    white-space: nowrap;
+  }
+
+  .planning-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim);
+    vertical-align: top;
+  }
+
+  .planning-table tbody tr:last-child td { border-bottom: none; }
+  .planning-table tbody tr:hover td { background: var(--bg3); }
+
+  .pt-id {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  .pt-badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  .pt-p0 { background: rgba(224,92,92,0.15); color: var(--red-soft); }
+  .pt-p1 { background: rgba(201,168,76,0.15); color: var(--gold); }
+  .pt-p2 { background: rgba(91,141,238,0.15); color: var(--blue); }
+
+  .pt-owner, .pt-sprint {
+    width: 100%;
+    padding: 5px 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .pt-owner:focus, .pt-sprint:focus { border-color: var(--gold); }
+  .pt-owner::placeholder, .pt-sprint::placeholder { color: var(--text-muted); }
+
+  .pt-done-cb {
+    width: 18px; height: 18px;
+    cursor: pointer;
+    accent-color: var(--gold);
+  }
+
+  /* ═══ FOOTER ═══ */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 0;
+    margin-top: 80px;
+    text-align: center;
+  }
+
+  .footer-inner {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .footer-inner strong { color: var(--gold); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .waves-grid { grid-template-columns: 1fr; }
+    .risk-grid { grid-template-columns: 1fr; }
+    .gov-grid { grid-template-columns: 1fr; }
+    .container { padding: 0 16px; }
+  }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-bright); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-gem">◆</div>
+      <div>
+        <div class="logo-name"><span>JULES</span> // Command</div>
+        <div class="logo-role">Program Manager Técnico · Arquiteto de Entrega</div>
+      </div>
+    </div>
+    <div class="header-nav">
+      <button class="nav-btn active" onclick="showSection('waves')">Ondas</button>
+      <button class="nav-btn" onclick="showSection('timeline')">Cronograma</button>
+      <button class="nav-btn" onclick="showSection('raci')">RACI</button>
+      <button class="nav-btn" onclick="showSection('risks')">Riscos</button>
+      <button class="nav-btn" onclick="showSection('gov')">Governança</button>
+      <button class="nav-btn" onclick="showSection('planning')">Planning M-series</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-top-tag"><div class="hero-dot"></div>JULES MISSION BRIEF</div>
+    <h1 class="hero-title">
+      Plan with<br>
+      <span class="gold">Precision.</span><br>
+      <span class="dim">Execute with Discipline.</span>
+    </h1>
+    <p class="hero-desc">
+      Atue como Program Manager Técnico e Arquiteto de Entrega para o SaaS BirthHub 360. Organize 100 ações em 4 ondas de 90 dias, defina dependências explícitas, mitige riscos sistêmicos, governe entregas quinzenais e entregue métricas de sucesso auditáveis a cada sprint.
+    </p>
+
+    <!-- MASTER PROMPT -->
+    <div class="prompt-master">
+      <pre><span class="pm-role">ROLE:</span> Program Manager Técnico + Arquiteto de Entrega
+      SaaS B2B multiagente — BirthHub 360
+
+<span class="pm-task">CONTEXT:</span>
+  100 ações classificadas (M01–M50 e I01–I50), prioridades P0–P2
+  Stack: TypeScript, Python, Prisma, Redis/BullMQ, Cloud Run
+
+<span class="pm-task">TASKS:</span>
+  1. Organizar 100 ações em 4 ondas de execução (90 dias cada)
+     → Fundação · Confiabilidade · Escala · Otimização
+  2. Para cada onda: objetivo de negócio, ações, dependências,
+     capacidade estimada, riscos, métricas de sucesso
+  3. Produzir matriz RACI por trilha
+     → Produto · Plataforma · Dados · Segurança · IA · Front-end
+  4. Gerar cronograma executivo quinzenal com go/no-go criteria
+  5. Gerar checklist de governança semanal para CTO
+     → Arquitetura · Qualidade · Operação · Finanças
+
+<span class="pm-out">OUTPUT FORMAT:</span>
+  Tabelas objetivas + plano 12 semanas + top-10 riscos
+  priorizados por impacto × probabilidade</pre>
+      <button class="copy-btn" onclick="copyPrompt(this)">📋 Copiar Prompt</button>
+    </div>
+  </section>
+
+  <!-- KPIs -->
+  <div class="kpi-row">
+    <div class="kpi-cell" style="--color:var(--blue)">
+      <div class="kpi-label">Total de Ações</div>
+      <div class="kpi-num" style="color:var(--blue)">100</div>
+      <div class="kpi-sub">M01–M50 + I01–I50</div>
+    </div>
+    <div class="kpi-cell" style="--color:var(--red-soft)">
+      <div class="kpi-label">P0 Críticas</div>
+      <div class="kpi-num" style="color:var(--red-soft)">46</div>
+      <div class="kpi-sub">bloqueiam escala</div>
+    </div>
+    <div class="kpi-cell" style="--color:var(--gold)">
+      <div class="kpi-label">Ondas de Entrega</div>
+      <div class="kpi-num" style="color:var(--gold)">4</div>
+      <div class="kpi-sub">90 dias cada</div>
+    </div>
+    <div class="kpi-cell" style="--color:var(--teal)">
+      <div class="kpi-label">Trilhas RACI</div>
+      <div class="kpi-num" style="color:var(--teal)">6</div>
+      <div class="kpi-sub">Produto · Plat · Dados · Seg · IA · FE</div>
+    </div>
+    <div class="kpi-cell" style="--color:var(--wave4)">
+      <div class="kpi-label">Top Riscos</div>
+      <div class="kpi-num" style="color:var(--wave4)">10</div>
+      <div class="kpi-sub">impacto × probabilidade</div>
+    </div>
+    <div class="kpi-cell" style="--color:var(--gold-light)">
+      <div class="kpi-label">Marcos Quinzenais</div>
+      <div class="kpi-num" style="color:var(--gold-light)">24</div>
+      <div class="kpi-sub">go/no-go por sprint</div>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION: WAVES ═══ -->
+  <section class="section" id="sec-waves">
+    <div class="section-eyebrow">// execução em ondas</div>
+    <h2 class="section-title">4 Ondas de 90 Dias</h2>
+    <p class="section-desc">Cada onda tem objetivo de negócio claro, dependências técnicas explícitas, capacidade em squads/semana e critério de sucesso auditável. Nenhuma onda avança sem evidência da anterior.</p>
+
+    <div class="waves-grid">
+      <!-- WAVE 1 -->
+      <div class="wave-card wave-1">
+        <div class="wave-header">
+          <div class="wave-num">// onda 01 · semanas 1-12</div>
+          <div class="wave-name">Fundação</div>
+          <div class="wave-period">Dias 1–90 · 3 Squads</div>
+        </div>
+        <div class="wave-body">
+          <div class="wave-objective">
+            🎯 <strong>Objetivo:</strong> Eliminar risco de inconsistência de dados, estabelecer contratos entre serviços, autenticação robusta e CI/CD funcional. O sistema deve ser observável e auditável.
+          </div>
+          <div class="wave-items">
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M01–M03: Bounded contexts, matriz de criticidade, contratos versionados</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M06–M08: Idempotência, observabilidade full-stack, SLO/SLI</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M10–M13: Segredos, RBAC, auditoria, LGPD</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M15–M16: Schema evolutivo, índices SQL críticos</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M18–M20: Backups, supply chain security, testes de contrato</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M28: Arquitetura multi-tenant isolada</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M38–M40: CI/CD com gates, runbooks P0/P1</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>I01–I10: Core APIs gateway (leads, deals, billing, contratos)</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>I41–I44, I46–I48: Auth, RBAC, E2E, SAST, backup</div></div>
+          </div>
+          <div class="wave-meta">
+            <div class="wave-meta-item"><div class="wmi-label">Capacidade</div><div class="wmi-val">3 squads · 2 sem.</div></div>
+            <div class="wave-meta-item"><div class="wmi-label">Ações</div><div class="wmi-val">~35 itens P0</div></div>
+            <div class="wave-meta-item"><div class="wmi-label">Risco principal</div><div class="wmi-val">Débito técnico alto</div></div>
+            <div class="wave-meta-item"><div class="wmi-label">Critério exit</div><div class="wmi-val">0 endpoint sem RBAC</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WAVE 2 -->
+      <div class="wave-card wave-2">
+        <div class="wave-header">
+          <div class="wave-num">// onda 02 · semanas 13-24</div>
+          <div class="wave-name">Confiabilidade</div>
+          <div class="wave-period">Dias 91–180 · 4 Squads</div>
+        </div>
+        <div class="wave-body">
+          <div class="wave-objective">
+            🎯 <strong>Objetivo:</strong> Completar fluxos de agentes ponta a ponta, integrar provedores críticos (Stripe, NFe, DocuSign), implementar resiliência com DLQ e recovery, eliminar mocks residuais.
+          </div>
+          <div class="wave-items">
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M05: Resiliência (timeout, retry, circuit breaker)</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M24–M25: Feature flags, catálogo de integrações</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M26–M27: Antifraude, catálogo de erros de domínio</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M29–M30: AI Ops (prompt versioning), guardrails de IA</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>I11–I20: Fluxos DEAL_CLOSED_WON, HEALTH_ALERT, CHURN_RISK_HIGH, DLQ</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>I21–I24: Stripe, Pagar.me, Focus NFe, DocuSign/Clicksign</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>I33: Sandbox de tools de agentes (isolamento)</div></div>
+          </div>
+          <div class="wave-meta">
+            <div class="wave-meta-item"><div class="wmi-label">Capacidade</div><div class="wmi-val">4 squads · 2 sem.</div></div>
+            <div class="wave-meta-item"><div class="wmi-label">Ações</div><div class="wmi-val">~30 itens P0-P1</div></div>
+            <div class="wave-meta-item"><div class="wmi-label">Risco principal</div><div class="wmi-val">Integrações externas lentas</div></div>
+            <div class="wave-meta-item"><div class="wmi-label">Critério exit</div><div class="wmi-val">Fluxos P&A automáticos</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WAVE 3 -->
+      <div class="wave-card wave-3">
+        <div class="wave-header">
+          <div class="wave-num">// onda 03 · semanas 25-36</div>
+          <div class="wave-name">Escala</div>
+          <div class="wave-period">Dias 181–270 · 4 Squads</div>
+        </div>
+        <div class="wave-body">
+          <div class="wave-objective">
+            🎯 <strong>Objetivo:</strong> Habilitar crescimento de tenants sem degradação, performance de front-end, testes de carga, FinOps operacional, dashboards de negócio e internacionalização.
+          </div>
+          <div class="wave-items">
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M09: FinOps com custo por tenant/feature/LLM</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M14, M17: Data quality, particionamento AgentLog</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M21–M23: Pirâmide QA, testes de carga, chaos engineering</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M31–M35: Observabilidade LLM, fallback multi-modelo, golden datasets, FE performance</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M36, M41: Design system WCAG AA, autoscaling SLO</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>I25–I29: CRM sync, Resend/WhatsApp, Ads attribution, Calendar, Drive</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>I35–I40: Dashboards operacionais, pipeline, financeiro, contratos, health score</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>I45, I49–I50: Testes carga BullMQ, canary deploy, DR drill</div></div>
+          </div>
+          <div class="wave-meta">
+            <div class="wave-meta-item"><div class="wmi-label">Capacidade</div><div class="wmi-val">4 squads · 2 sem.</div></div>
+            <div class="wave-meta-item"><div class="wmi-label">Ações</div><div class="wmi-val">~25 itens P1-P2</div></div>
+            <div class="wave-meta-item"><div class="wmi-label">Risco principal</div><div class="wmi-val">Complexidade de UI</div></div>
+            <div class="wave-meta-item"><div class="wmi-label">Critério exit</div><div class="wmi-val">10+ tenants simultâneos</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WAVE 4 -->
+      <div class="wave-card wave-4">
+        <div class="wave-header">
+          <div class="wave-num">// onda 04 · semanas 37-48</div>
+          <div class="wave-name">Otimização</div>
+          <div class="wave-period">Dias 271–360 · 3 Squads</div>
+        </div>
+        <div class="wave-body">
+          <div class="wave-objective">
+            🎯 <strong>Objetivo:</strong> Atingir maturidade operacional, cache semântico de IA, i18n para expansão, governança de código, modelo de maturidade de engenharia e KPI tree executiva.
+          </div>
+          <div class="wave-items">
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M37: Internacionalização e fiscal multi-mercado</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M43–M50: Nomenclatura, ownership, dívida técnica, KPI tree, maturidade</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>M47–M48: Modelo de maturidade, revisões arquiteturais quinzenais</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>I30–I32, I34: Fallback LLM, avaliação prompts, cache semântico</div></div>
+            <div class="wave-item"><div class="wave-item-bullet">▸</div><div>I14: BOARD_REPORT automático e agendado</div></div>
+          </div>
+          <div class="wave-meta">
+            <div class="wave-meta-item"><div class="wmi-label">Capacidade</div><div class="wmi-val">3 squads · 2 sem.</div></div>
+            <div class="wave-meta-item"><div class="wmi-val">~10 itens P1-P2</div><div class="wmi-label">Ações</div></div>
+            <div class="wave-meta-item"><div class="wmi-label">Risco principal</div><div class="wmi-val">Scope creep tardio</div></div>
+            <div class="wave-meta-item"><div class="wmi-label">Critério exit</div><div class="wmi-val">Score maturidade > 3.5</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══ TIMELINE ═══ -->
+  <section class="section" id="sec-timeline">
+    <div class="section-eyebrow">// cronograma executivo</div>
+    <h2 class="section-title">Marcos Quinzenais + Go/No-Go</h2>
+    <p class="section-desc">Cada marco tem critérios objetivos de go/no-go. Nenhuma onda avança sem evidência técnica verificável. O CTO valida pessoalmente cada gate.</p>
+
+    <div class="timeline">
+      <div class="milestone" style="--color:var(--wave1)">
+        <div class="ms-week">Semana 2 · Marco 1</div>
+        <div class="ms-title">🏗️ Bounded Contexts + Contratos Versionados</div>
+        <div class="ms-criteria">RFC de arquitetura aprovado. Schema registry ativo. Todos os eventos com versão. Diagrama C4 publicado. RACI definido por serviço.</div>
+        <div class="ms-go-nogo">
+          <span class="gng-item go">GO → RFC aprovado + schema registry</span>
+          <span class="gng-item nogo">NO-GO → domínios sobrepostos sem dono</span>
+        </div>
+      </div>
+
+      <div class="milestone" style="--color:var(--wave1)">
+        <div class="ms-week">Semana 4 · Marco 2</div>
+        <div class="ms-title">🔐 Segurança Baseline (RBAC + Auditoria + Segredos)</div>
+        <div class="ms-criteria">Zero endpoint sensível sem RBAC. 100% segredos com rotação automática. Tabela de auditoria imutável ativa. Pipeline SAST/SCA no CI.</div>
+        <div class="ms-go-nogo">
+          <span class="gng-item go">GO → pentest básico passando</span>
+          <span class="gng-item nogo">NO-GO → credencial hardcoded em código</span>
+        </div>
+      </div>
+
+      <div class="milestone" style="--color:var(--wave1)">
+        <div class="ms-week">Semana 6 · Marco 3</div>
+        <div class="ms-title">🧱 Core APIs em Produção (Leads, Deals, Billing, Contratos)</div>
+        <div class="ms-criteria">CRUD real para leads e deals. Billing summary com p95 < 300ms. Contratos com auditoria jurídica. Validação Zod/Pydantic em todos os endpoints.</div>
+        <div class="ms-go-nogo">
+          <span class="gng-item go">GO → demo ao vivo com dados reais</span>
+          <span class="gng-item nogo">NO-GO → mock em qualquer endpoint crítico</span>
+        </div>
+      </div>
+
+      <div class="milestone" style="--color:var(--wave1)">
+        <div class="ms-week">Semana 8 · Marco 4</div>
+        <div class="ms-title">👁️ Observabilidade Full-Stack + SLO Ativo</div>
+        <div class="ms-criteria">Tracing > 90% dos serviços. Dashboards SRE no ar. Error budget monitorado semanalmente. Alertas P0 com < 5min de detecção.</div>
+        <div class="ms-go-nogo">
+          <span class="gng-item go">GO → MTTD P0 comprovado em drill</span>
+          <span class="gng-item nogo">NO-GO → falha silenciosa em prod sem alerta</span>
+        </div>
+      </div>
+
+      <div class="milestone" style="--color:var(--wave2)">
+        <div class="ms-week">Semana 12 · Marco 5</div>
+        <div class="ms-title">⚡ Fluxos de Agentes Ponta a Ponta (DEAL + HEALTH + CHURN)</div>
+        <div class="ms-criteria">DEAL_CLOSED_WON executando completamente. HEALTH_ALERT com ações CS automatizadas. CHURN_RISK_HIGH com playbook CRM integrado. DLQ operacional.</div>
+        <div class="ms-go-nogo">
+          <span class="gng-item go">GO → 100 execuções reais sem falha</span>
+          <span class="gng-item nogo">NO-GO → estado intermediário perdido</span>
+        </div>
+      </div>
+
+      <div class="milestone" style="--color:var(--wave2)">
+        <div class="ms-week">Semana 16 · Marco 6</div>
+        <div class="ms-title">💳 Integrações Financeiras + Fiscais Operacionais</div>
+        <div class="ms-criteria">Stripe com reconciliação automática. Focus NFe emitindo NF em produção. Clicksign/DocuSign com callbacks ativos. Fallback de adquirência testado.</div>
+        <div class="ms-go-nogo">
+          <span class="gng-item go">GO → 1ª cobrança real processada</span>
+          <span class="gng-item nogo">NO-GO → divergência de saldo detectada</span>
+        </div>
+      </div>
+
+      <div class="milestone" style="--color:var(--wave3)">
+        <div class="ms-week">Semana 20 · Marco 7</div>
+        <div class="ms-title">📊 Dashboards de Negócio + FinOps Ativo</div>
+        <div class="ms-criteria">Painel pipeline drag/drop live. MRR/churn visíveis diariamente. Custo por tenant rastreado. Core Web Vitals com LCP < 2.5s.</div>
+        <div class="ms-go-nogo">
+          <span class="gng-item go">GO → CEO usa dashboard sem suporte</span>
+          <span class="gng-item nogo">NO-GO → custo de IA sem visibilidade</span>
+        </div>
+      </div>
+
+      <div class="milestone" style="--color:var(--wave3)">
+        <div class="ms-week">Semana 24 · Marco 8</div>
+        <div class="ms-title">🔬 Testes de Carga + Canary Deploy + Chaos Validado</div>
+        <div class="ms-criteria">BullMQ e API Gateway com baseline de escala. Deploy canary ativo para serviços críticos. Degradação graciosa validada em cenários de caos.</div>
+        <div class="ms-go-nogo">
+          <span class="gng-item go">GO → 10x pico atual sustentado</span>
+          <span class="gng-item nogo">NO-GO → cascading failure em teste</span>
+        </div>
+      </div>
+
+      <div class="milestone" style="--color:var(--wave4)">
+        <div class="ms-week">Semana 32 · Marco 9</div>
+        <div class="ms-title">🤖 AI Ops Maduro (Guardrails + Budget + Avaliação)</div>
+        <div class="ms-criteria">Zero incidente de segurança de IA. Orçamento de tokens por tenant ativo. Golden datasets com precisão mínima por tarefa. Cache semântico reduzindo custo.</div>
+        <div class="ms-go-nogo">
+          <span class="gng-item go">GO → avaliação offline passando</span>
+          <span class="gng-item nogo">NO-GO → PII vazando em output de LLM</span>
+        </div>
+      </div>
+
+      <div class="milestone" style="--color:var(--wave4)">
+        <div class="ms-week">Semana 40 · Marco 10</div>
+        <div class="ms-title">🌍 Maturidade Operacional + Pronto para Escala Global</div>
+        <div class="ms-criteria">Score de maturidade > 3.5 por domínio. KPI tree executiva data-driven. Modelo i18n implementado. Architecture verdict positivo. DR drill aprovado.</div>
+        <div class="ms-go-nogo">
+          <span class="gng-item go">GO → Architecture Verdict aprovado</span>
+          <span class="gng-item nogo">NO-GO → qualquer risco P0 em aberto</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══ RACI ═══ -->
+  <section class="section" id="sec-raci">
+    <div class="section-eyebrow">// responsabilidades</div>
+    <h2 class="section-title">Matriz RACI por Trilha</h2>
+    <p class="section-desc">R = Responsável (executa) · A = Aprovador (decisão final) · C = Consultado (input especializado) · I = Informado (acompanha)</p>
+
+    <div class="raci-wrapper">
+      <table class="raci">
+        <thead>
+          <tr>
+            <th>Trilha / Atividade</th>
+            <th>CTO</th>
+            <th>Tech Lead Plat.</th>
+            <th>Tech Lead Produto</th>
+            <th>SRE/DevOps</th>
+            <th>Engenheiro Dados</th>
+            <th>Engenheiro IA</th>
+            <th>Frontend Lead</th>
+            <th>Segurança</th>
+            <th>Product Manager</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Arquitetura de Domínio (M01–M02)</td><td><span class="raci-badge rb-A">A</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td></tr>
+          <tr><td>Contratos + Schema Registry (M03–M04)</td><td><span class="raci-badge rb-A">A</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td></tr>
+          <tr><td>Resiliência + Observabilidade (M05–M08)</td><td><span class="raci-badge rb-A">A</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td></tr>
+          <tr><td>FinOps · Custo por tenant (M09)</td><td><span class="raci-badge rb-A">A</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-C">C</span></td></tr>
+          <tr><td>Segurança + RBAC + Auditoria (M10–M12)</td><td><span class="raci-badge rb-A">A</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-I">I</span></td></tr>
+          <tr><td>LGPD + Compliance (M13)</td><td><span class="raci-badge rb-A">A</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-C">C</span></td></tr>
+          <tr><td>Data Quality + Schema SQL (M14–M17)</td><td><span class="raci-badge rb-A">A</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td></tr>
+          <tr><td>Backup + DR Drill (M18)</td><td><span class="raci-badge rb-A">A</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td></tr>
+          <tr><td>AI Ops + Guardrails (M29–M33)</td><td><span class="raci-badge rb-A">A</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-C">C</span></td></tr>
+          <tr><td>Front-end + Design System (M34–M36)</td><td><span class="raci-badge rb-A">A</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-R">R</span></td></tr>
+          <tr><td>CI/CD + Release Train (M38–M39)</td><td><span class="raci-badge rb-A">A</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td></tr>
+          <tr><td>Dívida Técnica + Maturidade (M45–M47)</td><td><span class="raci-badge rb-A">A</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-C">C</span></td></tr>
+          <tr><td>KPI Tree Executiva (M46)</td><td><span class="raci-badge rb-A">A</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-C">C</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-R">R</span></td><td><span class="raci-badge rb-I">I</span></td><td><span class="raci-badge rb-A">A</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══ RISKS ═══ -->
+  <section class="section" id="sec-risks">
+    <div class="section-eyebrow">// gestão de risco</div>
+    <h2 class="section-title">Top 10 Riscos · Impacto × Probabilidade</h2>
+    <p class="section-desc">Cada risco tem causa raiz identificada, impacto técnico e de negócio quantificado, e contramedida concreta associada a uma ou mais ações do checklist.</p>
+
+    <div class="risk-grid">
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-rank risk-1">1</div>
+          <div>
+            <div class="risk-name">Complexidade invisível multi-agente sem observabilidade</div>
+            <div class="risk-domain">IA · Orquestração · Operação</div>
+          </div>
+        </div>
+        <div class="risk-body">Sistema falha silenciosamente: erros de LLM, filas represadas ou fluxos corrompidos sem alerta. O produto parece funcionar mas entrega dados inconsistentes. Descoberta tardia por clientes.</div>
+        <div class="risk-pills">
+          <span class="risk-pill rp-impact">IMPACTO: CRÍTICO</span>
+          <span class="risk-pill rp-prob">PROB: ALTA</span>
+          <span class="risk-pill rp-effort">M07 · M08 · I20</span>
+        </div>
+        <div class="risk-mitigation">▸ Observabilidade full-stack obrigatória na Onda 1. SLO/SLI com error budget. Alertas P0 < 5 min.</div>
+      </div>
+
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-rank risk-1">2</div>
+          <div>
+            <div class="risk-name">Mocks residuais em produção destroem confiança operacional</div>
+            <div class="risk-domain">Backend · Integrações · Produto</div>
+          </div>
+        </div>
+        <div class="risk-body">Qualquer endpoint retornando dados fictícios em produção cria decisões comerciais erradas (health score falso, billing errado). Uma descoberta por cliente pode comprometer contratos.</div>
+        <div class="risk-pills">
+          <span class="risk-pill rp-impact">IMPACTO: ALTO</span>
+          <span class="risk-pill rp-prob">PROB: MÉDIA-ALTA</span>
+          <span class="risk-pill rp-effort">I01–I10 · M20</span>
+        </div>
+        <div class="risk-mitigation">▸ Gate de CI que bloqueia merge com TODO/mock em código de produção. Testes de contrato automáticos.</div>
+      </div>
+
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-rank risk-2">3</div>
+          <div>
+            <div class="risk-name">Vazamento cross-tenant por ausência de isolamento</div>
+            <div class="risk-domain">Segurança · Dados · Compliance</div>
+          </div>
+        </div>
+        <div class="risk-body">Query sem filtro de tenant_id expõe dados de um cliente a outro. Em SaaS multitenancy isso é violação grave de privacidade e potencial LGPD/GDPR com multas.</div>
+        <div class="risk-pills">
+          <span class="risk-pill rp-impact">IMPACTO: CRÍTICO</span>
+          <span class="risk-pill rp-prob">PROB: MÉDIA</span>
+          <span class="risk-pill rp-effort">M28 · M13 · M12</span>
+        </div>
+        <div class="risk-mitigation">▸ Middleware Prisma injetando tenant_id automaticamente. Row-Level Security no Postgres. Testes de isolamento no CI.</div>
+      </div>
+
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-rank risk-2">4</div>
+          <div>
+            <div class="risk-name">Explosão de custo de LLM sem controle por tenant</div>
+            <div class="risk-domain">IA · FinOps · Produto</div>
+          </div>
+        </div>
+        <div class="risk-body">Sem orçamento por tenant e alertas, um único cliente pode consumir 80% do budget de tokens, degradando todos os outros. Custo variável de IA pode dobrar em semanas.</div>
+        <div class="risk-pills">
+          <span class="risk-pill rp-impact">IMPACTO: ALTO</span>
+          <span class="risk-pill rp-prob">PROB: ALTA</span>
+          <span class="risk-pill rp-effort">M09 · M31 · I31</span>
+        </div>
+        <div class="risk-mitigation">▸ Quotas por tenant com soft/hard limits. Dashboard de custo LLM em tempo real. Alertas de anomalia automatizados.</div>
+      </div>
+
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-rank risk-3">5</div>
+          <div>
+            <div class="risk-name">Inconsistência de dados por ausência de idempotência</div>
+            <div class="risk-domain">Backend · Orquestração · Finanças</div>
+          </div>
+        </div>
+        <div class="risk-body">Retry de webhook ou reprocessamento duplica cobranças, cria dois contratos ou executa fluxo duas vezes. Em financeiro isso gera chargeback e perda de confiança.</div>
+        <div class="risk-pills">
+          <span class="risk-pill rp-impact">IMPACTO: ALTO</span>
+          <span class="risk-pill rp-prob">PROB: ALTA</span>
+          <span class="risk-pill rp-effort">M06 · I08 · I10</span>
+        </div>
+        <div class="risk-mitigation">▸ Middleware de idempotência centralizado com Redis. Chave event_id obrigatória em todo payload. Testes de duplicata no CI.</div>
+      </div>
+
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-rank risk-3">6</div>
+          <div>
+            <div class="risk-name">Fluxos de agente sem persistência de estado</div>
+            <div class="risk-domain">Orquestração · Produto · Confiabilidade</div>
+          </div>
+        </div>
+        <div class="risk-body">Crash do orquestrador durante DEAL_CLOSED_WON ou CHURN_RISK_HIGH perde estado intermediário. Reprocessamento não determinístico. Fluxos ficam em estado zumbi.</div>
+        <div class="risk-pills">
+          <span class="risk-pill rp-impact">IMPACTO: ALTO</span>
+          <span class="risk-pill rp-prob">PROB: MÉDIA</span>
+          <span class="risk-pill rp-effort">I15 · I16 · I11–I13</span>
+        </div>
+        <div class="risk-mitigation">▸ Persistência de estado em tabela Postgres com API de consulta. DLQ com endpoint de reprocessamento manual. State machine com checkpoints.</div>
+      </div>
+
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-rank risk-4">7</div>
+          <div>
+            <div class="risk-name">Integrações externas como single point of failure</div>
+            <div class="risk-domain">Integrações · Resiliência · Produto</div>
+          </div>
+        </div>
+        <div class="risk-body">Stripe, Focus NFe ou DocuSign com instabilidade derruba fluxo inteiro sem graceful degradation. Sem circuit breaker, timeout ou fallback, o produto para junto.</div>
+        <div class="risk-pills">
+          <span class="risk-pill rp-impact">IMPACTO: MÉDIO-ALTO</span>
+          <span class="risk-pill rp-prob">PROB: MÉDIA</span>
+          <span class="risk-pill rp-effort">M05 · M25 · I22</span>
+        </div>
+        <div class="risk-mitigation">▸ Circuit breaker por integração. Fallback de adquirência (Pagar.me). Catálogo de integrações com score de confiabilidade monitorado.</div>
+      </div>
+
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-rank risk-4">8</div>
+          <div>
+            <div class="risk-name">Segurança de IA: PII em outputs, jailbreak, prompt injection</div>
+            <div class="risk-domain">IA · Segurança · Compliance</div>
+          </div>
+        </div>
+        <div class="risk-body">Agente expondo dados sensíveis de clientes em outputs de LLM, ou prompt injection manipulando fluxos críticos. Incidente de segurança de IA em SaaS B2B é fatal para contratos enterprise.</div>
+        <div class="risk-pills">
+          <span class="risk-pill rp-impact">IMPACTO: CRÍTICO</span>
+          <span class="risk-pill rp-prob">PROB: BAIXA-MÉDIA</span>
+          <span class="risk-pill rp-effort">M30 · I33 · M29</span>
+        </div>
+        <div class="risk-mitigation">▸ Guardrails PII + toxicidade antes de todo output. Sandbox de tools isolado. Red team de prompts trimestral. Versioning de prompts com rollback.</div>
+      </div>
+
+      <div class="risk-card">
+        <div class="risk-href risk-5">
+        <div class="risk-header">
+          <div class="risk-rank risk-5">9</div>
+          <div>
+            <div class="risk-name">Débito técnico acumulando sem orçamento nem dono</div>
+            <div class="risk-domain">Engenharia · Processo · CTO</div>
+          </div>
+        </div>
+        <div class="risk-body">Sem reserva trimestral de capacidade para débito técnico, o backlog cresce silenciosamente. Em 12 meses o custo de refatoração supera o custo de novas features.</div>
+        <div class="risk-pills">
+          <span class="risk-pill rp-impact">IMPACTO: MÉDIO</span>
+          <span class="risk-pill rp-prob">PROB: ALTA</span>
+          <span class="risk-pill rp-effort">M45 · M47 · M48</span>
+        </div>
+        <div class="risk-mitigation">▸ 20% da capacidade de cada sprint reservada para débito. Backlog classificado por impacto. Review arquitetural quinzenal com CTO.</div>
+        </div>
+      </div>
+
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-rank risk-low">10</div>
+          <div>
+            <div class="risk-name">Ausência de ownership técnico causa filas de revisão</div>
+            <div class="risk-domain">Processo · Engenharia · Velocidade</div>
+          </div>
+        </div>
+        <div class="risk-body">Sem CODEOWNERS ativo por pasta/serviço, PRs esperam review indefinidamente ou são aprovados por quem não conhece o domínio. Qualidade cai e velocidade diminui.</div>
+        <div class="risk-pills">
+          <span class="risk-pill rp-impact">IMPACTO: BAIXO-MÉDIO</span>
+          <span class="risk-pill rp-prob">PROB: ALTA</span>
+          <span class="risk-pill rp-effort">M44 · M49 · M43</span>
+        </div>
+        <div class="risk-mitigation">▸ CODEOWNERS ativo por módulo. Template de PR obrigatório. Documentação viva por PR com lint automático.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══ GOVERNANCE ═══ -->
+  <section class="section" id="sec-gov">
+    <div class="section-eyebrow">// ritual semanal do CTO</div>
+    <h2 class="section-title">Checklist de Governança Semanal</h2>
+    <p class="section-desc">Execute este checklist toda segunda-feira. Nenhuma semana começa sem todas as perguntas respondidas com evidência concreta. Decisões pendentes bloqueiam sprints.</p>
+
+    <div class="gov-grid">
+      <div class="gov-card">
+        <div class="gov-card-header">
+          <div class="gov-icon">🏗️</div>
+          <div>
+            <div class="gov-card-title">Arquitetura & Qualidade</div>
+            <div class="gov-card-sub">segunda-feira · 60 min</div>
+          </div>
+        </div>
+        <div class="gov-items" id="gov-arch">
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Há algum serviço sem dono claro (CODEOWNERS) ou com responsabilidade sobreposta?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Algum PR da semana quebrou contrato entre serviços sem atualizar schema registry?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Alguma migração de schema foi aplicada sem o padrão expand-contract documentado?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>O índice de flakiness de testes E2E está abaixo de 2%?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Alguma decisão de arquitetura nova aumentou acoplamento sem revisão em fórum?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Coverage de testes de contrato está acima do mínimo para todos os serviços críticos?</span></div>
+        </div>
+      </div>
+
+      <div class="gov-card">
+        <div class="gov-card-header">
+          <div class="gov-icon">📡</div>
+          <div>
+            <div class="gov-card-title">Operação & SLO</div>
+            <div class="gov-card-sub">segunda-feira · 45 min</div>
+          </div>
+        </div>
+        <div class="gov-items" id="gov-ops">
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Algum SLO de serviço crítico queimou mais de 20% do error budget na semana?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Todos os incidentes P0/P1 da semana têm post-mortem aberto e ação no checklist?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>DLQ está limpa ou com itens processados e justificados?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Backup foi executado e restore drill está dentro do prazo mensal?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Runbooks de P0 foram usados esta semana? Precisam de atualização?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Tracing coverage está acima de 90%? Algum serviço novo sem instrumentação?</span></div>
+        </div>
+      </div>
+
+      <div class="gov-card">
+        <div class="gov-card-header">
+          <div class="gov-icon">🔐</div>
+          <div>
+            <div class="gov-card-title">Segurança & Compliance</div>
+            <div class="gov-card-sub">segunda-feira · 30 min</div>
+          </div>
+        </div>
+        <div class="gov-items">
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Alguma vulnerabilidade crítica (SAST/SCA) nova aberta sem atribuição e prazo?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Segredos com rotação vencida ou próxima do vencimento identificados?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Algum endpoint novo não passou por revisão de RBAC?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Guardrails de IA (PII, toxicidade) foram testados no deploy mais recente?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Solicitações de acesso a dados sensíveis revisadas e justificadas?</span></div>
+        </div>
+      </div>
+
+      <div class="gov-card">
+        <div class="gov-card-header">
+          <div class="gov-icon">💰</div>
+          <div>
+            <div class="gov-card-title">Finanças & FinOps</div>
+            <div class="gov-card-sub">segunda-feira · 20 min</div>
+          </div>
+        </div>
+        <div class="gov-items">
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Custo de LLM por tenant está dentro do orçamento esperado? Alguma anomalia?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Custo de infraestrutura por receita melhorou ou piorou em relação à semana anterior?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>MRR e churn atualizados no dashboard? Algum tenant em risco alto?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Alguma integração de billing (Stripe/NFe) com divergência ou falha silenciosa?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Orçamento trimestral de débito técnico sendo respeitado?</span></div>
+        </div>
+      </div>
+
+      <div class="gov-card">
+        <div class="gov-card-header">
+          <div class="gov-icon">🤖</div>
+          <div>
+            <div class="gov-card-title">IA & Agentes</div>
+            <div class="gov-card-sub">segunda-feira · 20 min</div>
+          </div>
+        </div>
+        <div class="gov-items">
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Algum prompt alterado sem versionamento e rollback testado?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Golden datasets foram executados no último deploy? Score mínimo mantido?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Disponibilidade do LLM primário acima de 99,5%? Fallback testado?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Latência p95 de completions dentro do SLO por fluxo?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Sandbox de tools isolou corretamente todos os agentes novos da semana?</span></div>
+        </div>
+      </div>
+
+      <div class="gov-card">
+        <div class="gov-card-header">
+          <div class="gov-icon">📈</div>
+          <div>
+            <div class="gov-card-title">Produto & Execução</div>
+            <div class="gov-card-sub">segunda-feira · 30 min</div>
+          </div>
+        </div>
+        <div class="gov-items">
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Quantos itens do checklist foram fechados com evidência verificável na semana?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Algum item fechado sem evidência técnica real (PR/teste/dashboard)?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Estamos no ritmo de 8–12 itens/semana? Acima ou abaixo?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Próximo marco quinzenal está on-track? Quais itens estão em risco?</span></div>
+          <div class="gov-item" onclick="toggleGov(this)"><div class="gov-check"></div><span>Alguma decisão de buy vs. build em aberto que está bloqueando sprint?</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══ M-SERIES PLANNING TABLE ═══ -->
+  <section class="section" id="sec-planning">
+    <div class="section-eyebrow">// gestão de melhorias</div>
+    <h2 class="section-title">Planning · M-Series Estratégicas</h2>
+    <p class="section-desc">Ações de melhoria estrutural gerenciadas por Jules. Atribua owner, onda de execução e rastreie status. Todo item P0 da Onda 1 é bloqueador de release.</p>
+
+    <div style="overflow-x:auto;border:1px solid var(--border);border-radius:10px;">
+      <table class="planning-table" id="planningTable">
+        <thead>
+          <tr>
+            <th>✓</th>
+            <th>ID</th>
+            <th>Ação Estratégica</th>
+            <th>Pri.</th>
+            <th>Trilha</th>
+            <th>Onda</th>
+            <th>Owner</th>
+            <th>Métrica de Sucesso</th>
+          </tr>
+        </thead>
+        <tbody id="planningBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+</div><!-- /container -->
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <strong>JULES // Program Command</strong> — BirthHub 360 CTO Playbook · Cada onda com objetivo claro · Cada risco com contramedida · Cada marco com evidência obrigatória.
+    </div>
+  </div>
+</footer>
+
+</div><!-- /wrap -->
+
+<script>
+// ═══ PLANNING DATA (M-series para Jules) ═══
+const planningData = [
+  { id:'M01', action:'Arquitetura orientada a domínio por bounded contexts', p:'p0', trilha:'Plataforma', onda:'1', metric:'0 conflitos de responsabilidade entre serviços' },
+  { id:'M02', action:'Matriz de criticidade por serviço e dependência (service catalog + RACI)', p:'p0', trilha:'Plataforma', onda:'1', metric:'MTTR por serviço crítico < 30 min' },
+  { id:'M04', action:'Política de depreciação com SLA de migração documentado', p:'p1', trilha:'Plataforma', onda:'2', metric:'0 quebra sem aviso' },
+  { id:'M08', action:'SLO/SLI por domínio e serviço com error budget monitorado', p:'p0', trilha:'Plataforma', onda:'1', metric:'erro budget monitorado semanalmente' },
+  { id:'M09', action:'FinOps com custo por tenant/feature/LLM visível em painel', p:'p1', trilha:'Dados', onda:'3', metric:'custo por receita reduzido trimestralmente' },
+  { id:'M13', action:'Política LGPD: retenção, anonimização, minimização (DPIA)', p:'p0', trilha:'Segurança', onda:'1', metric:'conformidade auditável' },
+  { id:'M14', action:'Data quality checks automáticos com jobs e relatórios', p:'p1', trilha:'Dados', onda:'3', metric:'incidentes de dados críticos < 2/mês' },
+  { id:'M17', action:'Particionamento e retenção de AgentLog com política de custo', p:'p1', trilha:'Dados', onda:'3', metric:'custo de storage otimizado' },
+  { id:'M18', action:'Backups testados com restore drill mensal documentado', p:'p0', trilha:'Plataforma', onda:'1', metric:'RTO/RPO dentro do alvo' },
+  { id:'M25', action:'Catálogo de integrações com score de confiabilidade por provedor', p:'p1', trilha:'Plataforma', onda:'2', metric:'MTBF integrações em alta' },
+  { id:'M29', action:'Governança de prompts e modelos (AI Ops + versionamento)', p:'p1', trilha:'IA', onda:'2', metric:'regressão de qualidade monitorada' },
+  { id:'M36', action:'Design system com tokens semânticos e acessibilidade WCAG AA', p:'p1', trilha:'Front-end', onda:'3', metric:'conformidade WCAG AA' },
+  { id:'M37', action:'Estratégia de internacionalização e moeda/fiscal para expansão', p:'p2', trilha:'Produto', onda:'4', metric:'expansão de mercado sem retrabalho' },
+  { id:'M40', action:'Runbooks operacionais por incidente crítico com game days', p:'p0', trilha:'Plataforma', onda:'1', metric:'tempo de diagnóstico acelerado' },
+  { id:'M41', action:'Gestão de capacidade e autoscaling baseado em SLO (HPA/Cloud Run)', p:'p1', trilha:'Plataforma', onda:'3', metric:'saturação sob picos controlada' },
+  { id:'M43', action:'Governança de nomenclatura e convenções de código com lint', p:'p2', trilha:'Engenharia', onda:'4', metric:'consistência transversal' },
+  { id:'M45', action:'Gestão de dívida técnica por orçamento trimestral e backlog', p:'p1', trilha:'Engenharia', onda:'2', metric:'redução de débito alto impacto' },
+  { id:'M46', action:'KPI tree executiva (produto, receita, operação) em dashboard', p:'p1', trilha:'Produto', onda:'3', metric:'decisões data-driven semanais' },
+  { id:'M47', action:'Modelo de maturidade de engenharia por domínio com score', p:'p2', trilha:'Engenharia', onda:'4', metric:'evolução previsível por trimestre' },
+  { id:'M48', action:'Revisão arquitetural quinzenal orientada a risco com atas', p:'p2', trilha:'Plataforma', onda:'4', metric:'riscos críticos tratados no prazo' },
+  { id:'M49', action:'Política de documentação viva por PR com template e lint', p:'p1', trilha:'Engenharia', onda:'2', metric:'docs desatualizada < 10%' },
+  { id:'M50', action:'Framework de decisão buy vs build por integração (matriz TCO)', p:'p2', trilha:'Produto', onda:'4', metric:'menor custo total de propriedade' },
+];
+
+const state = {
+  done: new Set(JSON.parse(localStorage.getItem('jules-done') || '[]')),
+  owners: JSON.parse(localStorage.getItem('jules-owners') || '{}'),
+  ondas: JSON.parse(localStorage.getItem('jules-ondas') || '{}'),
+};
+
+function save() {
+  localStorage.setItem('jules-done', JSON.stringify([...state.done]));
+  localStorage.setItem('jules-owners', JSON.stringify(state.owners));
+  localStorage.setItem('jules-ondas', JSON.stringify(state.ondas));
+}
+
+function pbClass(p) {
+  if (p === 'p0') return 'pt-p0';
+  if (p === 'p1') return 'pt-p1';
+  return 'pt-p2';
+}
+
+function renderPlanning() {
+  const tbody = document.getElementById('planningBody');
+  tbody.innerHTML = planningData.map(row => {
+    const isDone = state.done.has(row.id);
+    const owner = state.owners[row.id] || '';
+    const onda = state.ondas[row.id] || row.onda;
+    return `<tr style="opacity:${isDone?0.45:1}">
+      <td><input type="checkbox" class="pt-done-cb" ${isDone?'checked':''} onchange="toggleItem('${row.id}',this)"></td>
+      <td><span class="pt-id">${row.id}</span></td>
+      <td style="color:var(--text);font-size:12px;line-height:1.5">${row.action}</td>
+      <td><span class="pt-badge ${pbClass(row.p)}">${row.p.toUpperCase()}</span></td>
+      <td style="font-size:12px;color:var(--text-dim);white-space:nowrap">${row.trilha}</td>
+      <td><input class="pt-sprint" type="text" value="${onda}" placeholder="1-4" onchange="setOnda('${row.id}',this.value)" style="width:50px"></td>
+      <td><input class="pt-owner" type="text" value="${owner}" placeholder="@owner" onchange="setOwner('${row.id}',this.value)"></td>
+      <td style="font-size:11px;color:var(--teal)">${row.metric}</td>
+    </tr>`;
+  }).join('');
+}
+
+function toggleItem(id, cb) {
+  if (cb.checked) state.done.add(id);
+  else state.done.delete(id);
+  save();
+  renderPlanning();
+}
+
+function setOwner(id, val) { state.owners[id] = val; save(); }
+function setOnda(id, val) { state.ondas[id] = val; save(); }
+
+function toggleGov(el) {
+  el.classList.toggle('checked');
+  const key = el.closest('.gov-card').querySelector('.gov-card-title').textContent;
+  // save gov state
+  const govState = JSON.parse(localStorage.getItem('jules-gov') || '{}');
+  const idx = [...el.closest('.gov-items').children].indexOf(el);
+  if (!govState[key]) govState[key] = {};
+  govState[key][idx] = el.classList.contains('checked');
+  localStorage.setItem('jules-gov', JSON.stringify(govState));
+}
+
+function loadGov() {
+  const govState = JSON.parse(localStorage.getItem('jules-gov') || '{}');
+  Object.entries(govState).forEach(([key, checks]) => {
+    const titles = document.querySelectorAll('.gov-card-title');
+    titles.forEach(t => {
+      if (t.textContent === key) {
+        const items = t.closest('.gov-card').querySelectorAll('.gov-item');
+        Object.entries(checks).forEach(([idx, val]) => {
+          if (val && items[idx]) items[idx].classList.add('checked');
+        });
+      }
+    });
+  });
+}
+
+function showSection(name) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  const map = { waves:'sec-waves', timeline:'sec-timeline', raci:'sec-raci', risks:'sec-risks', gov:'sec-gov', planning:'sec-planning' };
+  const el = document.getElementById(map[name]);
+  if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function copyPrompt(btn) {
+  const text = document.querySelector('.prompt-master pre').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.innerHTML = '✅ Copiado!';
+    setTimeout(() => btn.innerHTML = '📋 Copiar Prompt', 2000);
+  });
+}
+
+// ═══ INIT ═══
+renderPlanning();
+loadGov();
+
+// Animate KPI numbers
+document.querySelectorAll('.kpi-num').forEach(el => {
+  const target = parseInt(el.textContent);
+  if (isNaN(target)) return;
+  let current = 0;
+  const step = Math.ceil(target / 30);
+  const interval = setInterval(() => {
+    current = Math.min(current + step, target);
+    el.textContent = current;
+    if (current >= target) clearInterval(interval);
+  }, 30);
+});
+</script>
+</body>
+</html>

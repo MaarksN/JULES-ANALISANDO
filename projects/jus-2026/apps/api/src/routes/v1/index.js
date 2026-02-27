@@ -1,0 +1,42 @@
+import express from 'express';
+import chatRoutes from '../chatRoutes.js';
+import sessionRoutes from '../sessionRoutes.js';
+import templateRoutes from '../templateRoutes.js';
+import documentRoutes from '../documentRoutes.js';
+import uploadRoutes from '../uploadRoutes.js';
+import marketplaceRoutes from '../marketplaceRoutes.js';
+import analyticsLegacyRoutes from '../analyticsRoutes.js';
+import paymentRoutes from '../paymentRoutes.js';
+import notificationRoutes from '../notificationRoutes.js';
+import auditRoutes from '../auditRoutes.js';
+import whatsappRoutes from '../whatsappRoutes.js';
+import jurisprudenceRoutes from '../jurisprudenceRoutes.js';
+import profileRoutes from '../profileRoutes.js';
+import aiRoutes from './ai.js';
+import analyticsV1Routes from './analytics.js';
+import webhookRoutes from './webhooks.js';
+import legalValidationRoutes from './legalValidation.js';
+import usageRoutes from './usage.js';
+
+const router = express.Router();
+
+router.use('/ai', aiRoutes);
+router.use('/analytics', analyticsV1Routes);
+router.use('/webhooks', webhookRoutes);
+router.use('/validate', legalValidationRoutes);
+router.use('/usage', usageRoutes);
+router.use('/chat', chatRoutes);
+router.use('/sessions', sessionRoutes);
+router.use('/templates', templateRoutes);
+router.use('/documents', documentRoutes);
+router.use('/upload', uploadRoutes);
+router.use('/marketplace', marketplaceRoutes);
+router.use('/analytics-legacy', analyticsLegacyRoutes);
+router.use('/payment', paymentRoutes);
+router.use('/notifications', notificationRoutes);
+router.use('/audit', auditRoutes);
+router.use('/whatsapp', whatsappRoutes);
+router.use('/jurisprudence', jurisprudenceRoutes);
+router.use('/profile', profileRoutes);
+
+export default router;

@@ -1,0 +1,7 @@
+{
+  "name": "JusArtificial - Suíte Jurídica IA",
+  "description": "Plataforma de inteligência artificial jurídica especializada no direito brasileiro. Criação de petições, revisão de contratos, pesquisa jurisprudencial e comparação de documentos com segurança e fundamentação.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

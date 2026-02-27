@@ -1,0 +1,38 @@
+{
+  "name": "birthub-360",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "test:e2e": "playwright test",
+    "test:agents": "pytest agents tests/integration",
+    "test:coverage": "pytest agents tests/integration --cov=agents/ae --cov=agents/ldr --cov=agents/sdr --cov=agents/shared --cov-fail-under=80",
+    "test:load": "pnpm --filter @birthub/queue test:load",
+    "dev:ldr-worker": "tsx agents/ldr/worker.ts",
+    "dev:sdr-worker": "tsx agents/sdr/worker.ts",
+    "dev:financeiro-worker": "tsx agents/financeiro/worker.ts",
+    "dev:juridico-worker": "tsx agents/juridico/worker.ts",
+    "dev:analista-worker": "tsx agents/analista/worker.ts",
+    "dev:pos-venda-worker": "tsx agents/pos-venda/worker.ts",
+    "dev:all-workers": "pnpm -r --parallel --filter \"*-agent-worker\" dev",
+    "dev:ae-worker": "tsx agents/ae/worker.ts",
+    "dev:marketing-worker": "tsx agents/marketing/worker.ts"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5",
+    "tsx": "^4.10.3",
+    "turbo": "latest",
+    "typescript": "^5.4.5",
+    "@playwright/test": "^1.55.0"
+  },
+  "packageManager": "pnpm@9.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "agents/*"
+  ]
+}

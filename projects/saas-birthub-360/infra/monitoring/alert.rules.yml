@@ -1,0 +1,38 @@
+groups:
+  - name: birthub-slo-alerts
+    rules:
+      - alert: ApiGatewayDown
+        expr: up{job="api-gateway"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          slo: availability
+        annotations:
+          summary: "API Gateway indisponível"
+
+      - alert: ApiGatewayHighErrorBudgetBurn
+        expr: rate(http_requests_total{job="api-gateway",status=~"5.."}[5m]) / clamp_min(rate(http_requests_total{job="api-gateway"}[5m]), 0.001) > 0.01
+        for: 10m
+        labels:
+          severity: critical
+          slo: availability
+        annotations:
+          summary: "Burn rate de erro acima do orçamento de 99%"
+
+      - alert: ApiGatewayP95LatencySLOBreach
+        expr: histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{job="api-gateway"}[5m]))) > 0.6
+        for: 15m
+        labels:
+          severity: warning
+          slo: latency
+        annotations:
+          summary: "Latência p95 acima de 600ms"
+
+      - alert: Webhook429Spike
+        expr: rate(http_requests_total{job="api-gateway",status="429"}[10m]) > 3
+        for: 10m
+        labels:
+          severity: warning
+          slo: saturation
+        annotations:
+          summary: "Spike de rate limiting detectado em endpoints expostos"

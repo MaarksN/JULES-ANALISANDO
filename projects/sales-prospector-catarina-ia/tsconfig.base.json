@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@salesos/shared/*": ["libs/shared/src/*"]
+    }
+  }
+}
