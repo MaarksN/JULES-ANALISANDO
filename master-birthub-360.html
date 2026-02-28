@@ -1,0 +1,119 @@
+<!doctype html><html lang="pt-PT"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Master Prompt - BirtHub 360 RevOps</title><style>
+:root{--bg:#07090d;--panel:#111827;--panel2:#0f172a;--card:#1f2937;--line:#374151;--text:#e5e7eb;--muted:#9ca3af;--ok:#22c55e;--todo:#ef4444;--codex:#c084fc;--jules:#38bdf8;--blue:#2563eb}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}
+header{position:sticky;top:0;background:rgba(7,9,13,.96);backdrop-filter:blur(6px);padding:16px;border-bottom:1px solid var(--line);z-index:10}
+h1{margin:0 0 6px;font-size:22px}.meta{font-size:13px;color:var(--muted)}
+.container{padding:16px;max-width:1400px;margin:auto}.project-checklist{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.pill{border:1px solid var(--line);border-radius:999px;padding:4px 8px;font-size:12px;background:#0b1220}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}button{background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px;cursor:pointer;font-size:12px}button.copy{background:var(--blue);border-color:#3b82f6}
+.cycle{border:1px solid var(--line);border-radius:10px;margin-bottom:12px;overflow:hidden}.cycle>summary{list-style:none;cursor:pointer;padding:12px 14px;background:var(--panel);font-weight:700}
+.phase{display:grid;grid-template-columns:130px 1fr auto auto auto;gap:8px;align-items:center;padding:10px 12px;border-top:1px solid var(--line);background:var(--panel2)}
+.phase.locked{opacity:.45}.tag{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid}.codex{color:var(--codex);border-color:var(--codex)}.jules{color:var(--jules);border-color:var(--jules)}
+.status{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--line)}.done{color:var(--ok)}.todo{color:var(--todo)} small{color:var(--muted)}
+@media(max-width:1050px){.phase{grid-template-columns:1fr}}
+</style></head><body>
+<header><h1>MASTER PROMPT · BirtHub 360 RevOps</h1><div class="meta">ZIP: <strong>SAAS-BIRTHUB-AGENTES-360.zip</strong> · 10 ciclos · 10 fases · 100 implementações (ciclos 1..10)</div></header>
+<div class="container"><div class="project-checklist"><h3>Checklist macro</h3>
+<label><input type="checkbox"> Ciclo 0 de importação concluído</label><br>
+<label><input type="checkbox"> 100 implementações reais concluídas (sem mock)</label><br>
+<label><input type="checkbox"> Scripts executados e evidenciados por fase</label>
+<div class="stats"><span class="pill" id="st-total"></span><span class="pill" id="st-done"></span></div>
+<div class="toolbar"><button class="copy" id="copy-all">Copiar prompt global</button></div>
+</div><div id="app"></div></div>
+<script>
+const CFG = {"slug": "master-birthub-360", "name": "BirtHub 360 RevOps", "zip": "SAAS-BIRTHUB-AGENTES-360.zip", "focus": "Ecossistema RevOps com múltiplos agentes IA", "stack": "Monorepo pnpm/turborepo, Next.js, Python/Node", "setup": ["pnpm install", "docker compose up -d", "pnpm turbo run build"], "backendTests": ["pnpm turbo run test", "pnpm turbo run lint"], "frontendTests": ["pnpm --filter dashboard test"]};
+const STORAGE_KEY = `master_prompt_${CFG.slug}_100_impl`;
+const state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+function totalDone(){
+  return Object.entries(state).filter(([k,v])=>v===true && /^c([1-9]|10)p(\d+)$/.test(k)).length;
+}
+function phaseId(c,p){ return `c${c}p${p}`; }
+function ownerFor(c,p){ return (p % 2 === 0) ? 'codex' : 'jules'; }
+
+function scriptFor(owner, cycle, phase){
+  const header=[`# Projeto: ${CFG.name}`,`# Ciclo ${cycle} | Fase ${phase} | Implementação ${((cycle-1)*10)+phase}`, '# Regra: sem mocks/placeholders e com checklist fechado'];
+  if(cycle===0){
+    return [...header,
+      '# CICLO 0 - criação e importação do código do ZIP para GitHub',
+      `unzip -o "${CFG.zip}" -d ./_import`,
+      'git checkout -b ciclo-0-bootstrap || git checkout ciclo-0-bootstrap',
+      'rsync -av --delete ./_import/* ./',
+      'git add . && git commit -m "ciclo 0: importar código real do zip"'
+    ].join('
+');
+  }
+  const setup=CFG.setup.join('
+');
+  const tests=(owner==='jules'?CFG.backendTests:CFG.frontendTests).join('
+');
+  return [...header,
+    `# Dono: ${owner.toUpperCase()}`,
+    '# Setup real', setup,
+    `git checkout -b c${cycle}-f${phase}-${owner} || git checkout c${cycle}-f${phase}-${owner}`,
+    '# implementar requisito real da fase atual',
+    '# Testes reais', tests,
+    `git add . && git commit -m "c${cycle}f${phase}: implementação ${owner}"`
+  ].join('
+');
+}
+
+function promptFor(owner,cycle,phase){
+  const role = owner==='jules' ? 'Backend/DevOps/DB/Segurança' : 'Frontend/UX/Integração';
+  const n=((cycle-1)*10)+phase;
+  return `MASTER PROMPT ${owner.toUpperCase()}
+Projeto: ${CFG.name}
+Ciclo ${cycle} · Fase ${phase}
+Implementação: #${String(n).padStart(3,'0')}
+Escopo: ${CFG.focus}
+Stack: ${CFG.stack}
+Responsável: ${role}
+
+Obrigatório:
+1) Entrega real funcionando
+2) Testes reais executados
+3) Sem mocks/placeholders
+4) Só avançar com checklist concluído`;
+}
+
+function isDone(id){ return state[id]===true; }
+function setDone(id,val){ state[id]=val; localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); render(); }
+function copyText(t){ navigator.clipboard?.writeText(t).catch(()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();}); }
+
+function build(){
+  const cycles=[];
+  for(let c=0;c<=10;c++){
+    const phases=[];
+    for(let p=1;p<=10;p++) phases.push({cycle:c,phase:p,id:phaseId(c,p),owner:ownerFor(c,p)});
+    cycles.push({cycle:c,phases});
+  }
+  return cycles;
+}
+
+function render(){
+  document.getElementById('st-total').textContent='100 implementações';
+  document.getElementById('st-done').textContent=`${totalDone()} concluídas`;
+  const app=document.getElementById('app'); app.innerHTML='';
+  build().forEach(c=>{
+    const d=document.createElement('details'); d.className='cycle';
+    d.innerHTML=`<summary>Ciclo ${c.cycle} ${c.cycle===0?'(Criação do repositório a partir do ZIP)':''}</summary>`;
+    c.phases.forEach((p,idx)=>{
+      const row=document.createElement('div');
+      const prev = idx===0 ? true : isDone(c.phases[idx-1].id);
+      const done = isDone(p.id);
+      const impl = p.cycle===0 ? 'bootstrap' : String(((p.cycle-1)*10)+p.phase).padStart(3,'0');
+      row.className='phase'+(prev?'':' locked');
+      row.innerHTML=`<div><span class='status ${done?'done':'todo'}'>${done?'Concluído':'Pendente'}</span><br><small>Impl #${impl}</small></div><div><strong>Fase ${p.phase}</strong><br><small>${p.id}</small></div><div><span class='tag ${p.owner}'>${p.owner.toUpperCase()}</span></div><label><input type='checkbox' ${done?'checked':''} ${prev?'':'disabled'}> checklist</label><div><button class='copy btn-item' ${prev?'':'disabled'}>Copiar item</button> <button class='copy btn-script' ${prev?'':'disabled'}>Copiar script</button> <button class='copy btn-prompt' ${prev?'':'disabled'}>Copiar prompt</button></div>`;
+      row.querySelector('input').onchange=e=>setDone(p.id,e.target.checked);
+      row.querySelector('.btn-item').onclick=()=>copyText(`Projeto ${CFG.name} | Ciclo ${p.cycle} Fase ${p.phase} | Owner ${p.owner.toUpperCase()} | Checklist obrigatório`);
+      row.querySelector('.btn-script').onclick=()=>copyText(scriptFor(p.owner,p.cycle,p.phase));
+      row.querySelector('.btn-prompt').onclick=()=>copyText(promptFor(p.owner,p.cycle,p.phase));
+      d.appendChild(row);
+    });
+    app.appendChild(d);
+  });
+}
+
+document.getElementById('copy-all').onclick=()=>copyText(`MASTER PROMPT GLOBAL\nProjeto: ${CFG.name}\nEstrutura: Ciclo 0 + 10 ciclos + 10 fases por ciclo + 100 implementações.\nRegra: só avançar após checklist concluído.`);
+render();
+</script></body></html>
