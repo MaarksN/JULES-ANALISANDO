@@ -1,0 +1,19 @@
+{
+  "name": "@birthub/llm-client",
+  "version": "0.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.11.1",
+    "@birthub/utils": "workspace:*",
+    "@birthub/shared-types": "workspace:*",
+    "@birthub/integrations": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "@types/node": "^20.12.12"
+  }
+}

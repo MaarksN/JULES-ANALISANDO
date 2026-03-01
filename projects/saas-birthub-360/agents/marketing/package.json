@@ -1,0 +1,21 @@
+{
+  "name": "marketing-agent-worker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start:worker": "tsx worker.ts",
+    "dev": "tsx worker.ts"
+  },
+  "dependencies": {
+    "bullmq": "^5.7.0",
+    "dotenv": "^16.4.5",
+    "@birthub/queue": "workspace:*",
+    "@birthub/shared-types": "workspace:*",
+    "axios": "^1.6.8",
+    "ioredis": "^5.4.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.10.3",
+    "@types/node": "^20.12.12"
+  }
+}

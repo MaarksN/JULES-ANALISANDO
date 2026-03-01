@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roteiro Técnico SaaS de Classe Mundial - ENRIQUECIMENTO-DE-LEADS</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: Inter, Segoe UI, Roboto, Arial, sans-serif; margin: 0; background: #0b1020; color: #e8ecf8; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    h1, h2, h3 { margin: 0 0 12px; }
+    h1 { font-size: 30px; }
+    h2 { margin-top: 32px; font-size: 24px; color: #8ab4ff; }
+    h3 { margin-top: 20px; font-size: 18px; color: #c9d8ff; }
+    p, li { line-height: 1.5; }
+    .card { background: #121a33; border: 1px solid #23305f; border-radius: 14px; padding: 16px; margin: 12px 0; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }
+    .tag { display: inline-block; background: #1f2b54; border: 1px solid #395097; border-radius: 999px; padding: 3px 10px; font-size: 12px; margin-right: 8px; }
+    code, pre { background: #0c1430; border: 1px solid #24356f; border-radius: 10px; }
+    pre { padding: 12px; overflow: auto; white-space: pre-wrap; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { border: 1px solid #2b3a74; padding: 8px; text-align: left; }
+    th { background: #16214a; }
+    .small { font-size: 13px; color: #aec2ff; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>Consultoria CTO: Diagnóstico Profundo e Roteiro SaaS Global</h1>
+    <p>Projeto analisado: <strong>ENRIQUECIMENTO-DE-LEADS</strong>. Escopo: frontend React + backend HTTP Node + integrações IA + persistência Supabase.</p>
+
+    <section class="card">
+      <h2>1) Checklist mestre de evolução (Item #1 do output)</h2>
+      <p>Use esta estrutura para acompanhar os 100 pontos abaixo com disciplina de execução semanal.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>Tipo</th><th>Domínio</th><th>Prioridade</th><th>Status</th><th>Dono</th><th>Sprint</th><th>Métrica de saída</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>IMP-01..IMP-50</td><td>Melhoria</td><td>Arquitetura/Segurança/Produto/Ops</td><td>P0/P1/P2</td><td>Backlog, Doing, Done, Blocked</td><td>Engineering Owner</td><td>Sprint N</td><td>KPI técnico + KPI negócio</td></tr>
+          <tr><td>NEW-01..NEW-50</td><td>Implementação</td><td>Funcionalidades estratégicas</td><td>P0/P1/P2</td><td>Backlog, Doing, Done, Blocked</td><td>Squad Owner</td><td>Sprint N</td><td>Adoption + Revenue impact</td></tr>
+        </tbody>
+      </table>
+      <ul>
+        <li><strong>Cadência:</strong> revisão diária de bloqueios + revisão semanal de KPI (latência p95, erro 5xx, custo por lead enriquecido, conversão).</li>
+        <li><strong>Critério de aceite:</strong> cada item só fecha com PR, testes automatizados, observabilidade e playbook de operação.</li>
+        <li><strong>Gates:</strong> sem evidência de segurança e teste, item não sai de Doing.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>2) Diagnóstico franco (sem maquiagem)</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Acertos reais</h3>
+          <ul>
+            <li>Separação frontend/backend já iniciada com rotas de IA no servidor Node.</li>
+            <li>Schema SQL com RLS no Supabase para tabela <code>leads</code>.</li>
+            <li>Tipagem TypeScript presente em boa parte dos contratos de domínio.</li>
+            <li>Fluxo de autenticação por magic link reduz fricção de onboarding.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Riscos críticos atuais</h3>
+          <ul>
+            <li>Cliente Supabase customizado simula sessão no localStorage, quebrando segurança real de auth.</li>
+            <li>Rate limit em memória por IP não escala horizontalmente e perde estado em restart.</li>
+            <li>Validador de CNPJ usa resultado aleatório, inviável para produção.</li>
+            <li>Ausência de validação estruturada de payloads e ausência de logs estruturados com tracing.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>3) 50 itens de melhoria (IMP-01 a IMP-50)</h2>
+      <ol>
+        <li><strong>IMP-01 (P0 Segurança):</strong> substituir <code>src/lib/supabase.ts</code> mock por <code>@supabase/supabase-js</code> com sessão real e refresh token seguro.</li>
+        <li><strong>IMP-02:</strong> remover geração local de usuário via <code>crypto.randomUUID()</code>; usar claims JWT do Supabase.</li>
+        <li><strong>IMP-03:</strong> implementar validação de entrada com Zod/Ajv em todas as rotas <code>/api/ai/*</code>.</li>
+        <li><strong>IMP-04:</strong> trocar rate limit em memória por Redis + sliding window global.</li>
+        <li><strong>IMP-05:</strong> adicionar autenticação obrigatória nas rotas IA com verificação de bearer token.</li>
+        <li><strong>IMP-06:</strong> adicionar autorização multi-tenant por <code>org_id</code> em todas as queries.</li>
+        <li><strong>IMP-07:</strong> aplicar timeout/circuit-breaker/retry exponencial para chamadas Gemini.</li>
+        <li><strong>IMP-08:</strong> padronizar erros com envelope <code>{code,message,details,traceId}</code>.</li>
+        <li><strong>IMP-09:</strong> adicionar logging estruturado JSON (pino) com correlação por request-id.</li>
+        <li><strong>IMP-10:</strong> instrumentar OpenTelemetry (HTTP server + fetch + IA provider).</li>
+        <li><strong>IMP-11:</strong> mover prompts críticos para versionamento com controle por ambiente.</li>
+        <li><strong>IMP-12:</strong> criar política de redaction de PII nos logs (email, telefone, CNPJ).</li>
+        <li><strong>IMP-13:</strong> substituir <code>any</code> por tipos estritos em App e componentes centrais.</li>
+        <li><strong>IMP-14:</strong> introduzir React Query/SWR para cache, invalidação e retry controlado.</li>
+        <li><strong>IMP-15:</strong> normalizar estado de leads em store central (Zustand/Redux Toolkit).</li>
+        <li><strong>IMP-16:</strong> quebrar <code>App.tsx</code> em layout, navegação e páginas para reduzir acoplamento.</li>
+        <li><strong>IMP-17:</strong> eliminar mock data fixa em produção e separar seed de desenvolvimento.</li>
+        <li><strong>IMP-18:</strong> implementar feature flags por tenant e ambiente.</li>
+        <li><strong>IMP-19:</strong> validar outputs do LLM por schema antes de salvar no banco.</li>
+        <li><strong>IMP-20:</strong> adicionar detecção de alucinação com score de confiança e fonte citada.</li>
+        <li><strong>IMP-21:</strong> criar fila assíncrona para enriquecimento pesado (BullMQ/SQS).</li>
+        <li><strong>IMP-22:</strong> implementar idempotência em endpoints de upsert/ação de IA.</li>
+        <li><strong>IMP-23:</strong> ativar CSP, HSTS, X-Frame-Options e proteção de MIME sniffing.</li>
+        <li><strong>IMP-24:</strong> revisar <code>security.js</code>: remover 2FA hardcoded e fluxos inseguros.</li>
+        <li><strong>IMP-25:</strong> aplicar hash e encrypt-at-rest para dados sensíveis além do provider.</li>
+        <li><strong>IMP-26:</strong> adicionar política de retenção e deleção LGPD auditável.</li>
+        <li><strong>IMP-27:</strong> medir custo por endpoint IA e impor orçamento diário por tenant.</li>
+        <li><strong>IMP-28:</strong> implementar fallback de modelo (flash → modelo alternativo) com quality gate.</li>
+        <li><strong>IMP-29:</strong> adicionar testes unitários dos services de IA com mocks determinísticos.</li>
+        <li><strong>IMP-30:</strong> adicionar testes de contrato da API (Pact/Schema tests).</li>
+        <li><strong>IMP-31:</strong> adicionar testes E2E para onboarding, busca, enrich e sales kit.</li>
+        <li><strong>IMP-32:</strong> CI/CD com lint, typecheck, test, build e deploy por ambiente.</li>
+        <li><strong>IMP-33:</strong> incluir scan SAST/Dependency (npm audit, osv-scanner, CodeQL).</li>
+        <li><strong>IMP-34:</strong> versionar API (<code>/v1</code>) para compatibilidade futura.</li>
+        <li><strong>IMP-35:</strong> criar migrações SQL versionadas e rollback automático.</li>
+        <li><strong>IMP-36:</strong> adicionar índices para consultas por <code>user_id</code>, <code>status</code>, <code>created_at</code>.</li>
+        <li><strong>IMP-37:</strong> adotar soft delete e trilha de auditoria imutável para leads.</li>
+        <li><strong>IMP-38:</strong> paginação server-side em listagens para escala.</li>
+        <li><strong>IMP-39:</strong> implementar busca full-text para leads e insights.</li>
+        <li><strong>IMP-40:</strong> usar workers/webhooks para tarefas de transcrição e análise visual.</li>
+        <li><strong>IMP-41:</strong> configurar dashboards SLO (latência, disponibilidade, custo IA, erro de schema).</li>
+        <li><strong>IMP-42:</strong> implementar runbook de incidentes com severidade e on-call.</li>
+        <li><strong>IMP-43:</strong> habilitar proteção anti-abuso por fingerprint + velocidade de requisição.</li>
+        <li><strong>IMP-44:</strong> incorporar cache semântico de prompts repetidos.</li>
+        <li><strong>IMP-45:</strong> padronizar design system com tokens e componentes auditáveis.</li>
+        <li><strong>IMP-46:</strong> medir Web Vitals e reduzir bundle inicial com code splitting granular.</li>
+        <li><strong>IMP-47:</strong> internacionalização PT/EN/ES com catálogo de mensagens.</li>
+        <li><strong>IMP-48:</strong> acessibilidade AA: foco, contraste, aria-label e navegação por teclado.</li>
+        <li><strong>IMP-49:</strong> criar governança de prompts com revisão humana e testes de regressão.</li>
+        <li><strong>IMP-50:</strong> definir arquitetura-alvo de referência (BFF + event-driven + data platform).</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>4) 50 itens de implementação (NEW-01 a NEW-50)</h2>
+      <ol>
+        <li><strong>NEW-01 (P0):</strong> módulo de onboarding SaaS com workspace, convite e papéis RBAC.</li>
+        <li><strong>NEW-02:</strong> billing Stripe com plano Free/Pro/Scale, trial e metering por uso de IA.</li>
+        <li><strong>NEW-03:</strong> catálogo de conectores CRM (HubSpot, Pipedrive, Salesforce).</li>
+        <li><strong>NEW-04:</strong> integração WhatsApp Business para cadência de follow-up.</li>
+        <li><strong>NEW-05:</strong> sincronização bidirecional de pipeline com CRM alvo.</li>
+        <li><strong>NEW-06:</strong> motor de scoring preditivo com features comportamentais e firmográficas.</li>
+        <li><strong>NEW-07:</strong> página de insights por lead com timeline completa e recomendações.</li>
+        <li><strong>NEW-08:</strong> enriquecimento automático agendado por gatilho (novo lead/import).</li>
+        <li><strong>NEW-09:</strong> mecanismo de deduplicação fuzzy por nome, domínio, CNPJ e telefone.</li>
+        <li><strong>NEW-10:</strong> importador CSV em lote com validação de schema e pré-visualização.</li>
+        <li><strong>NEW-11:</strong> exportador para CSV/Parquet/API com filtros avançados.</li>
+        <li><strong>NEW-12:</strong> workflow builder visual de cadências de prospecção multicanal.</li>
+        <li><strong>NEW-13:</strong> biblioteca de playbooks de venda por segmento com versionamento.</li>
+        <li><strong>NEW-14:</strong> assistente de objeções em tempo real durante ligação (copilot).</li>
+        <li><strong>NEW-15:</strong> gerador de briefing executivo por conta alvo (ABM one-page).</li>
+        <li><strong>NEW-16:</strong> recomendador de próximo melhor passo (Next Best Action).</li>
+        <li><strong>NEW-17:</strong> análise de sentimento de respostas de email e call transcript.</li>
+        <li><strong>NEW-18:</strong> módulo de inteligência competitiva por setor.</li>
+        <li><strong>NEW-19:</strong> base de conhecimento RAG com documentos do cliente.</li>
+        <li><strong>NEW-20:</strong> endpoint de webhooks outbound para eventos de lead/stage.</li>
+        <li><strong>NEW-21:</strong> central de alertas (Slack/Teams/Email) para sinais de alta intenção.</li>
+        <li><strong>NEW-22:</strong> painel de performance por SDR/AE com metas e benchmark.</li>
+        <li><strong>NEW-23:</strong> recomendação de horário ideal de contato por histórico.</li>
+        <li><strong>NEW-24:</strong> análise de território e roteirização de visitas comerciais.</li>
+        <li><strong>NEW-25:</strong> módulo de compliance com consentimento e base legal por contato.</li>
+        <li><strong>NEW-26:</strong> cofre de segredos e chaves por tenant (KMS/Vault integration).</li>
+        <li><strong>NEW-27:</strong> API pública com chaves por escopo e rotação automática.</li>
+        <li><strong>NEW-28:</strong> marketplace de templates de prompts e automações.</li>
+        <li><strong>NEW-29:</strong> simulação de forecast de receita com cenários.</li>
+        <li><strong>NEW-30:</strong> benchmark anônimo entre contas para taxa de conversão.</li>
+        <li><strong>NEW-31:</strong> módulo de qualidade de dados com score por campo.</li>
+        <li><strong>NEW-32:</strong> corretor automático de dados inconsistentes com trilha de aprovação.</li>
+        <li><strong>NEW-33:</strong> busca semântica de leads por linguagem natural.</li>
+        <li><strong>NEW-34:</strong> painel de custo de IA por workflow e por usuário.</li>
+        <li><strong>NEW-35:</strong> simulator A/B de prompts com comparação de CTR/reply rate.</li>
+        <li><strong>NEW-36:</strong> módulo de campanhas outbound com sequenciamento e holdout.</li>
+        <li><strong>NEW-37:</strong> criação de landing pages personalizadas por conta alvo.</li>
+        <li><strong>NEW-38:</strong> engine de recomendação de oferta/proposta comercial.</li>
+        <li><strong>NEW-39:</strong> cadastro de ICP e anti-ICP com pontuação dinâmica.</li>
+        <li><strong>NEW-40:</strong> playbook de recuperação de leads perdidos com trigger automático.</li>
+        <li><strong>NEW-41:</strong> copiloto de reunião com geração de ata e tarefas no CRM.</li>
+        <li><strong>NEW-42:</strong> central de integrações no-code via webhooks e mapeamento de campos.</li>
+        <li><strong>NEW-43:</strong> relatório executivo de ROI por trimestre para C-level.</li>
+        <li><strong>NEW-44:</strong> predição de churn de clientes e ações de retenção.</li>
+        <li><strong>NEW-45:</strong> multi-idioma em conteúdo gerado (PT/EN/ES) com adaptação cultural.</li>
+        <li><strong>NEW-46:</strong> governança de permissões por recurso (RBAC + ABAC).</li>
+        <li><strong>NEW-47:</strong> job scheduler com retries, dead-letter queue e observabilidade.</li>
+        <li><strong>NEW-48:</strong> portal self-service de suporte com health status e incidentes.</li>
+        <li><strong>NEW-49:</strong> camada de data warehouse para analytics e BI externo.</li>
+        <li><strong>NEW-50:</strong> programa de API partners com sandbox e documentação interativa.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>5) Prompts especializados para CODEX (otimizados para execução)</h2>
+      <div class="card">
+        <h3>Prompt CODEX #1 — Hardening de Segurança + Auth real</h3>
+<pre>Você é um Principal Security Engineer. Refatore este projeto React + Node para remover autenticação mock e implantar autenticação real Supabase.
+Objetivos técnicos obrigatórios:
+1) Trocar src/lib/supabase.ts por @supabase/supabase-js oficial, com persistência de sessão segura.
+2) Proteger backend /api/ai/* com bearer token e validação JWT.
+3) Implementar validação de payload com Zod em todas as rotas.
+4) Adicionar middleware de rate limit distribuído (Redis) e request-id.
+5) Entregar testes unitários e integração para auth + rotas protegidas.
+Restrições:
+- Não usar placeholders.
+- Fornecer migrações SQL necessárias e instruções de variáveis de ambiente.
+Saída esperada:
+- Patch completo por arquivo, justificativa arquitetural curta, comandos de teste e evidência de passing.</pre>
+      </div>
+
+      <div class="card">
+        <h3>Prompt CODEX #2 — Escalabilidade e Observabilidade SaaS</h3>
+<pre>Atue como Staff Engineer de plataforma SaaS global. Reestruture o backend Node para padrões de produção:
+1) Logging estruturado com pino.
+2) Telemetria OpenTelemetry (HTTP + chamadas Gemini).
+3) Envelope de erro padrão com traceId.
+4) Fila assíncrona para enrich/sales-kit com BullMQ.
+5) Cache Redis para respostas de IA repetidas.
+6) Dashboard de métricas SLO (latência p95, erro, custo por request).
+Entregue:
+- Arquitetura alvo em texto + código funcional.
+- Testes para filas, retries e idempotência.
+- Guia de operação (runbook resumido).</pre>
+      </div>
+
+      <div class="card">
+        <h3>Prompt CODEX #3 — Produto de Receita (Growth Engine)</h3>
+<pre>Você é Product+Engineering Lead. Implemente monetização e retenção:
+1) Stripe billing com planos e limites de uso de IA por tenant.
+2) Feature flags por plano (free/pro/scale).
+3) Painel de consumo e custo por usuário.
+4) Alertas de limite e upgrade in-app.
+5) Eventos de produto para funil de conversão (onboarding até ativação).
+Saída:
+- Código backend + frontend.
+- Eventos instrumentados.
+- Testes E2E cobrindo trial, upgrade e bloqueio por limite.</pre>
+      </div>
+
+      <div class="card">
+        <h3>Prompt CODEX #4 — Qualidade de Dados e IA Confiável</h3>
+<pre>Atue como Arquiteto de Dados e IA Responsável. Fortaleça confiabilidade dos outputs:
+1) Validar JSON de resposta LLM por schema rígido.
+2) Implementar confidence score e classificação de risco de alucinação.
+3) Exigir citação de fonte quando usar googleSearch/googleMaps.
+4) Criar rotina de avaliação offline com dataset de regressão.
+5) Expor no frontend a confiança e avisos de uso.
+Entregável:
+- Código + testes de regressão + relatório de qualidade (precision/recall dos campos críticos).</pre>
+      </div>
+    </section>
+
+    <section class="card small">
+      <h2>6) Sequência recomendada de execução (12 semanas)</h2>
+      <p><strong>Semanas 1-2:</strong> IMP-01..IMP-10 (fundação de segurança e observabilidade).<br/>
+      <strong>Semanas 3-4:</strong> IMP-11..IMP-22 (confiabilidade IA + arquitetura de estado).<br/>
+      <strong>Semanas 5-6:</strong> IMP-23..IMP-35 (compliance, CI/CD, versionamento e banco).<br/>
+      <strong>Semanas 7-8:</strong> IMP-36..IMP-50 (escala de dados, performance e acessibilidade).<br/>
+      <strong>Semanas 9-12:</strong> NEW-01..NEW-20 prioritárias para monetização e retenção, depois NEW-21..NEW-50 por impacto.</p>
+    </section>
+  </main>
+</body>
+</html>

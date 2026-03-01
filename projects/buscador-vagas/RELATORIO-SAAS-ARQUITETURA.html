@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Relatório CTO — Evolução para Plataforma SaaS Global</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #131a2e;
+      --card-2: #0f1528;
+      --text: #edf2ff;
+      --muted: #9fb0d6;
+      --ok: #00d084;
+      --warn: #ffb020;
+      --danger: #ff4d6d;
+      --line: #283454;
+      --accent: #5c7cfa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(160deg, #080d1c, #111a32 60%, #0a1022);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    h1, h2, h3 { line-height: 1.2; margin: 0 0 12px; }
+    h1 { font-size: 1.8rem; }
+    h2 { font-size: 1.35rem; margin-top: 28px; }
+    h3 { font-size: 1.05rem; margin-top: 20px; color: #c7d4ff; }
+    p, li { color: var(--muted); }
+    .card {
+      background: radial-gradient(1200px 600px at 20% -20%, #1a2750 0%, var(--card) 35%, var(--card-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--line);
+      margin: 12px 0 20px;
+      background: rgba(13, 20, 40, 0.6);
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.95rem;
+    }
+    th { color: #d9e2ff; background: rgba(92, 124, 250, 0.15); }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.8rem; margin-right: 6px; }
+    .ok { background: rgba(0,208,132,.2); color: var(--ok); border: 1px solid rgba(0,208,132,.4); }
+    .warn { background: rgba(255,176,32,.2); color: var(--warn); border: 1px solid rgba(255,176,32,.4); }
+    .danger { background: rgba(255,77,109,.2); color: var(--danger); border: 1px solid rgba(255,77,109,.4); }
+    code, pre {
+      background: #0d1530;
+      color: #d7e3ff;
+      border: 1px solid #26365f;
+      border-radius: 8px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    code { padding: 2px 6px; }
+    pre { padding: 12px; overflow: auto; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h1>Plano Mestre de Transformação para SaaS de Classe Mundial</h1>
+      <p>Escopo analisado: Worker API (Cloudflare), app web estática, extensão Chrome e pipeline de scraping. Diagnóstico direto: a base é funcional e pragmática, com boa separação por módulos, mas ainda distante de um SaaS global em confiabilidade, segurança, governança e monetização enterprise.</p>
+      <p><span class="tag ok">Ponto forte</span> Boa modularização de handlers/middleware/scoring e sanitização básica em entrada/saída.</p>
+      <p><span class="tag warn">Ponto de atenção</span> Observabilidade, segurança avançada, multitenancy, billing, SLOs, CI/CD e arquitetura de dados ainda não estão no padrão enterprise.</p>
+      <p><span class="tag danger">Risco crítico</span> Dependência de scrapers com baixa governança de qualidade e sem isolamento robusto de falhas de terceiros.</p>
+    </section>
+
+    <section class="card">
+      <h2>1) Checklist detalhado de evolução (acompanha os 100 itens)</h2>
+      <table>
+        <thead>
+          <tr><th>Campo</th><th>Definição operacional</th><th>Critério de aceite</th><th>Evidência exigida</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ID</td><td>Identificador único no formato Mxx (melhoria) ou Ixx (implementação).</td><td>Todos os 100 IDs mapeados sem duplicidade.</td><td>Planilha/issue tracker com 100 linhas.</td></tr>
+          <tr><td>Categoria</td><td>Arquitetura, Segurança, Dados, Produto, Operação, FinOps, Growth.</td><td>Cada item com categoria definida.</td><td>Coluna preenchida no tracker.</td></tr>
+          <tr><td>Impacto</td><td>Escala de 1–5 para receita, risco, performance e experiência.</td><td>Score composto >=3 para priorização de sprint.</td><td>Matriz RICE/WSJF anexada.</td></tr>
+          <tr><td>Prioridade</td><td>P0, P1, P2.</td><td>100% dos itens classificados.</td><td>Roadmap trimestral aprovado.</td></tr>
+          <tr><td>Dono</td><td>Eng, Produto, Data, SRE, Segurança.</td><td>Todo item com owner nominal.</td><td>Squad board com accountable.</td></tr>
+          <tr><td>Prazo</td><td>Data de início/fim e duração em dias úteis.</td><td>Lead time definido para 100 itens.</td><td>Gantt ou milestones do GitHub.</td></tr>
+          <tr><td>Dependências</td><td>Bloqueios técnicos, legais e de dados.</td><td>Sem tarefa crítica sem dependência mapeada.</td><td>Campo dependency preenchido.</td></tr>
+          <tr><td>Métrica primária</td><td>Ex.: p95 latency, conversion trial→paid, churn, NRR, MTTR.</td><td>1 KPI primário por item.</td><td>Dashboard com baseline e target.</td></tr>
+          <tr><td>Definição de pronto</td><td>DoD: código, testes, docs, monitoramento, runbook.</td><td>Checklist DoD 100% marcado.</td><td>PR + evidência de deploy + doc.</td></tr>
+          <tr><td>Status</td><td>Backlog, Em andamento, Em validação, Concluído.</td><td>Atualização semanal obrigatória.</td><td>Ritual de governança quinzenal.</td></tr>
+          <tr><td>Qualidade</td><td>Cobertura de testes, erro em produção, regressão.</td><td>Zero regressão crítica por release.</td><td>Relatório de testes e monitoramento.</td></tr>
+          <tr><td>Resultado de negócio</td><td>Relação direta com CAC, LTV, retenção ou expansão.</td><td>80% dos itens conectados a métrica de negócio.</td><td>QBR com before/after.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>2) 50 itens de melhoria (otimizar o que já existe)</h2>
+      <table>
+        <thead><tr><th>ID</th><th>Melhoria</th><th>Padrão técnico recomendado</th></tr></thead>
+        <tbody>
+          <tr><td>M01</td><td>Centralizar roteamento HTTP para reduzir if/else sequencial.</td><td>Router declarativo por método/path com tabela de handlers.</td></tr>
+          <tr><td>M02</td><td>Padronizar envelope de erro com código interno e causa rastreável.</td><td>RFC 7807 (<code>application/problem+json</code>) + requestId obrigatório.</td></tr>
+          <tr><td>M03</td><td>Fortalecer autenticação administrativa.</td><td>Trocar token estático por JWT assinado + rotação de chaves.</td></tr>
+          <tr><td>M04</td><td>Rate limit por tenant + fingerprint de cliente.</td><td>Token bucket distribuído em Durable Objects.</td></tr>
+          <tr><td>M05</td><td>Aplicar timeout por scraper para contenção de cauda longa.</td><td><code>AbortController</code> com budget por fonte e cancelamento cooperativo.</td></tr>
+          <tr><td>M06</td><td>Melhorar estratégia de cache de busca.</td><td>Cache em camadas: edge cache + KV, chaves por versão de schema.</td></tr>
+          <tr><td>M07</td><td>Eliminar perda de precisão na ordenação salarial textual.</td><td>Normalizar salário para campo numérico bruto (min/max moeda).</td></tr>
+          <tr><td>M08</td><td>Reforçar deduplicação semântica de vagas.</td><td>Hash canônico de título+empresa+local+url_normalizada.</td></tr>
+          <tr><td>M09</td><td>Evitar recomputação de score em resultados idênticos.</td><td>Memoização de features por job fingerprint.</td></tr>
+          <tr><td>M10</td><td>Padronizar idioma de mensagens para API pública.</td><td>Camada i18n server-side (pt/en) via header <code>Accept-Language</code>.</td></tr>
+          <tr><td>M11</td><td>Melhorar validade de URLs de origem.</td><td>Whitelist de domínios + parser robusto WHATWG URL.</td></tr>
+          <tr><td>M12</td><td>Evitar acoplamento entre payload legado e novo.</td><td>Versionamento explícito de contrato via <code>schemaVersion</code>.</td></tr>
+          <tr><td>M13</td><td>Adicionar limites por campo no frontend antes de enviar.</td><td>Validação com JSON Schema compartilhado entre front e API.</td></tr>
+          <tr><td>M14</td><td>Robustecer favoritos contra payloads excessivos.</td><td>Sanitização profunda + limite de tamanho por item.</td></tr>
+          <tr><td>M15</td><td>Melhorar CORS para cenários multiambiente.</td><td>Allowlist dinâmica por ambiente com preflight cacheado.</td></tr>
+          <tr><td>M16</td><td>Enriquecer métricas de scraping por site.</td><td>Histogramas p50/p95 de latência e taxa de sucesso por fonte.</td></tr>
+          <tr><td>M17</td><td>Medir qualidade do score com feedback real.</td><td>Loop de aprendizado usando cliques/favoritos como sinal fraco.</td></tr>
+          <tr><td>M18</td><td>Remover literais repetidas de limites e defaults.</td><td>Config central imutável com validação de env no boot.</td></tr>
+          <tr><td>M19</td><td>Melhorar paginação para escalabilidade.</td><td>Cursor-based pagination para consultas grandes.</td></tr>
+          <tr><td>M20</td><td>Blindar parser de payload contra tipos inesperados.</td><td>Validação runtime com Zod/Valibot e coerção explícita.</td></tr>
+          <tr><td>M21</td><td>Elevar observabilidade de erros silenciosos.</td><td>Integração com Sentry/Datadog e breadcrumbs por requestId.</td></tr>
+          <tr><td>M22</td><td>Controlar explosão de cardinalidade em métricas.</td><td>Taxonomia fixa de labels e agregação por dimensões estáveis.</td></tr>
+          <tr><td>M23</td><td>Reduzir chamadas de saúde redundantes no frontend.</td><td>Cache local de health/version com TTL de 60 segundos.</td></tr>
+          <tr><td>M24</td><td>Aumentar resiliência do fetch no app web.</td><td>Retry exponencial com jitter apenas para erros transitórios.</td></tr>
+          <tr><td>M25</td><td>Prevenir XSS por renderização HTML de resultados.</td><td>Trocar <code>innerHTML</code> por criação segura de nós DOM.</td></tr>
+          <tr><td>M26</td><td>Melhorar UX de estados vazios e loading.</td><td>Skeleton loading + empty states orientados por ação.</td></tr>
+          <tr><td>M27</td><td>Fortalecer exportações CSV/JSON para grandes volumes.</td><td>Streaming/chunk download com limite de memória no browser.</td></tr>
+          <tr><td>M28</td><td>Separar concerns de apresentação e dados no frontend.</td><td>Arquitetura por módulos: apiClient, state, UI renderer.</td></tr>
+          <tr><td>M29</td><td>Remover risco de drift de configuração entre app e extensão.</td><td>Fonte única de verdade de config versionada.</td></tr>
+          <tr><td>M30</td><td>Reforçar compliance LGPD no armazenamento local.</td><td>Política de retenção e consentimento explícito para preferências.</td></tr>
+          <tr><td>M31</td><td>Melhorar testes de scoring por cenários reais.</td><td>Dataset curado + testes snapshot de ranking.</td></tr>
+          <tr><td>M32</td><td>Garantir idempotência de POST /favorites.</td><td>Chave determinística por job + upsert transacional.</td></tr>
+          <tr><td>M33</td><td>Evitar resposta pesada com diagnostics em produção padrão.</td><td>Campo diagnostics sob flag debug ou plano enterprise.</td></tr>
+          <tr><td>M34</td><td>Elevar governança de dependências JS.</td><td>Renovate + scan SCA contínuo + política de versões.</td></tr>
+          <tr><td>M35</td><td>Melhorar segurança de segredos em runtime.</td><td>Secrets manager com rotação automática e auditoria.</td></tr>
+          <tr><td>M36</td><td>Aprimorar rastreabilidade ponta a ponta.</td><td>OpenTelemetry tracing (frontend→worker→scraper).</td></tr>
+          <tr><td>M37</td><td>Reduzir cold start percebido.</td><td>Warming seletivo e minimização de bundle inicial.</td></tr>
+          <tr><td>M38</td><td>Melhorar normalização de localização.</td><td>Dicionário geográfico + geocoding para formato canônico.</td></tr>
+          <tr><td>M39</td><td>Incluir score de confiabilidade por fonte.</td><td>Weighting adaptativo por histórico de qualidade de cada site.</td></tr>
+          <tr><td>M40</td><td>Formalizar política de depreciação de API.</td><td>SemVer + headers <code>Deprecation</code> e <code>Sunset</code>.</td></tr>
+          <tr><td>M41</td><td>Melhorar documentação técnica para onboarding.</td><td>ADRs + diagrama C4 + runbooks operacionais.</td></tr>
+          <tr><td>M42</td><td>Elevar cobertura de testes de integração.</td><td>Testes de contrato com mocks de upstreams.</td></tr>
+          <tr><td>M43</td><td>Automatizar smoke tests pós-deploy.</td><td>Pipeline com verificação /health, /search e /favorites.</td></tr>
+          <tr><td>M44</td><td>Refinar estratégia de feature flags.</td><td>Flags server-side por tenant/percentual com kill switch.</td></tr>
+          <tr><td>M45</td><td>Gerir custo de scraping em horário de pico.</td><td>Orquestração por budget diário de requests por fonte.</td></tr>
+          <tr><td>M46</td><td>Mitigar lock-in operacional.</td><td>Camada de abstração para cache/filas/telemetria.</td></tr>
+          <tr><td>M47</td><td>Melhorar experiência mobile no app estático.</td><td>Revisão responsiva com breakpoints e acessibilidade WCAG AA.</td></tr>
+          <tr><td>M48</td><td>Fortalecer qualidade de dados de vagas.</td><td>Pipeline de validação semântica com regras por domínio.</td></tr>
+          <tr><td>M49</td><td>Classificar incidentes e erros por severidade.</td><td>Matriz Sev0–Sev3 com runbook de resposta.</td></tr>
+          <tr><td>M50</td><td>Amarrar backlog técnico a metas de negócio.</td><td>Roadmap orientado por KPI (retenção, conversão e NRR).</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>3) 50 itens de implementação (novas capacidades SaaS)</h2>
+      <table>
+        <thead><tr><th>ID</th><th>Implementação</th><th>Arquitetura/padrão de execução</th></tr></thead>
+        <tbody>
+          <tr><td>I01</td><td>Multitenancy real com isolamento de dados.</td><td>Modelo tenant_id em todas as entidades + RBAC por tenant.</td></tr>
+          <tr><td>I02</td><td>Billing e assinatura por plano.</td><td>Stripe Billing com webhooks idempotentes e ledger interno.</td></tr>
+          <tr><td>I03</td><td>Autenticação de usuários finais.</td><td>OIDC (Google/Microsoft/GitHub) + sessões curtas e refresh seguro.</td></tr>
+          <tr><td>I04</td><td>Painel admin SaaS.</td><td>Backoffice com gestão de tenants, uso, limites e auditoria.</td></tr>
+          <tr><td>I05</td><td>API keys por cliente.</td><td>Chaves com escopos, quotas e rotação assistida.</td></tr>
+          <tr><td>I06</td><td>Webhooks para integrações externas.</td><td>Entrega assíncrona com assinatura HMAC e retry policy.</td></tr>
+          <tr><td>I07</td><td>Fila de scraping assíncrono.</td><td>Cloudflare Queues/Workers para processamento desacoplado.</td></tr>
+          <tr><td>I08</td><td>Banco operacional transacional.</td><td>PostgreSQL com Prisma/Drizzle para favoritos e preferências.</td></tr>
+          <tr><td>I09</td><td>Data warehouse analítico.</td><td>ETL diário para BigQuery/Snowflake e modelos dbt.</td></tr>
+          <tr><td>I10</td><td>Motor de recomendação personalizado.</td><td>Ranker híbrido (regras + aprendizado de clique/favorito).</td></tr>
+          <tr><td>I11</td><td>Segmentação por perfil profissional.</td><td>Taxonomia de skills/seniority com ontologia de cargos.</td></tr>
+          <tr><td>I12</td><td>Alertas proativos de vagas.</td><td>Jobs agendados + notificações por e-mail, push e webhook.</td></tr>
+          <tr><td>I13</td><td>Inbox de oportunidades com triagem.</td><td>Estados Kanban (novo, analisando, aplicado, rejeitado).</td></tr>
+          <tr><td>I14</td><td>Rastreamento de candidatura.</td><td>Pipeline ATS-lite com timeline e status automático.</td></tr>
+          <tr><td>I15</td><td>Gestão de currículo por versão.</td><td>Versionamento de CV com parsing estruturado de competências.</td></tr>
+          <tr><td>I16</td><td>Normalização avançada de skills.</td><td>NER + dicionário semântico (ex.: React.js = React).</td></tr>
+          <tr><td>I17</td><td>Busca semântica vetorial.</td><td>Embeddings + índice vetorial para matching cargo/candidato.</td></tr>
+          <tr><td>I18</td><td>Painel de mercado salarial.</td><td>Agregação por região/seniority/tecnologia com séries temporais.</td></tr>
+          <tr><td>I19</td><td>Sistema de planos Free/Pro/Enterprise.</td><td>Feature gates por plano e limites de uso configuráveis.</td></tr>
+          <tr><td>I20</td><td>Portal de autoatendimento B2B.</td><td>Workspace de equipe com seats, permissões e faturamento.</td></tr>
+          <tr><td>I21</td><td>SSO enterprise.</td><td>SAML/OIDC corporativo com SCIM para provisionamento.</td></tr>
+          <tr><td>I22</td><td>Auditoria completa de ações.</td><td>Audit log imutável com trilha de quem-fez-o-quê-quando.</td></tr>
+          <tr><td>I23</td><td>Compliance e governança.</td><td>Controles LGPD + política de retenção e direito ao esquecimento.</td></tr>
+          <tr><td>I24</td><td>Módulo antifraude para abuso de API.</td><td>Detecção de anomalia por IP/chave/tenant em tempo real.</td></tr>
+          <tr><td>I25</td><td>Portal público de status.</td><td>Status page com uptime por componente e histórico de incidentes.</td></tr>
+          <tr><td>I26</td><td>Arquitetura de eventos.</td><td>Event bus para <code>search.created</code>, <code>job.clicked</code>, <code>fav.saved</code>.</td></tr>
+          <tr><td>I27</td><td>Catálogo de dados e contratos.</td><td>Schema registry e versionamento de eventos.</td></tr>
+          <tr><td>I28</td><td>Experimentos A/B no ranking.</td><td>Framework de experimentação com guardrails estatísticos.</td></tr>
+          <tr><td>I29</td><td>Engine de regras do cliente.</td><td>DSL para filtros/pesos customizados por tenant.</td></tr>
+          <tr><td>I30</td><td>Marketplace de conectores.</td><td>Conectores oficiais + SDK para parceiros.</td></tr>
+          <tr><td>I31</td><td>SDK público da plataforma.</td><td>SDK TypeScript/Python com retries e tipagem forte.</td></tr>
+          <tr><td>I32</td><td>CLI para operações de suporte.</td><td>Comandos para debug de tenant, quotas e replay de eventos.</td></tr>
+          <tr><td>I33</td><td>Infra como código.</td><td>Terraform para ambientes dev/staging/prod e políticas guardrail.</td></tr>
+          <tr><td>I34</td><td>CI/CD com quality gates estritos.</td><td>Build, testes, SAST, DAST, cobertura mínima e deploy canário.</td></tr>
+          <tr><td>I35</td><td>Progressive delivery.</td><td>Canary + blue/green com rollback automático por SLO.</td></tr>
+          <tr><td>I36</td><td>SLO/SLI formalizados.</td><td>Objetivos: disponibilidade, latência p95, erro e frescor de dados.</td></tr>
+          <tr><td>I37</td><td>Runbooks e playbooks de incidentes.</td><td>Procedimentos por severidade com RACI definido.</td></tr>
+          <tr><td>I38</td><td>Backup e disaster recovery testados.</td><td>RPO/RTO definidos + simulação trimestral de restauração.</td></tr>
+          <tr><td>I39</td><td>Ambiente sandbox para clientes API.</td><td>Dados sintéticos e limites próprios para testes externos.</td></tr>
+          <tr><td>I40</td><td>Módulo de consentimento e privacidade.</td><td>Centro de preferências com trilha de consentimento versionada.</td></tr>
+          <tr><td>I41</td><td>Motor de notificações omnichannel.</td><td>Orquestrador com templates versionados e fallback por canal.</td></tr>
+          <tr><td>I42</td><td>Sistema de tickets in-app.</td><td>Suporte contextual com telemetria anexada automaticamente.</td></tr>
+          <tr><td>I43</td><td>Assistente IA para carreira e matching.</td><td>RAG com dados do usuário, guardrails e explicabilidade.</td></tr>
+          <tr><td>I44</td><td>Gestão de conhecimento operacional.</td><td>Base de conhecimento vinculada a incidentes e mudanças.</td></tr>
+          <tr><td>I45</td><td>Localization internacional completa.</td><td>i18n em conteúdo, moeda, data e fusos por região.</td></tr>
+          <tr><td>I46</td><td>Estratégia multi-região.</td><td>Distribuição geográfica com failover ativo-passivo.</td></tr>
+          <tr><td>I47</td><td>Programa de parceiros e revenda.</td><td>Portal partner com tracking de receita e comissionamento.</td></tr>
+          <tr><td>I48</td><td>Modelo de precificação por valor.</td><td>Preço por volume, features premium e SLA contratado.</td></tr>
+          <tr><td>I49</td><td>QBR automatizado por cliente enterprise.</td><td>Relatórios de adoção, ROI e recomendações gerados por dados.</td></tr>
+          <tr><td>I50</td><td>Governança executiva de produto/plataforma.</td><td>Operating cadence mensal com metas, riscos e decisões arquiteturais.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>4) Prompts especializados para CODEX (alto contexto e execução real)</h2>
+      <h3>Prompt 1 — Refatoração arquitetural do Worker</h3>
+      <pre>Você é um Staff Engineer especialista em Cloudflare Workers. Refatore o roteamento HTTP atual para um router declarativo por tabela de rotas (método + path + middlewares), sem quebrar compatibilidade de endpoints existentes. Exija:
+1) Testes de contrato para /health, /search, /favorites e /metrics/reset.
+2) Envelope de erro em application/problem+json com requestId.
+3) Commits atômicos por etapa (router, middleware, testes, docs).
+4) Critérios de aceite com benchmark de latência p95 antes/depois.
+Entregue patch completo, comandos de teste e plano de rollback.</pre>
+
+      <h3>Prompt 2 — Hardening de segurança e identidade</h3>
+      <pre>Atue como Security Architect. Substitua autenticação admin por JWT assinado com rotação de chaves e escopos. Implemente validação de assinatura, expiração, audience e issuer. Adicione auditoria de ações administrativas com trilha imutável. Inclua testes de ataques comuns (token replay, token expirado, assinatura inválida). Gere documentação de threat model (STRIDE) com mitigação implementada no código.</pre>
+
+      <h3>Prompt 3 — Observabilidade de produção</h3>
+      <pre>Atue como SRE. Instrumente a aplicação com OpenTelemetry (traces, metrics, logs correlacionados por requestId). Defina SLI/SLO para disponibilidade, latência p95 e taxa de erro. Implemente alertas acionáveis e runbooks por severidade. Entregue dashboard inicial e smoke tests pós-deploy. Não use placeholders: inclua nomes de métricas, labels e thresholds concretos.</pre>
+
+      <h3>Prompt 4 — Motor de scoring orientado a dados</h3>
+      <pre>Atue como ML Engineer aplicado a ranking. Reestruture o score atual em pipeline de features versionadas (v1, v2...), com pesos configuráveis por tenant. Inclua avaliação offline com dataset realista e métricas NDCG@10 e Precision@5. Entregue testes de regressão de ranking e mecanismo de rollback para versão anterior de score.</pre>
+
+      <h3>Prompt 5 — Multitenancy e monetização SaaS</h3>
+      <pre>Atue como SaaS Platform Architect. Implemente multitenancy com tenant_id, RBAC por papéis e quotas por plano. Adicione billing com Stripe (assinatura mensal/anual), webhooks idempotentes e feature gates por plano. Entregue migrations, políticas de autorização, testes de isolamento entre tenants e documentação de pricing hooks.</pre>
+
+      <h3>Prompt 6 — Frontend resiliente e seguro</h3>
+      <pre>Atue como Frontend Principal Engineer. Refatore o app web para eliminar innerHTML em renderização de vagas, aplicar DOM seguro e separar camadas apiClient/state/UI. Inclua loading states, retry com backoff, telemetria de erro e testes E2E dos fluxos de busca/favorito/exportação. Preserve UX atual e documente ganhos de segurança/performance.</pre>
+
+      <h3>Prompt 7 — Pipeline CI/CD enterprise</h3>
+      <pre>Atue como DevOps Lead. Crie pipeline CI/CD com quality gates: lint, testes unitários/integrados, cobertura mínima, SAST, verificação de dependências e deploy canário com rollback automático por SLO. Gere também policy-as-code para impedir merge sem evidências obrigatórias (testes + changelog + runbook).</pre>
+
+      <h3>Prompt 8 — Dados e analytics para decisão executiva</h3>
+      <pre>Atue como Data Platform Architect. Projete modelo analítico para funil de aquisição e retenção (visitante → cadastro → busca → favorito → assinatura). Implemente eventos versionados, ETL para warehouse e painéis de CAC, LTV, churn e NRR. Inclua dicionário de dados e testes de qualidade (completude, unicidade, consistência temporal).</pre>
+    </section>
+  </main>
+</body>
+</html>

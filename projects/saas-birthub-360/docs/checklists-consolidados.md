@@ -1,0 +1,143 @@
+# Consolidado de Checklists por Prioridade
+
+Atualizado em: 2026-02-25
+
+> Organização solicitada: sem itens verdes, priorizando **amarelo (maior prioridade)** e depois **vermelho (menor prioridade)**.
+
+## 🟡 Maior prioridade — Implementar melhorias / em andamento
+
+- 🟡 **docs/implementation-checklist.md** · **A. Plataforma, Arquitetura e Governança** — #12 Implementar validação schema-first com Zod/Pydantic para payloads críticos (aplicado parser schema-first no domínio de leads)
+- 🟡 **docs/implementation-checklist.md** · **B. API Gateway** — #16 Substituir handlers `ok({})` estáticos por chamadas reais à camada de serviço (concluído, incluindo `/financial/reconcile` via adapter)
+- 🟡 **EXECUTION_CHECKLIST.md** · **📦 FASE 1 — Infraestrutura Base** — Supabase Auth configurado
+- 🟡 **EXECUTION_CHECKLIST.md** · **📦 FASE 1 — Infraestrutura Base** — Google Cloud Storage configurado
+- 🟡 **EXECUTION_CHECKLIST.md** · **🗄️ FASE 2 — Banco de Dados** — Migration inicial rodando
+- 🟡 **EXECUTION_CHECKLIST.md** · **🗄️ FASE 2 — Banco de Dados** — Seed de dados para desenvolvimento
+- 🟡 **EXECUTION_CHECKLIST.md** · **🤖 FASE 4 — Agentes de IA** — Agente SDR — schedule_meeting (Google Calendar)
+- 🟡 **EXECUTION_CHECKLIST.md** · **🤖 FASE 4 — Agentes de IA** — Agente AE — transcribe_and_sync_call
+- 🟡 **EXECUTION_CHECKLIST.md** · **🤖 FASE 4 — Agentes de IA** — Agente Marketing — testes unitários
+- 🟡 **EXECUTION_CHECKLIST.md** · **🤖 FASE 4 — Agentes de IA** — Agente Pós-Venda — testes unitários
+- 🟡 **EXECUTION_CHECKLIST.md** · **🤖 FASE 4 — Agentes de IA** — Agente Financeiro — testes unitários
+- 🟡 **EXECUTION_CHECKLIST.md** · **🤖 FASE 4 — Agentes de IA** — Agente Jurídico — testes unitários
+- 🟡 **EXECUTION_CHECKLIST.md** · **🤖 FASE 4 — Agentes de IA** — Agente Analista — testes unitários
+- 🟡 **EXECUTION_CHECKLIST.md** · **🔄 FASE 5 — Orquestrador e Filas** — Todas as filas Bull MQ definidas e rodando
+
+## 🔴 Menor prioridade — Não iniciado
+
+- 🔴 **docs/implementation-checklist.md** · **B. API Gateway** — #19 Implementar `DealRepository` com transições válidas de estágio (state machine) e histórico de mudanças
+- 🔴 **docs/implementation-checklist.md** · **B. API Gateway** — #20 Implementar `CustomerRepository` com dados de health score calculados em tempo real
+- 🔴 **docs/implementation-checklist.md** · **B. API Gateway** — #21 Implementar `FinancialRepository` com consolidação de MRR, churn, inadimplência e projeções
+- 🔴 **docs/implementation-checklist.md** · **B. API Gateway** — #22 Implementar `ContractRepository` com persistência, versionamento de documentos e status de assinatura
+- 🔴 **docs/implementation-checklist.md** · **B. API Gateway** — #23 Implementar `AnalyticsRepository` com queries agregadas usando materialized views ou cache de curta duração
+- 🔴 **docs/implementation-checklist.md** · **B. API Gateway** — #24 Implementar idempotency key em todos os webhooks recebidos
+- 🔴 **docs/implementation-checklist.md** · **B. API Gateway** — #25 Validar assinatura HMAC/JWT de webhook por provedor antes de processar
+- 🔴 **docs/implementation-checklist.md** · **B. API Gateway** — #26 Implementar autorização por escopo/role além do JWT
+- 🔴 **docs/implementation-checklist.md** · **B. API Gateway** — #27 Implementar rate limiting por rota e por tenant
+- 🔴 **docs/implementation-checklist.md** · **B. API Gateway** — #28 Padronizar erros HTTP com códigos de domínio
+- 🔴 **docs/implementation-checklist.md** · **B. API Gateway** — #29 Adicionar testes de contrato OpenAPI para endpoints críticos
+- 🔴 **docs/implementation-checklist.md** · **B. API Gateway** — #30 Publicar documentação operacional da API em `docs/api/`
+- 🔴 **EXECUTION_CHECKLIST.md** · **🔄 FASE 5 — Orquestrador e Filas** — Jobs agendados (crons) funcionando
+- 🔴 **EXECUTION_CHECKLIST.md** · **🖥️ FASE 7 — Dashboard** — apps/dashboard — setup Next.js 14
+- 🔴 **EXECUTION_CHECKLIST.md** · **🖥️ FASE 7 — Dashboard** — Tela: Pipeline de Vendas
+- 🔴 **EXECUTION_CHECKLIST.md** · **🖥️ FASE 7 — Dashboard** — Tela: Health Score Board (clientes)
+- 🔴 **EXECUTION_CHECKLIST.md** · **🖥️ FASE 7 — Dashboard** — Tela: Visão Financeira (MRR, churn, inadimplência)
+- 🔴 **EXECUTION_CHECKLIST.md** · **🖥️ FASE 7 — Dashboard** — Tela: Analytics e Attribution
+- 🔴 **EXECUTION_CHECKLIST.md** · **🖥️ FASE 7 — Dashboard** — Tela: Gestão de Contratos
+- 🔴 **EXECUTION_CHECKLIST.md** · **🖥️ FASE 7 — Dashboard** — Tela: Log de Atividades dos Agentes
+- 🔴 **EXECUTION_CHECKLIST.md** · **🖥️ FASE 7 — Dashboard** — Real-time updates via Supabase Realtime
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **A. Plataforma, Arquitetura e Governança (1-15)** — #1 Definir roadmap trimestral por domínio (Marketing, SDR, AE, CS, Financeiro, Jurídico, BI).
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **A. Plataforma, Arquitetura e Governança (1-15)** — #2 Definir RFC template para mudanças arquiteturais.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **A. Plataforma, Arquitetura e Governança (1-15)** — #3 Criar matriz de criticidade por serviço.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **A. Plataforma, Arquitetura e Governança (1-15)** — #4 Mapear SLO/SLI por serviço (latência, disponibilidade, erro).
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **A. Plataforma, Arquitetura e Governança (1-15)** — #5 Formalizar versionamento de APIs (externa e interna).
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **A. Plataforma, Arquitetura e Governança (1-15)** — #6 Padronizar contrato de erros entre serviços.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **A. Plataforma, Arquitetura e Governança (1-15)** — #7 Criar padrão único de correlação (`trace_id`, `request_id`, `job_id`).
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **A. Plataforma, Arquitetura e Governança (1-15)** — #8 Implementar policy de backward compatibility para eventos e payloads.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **A. Plataforma, Arquitetura e Governança (1-15)** — #9 Definir regras de depreciação de endpoints.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **A. Plataforma, Arquitetura e Governança (1-15)** — #10 Criar catálogo de serviços e dependências.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **A. Plataforma, Arquitetura e Governança (1-15)** — #11 Especificar limites de payload por endpoint.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **A. Plataforma, Arquitetura e Governança (1-15)** — #12 Implementar validação schema-first para payloads críticos.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **A. Plataforma, Arquitetura e Governança (1-15)** — #13 Criar guardrails para uso de features experimentais.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **A. Plataforma, Arquitetura e Governança (1-15)** — #14 Definir ownership técnico por pasta/serviço.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **A. Plataforma, Arquitetura e Governança (1-15)** — #15 Criar runbook operacional por incidente crítico.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **B. API Gateway (16-30)** — #16 Substituir handlers `ok(...)` por serviços reais.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **B. API Gateway (16-30)** — #17 Implementar camada de service/repository no gateway.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **B. API Gateway (16-30)** — #18 Conectar rotas de leads ao banco com paginação e filtros.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **B. API Gateway (16-30)** — #19 Conectar rotas de deals com transições válidas de estágio.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **B. API Gateway (16-30)** — #20 Implementar rotas de customers com dados de saúde reais.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **B. API Gateway (16-30)** — #21 Implementar rotas financeiras com consolidação real.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **B. API Gateway (16-30)** — #22 Implementar rotas de contratos com persistência e versionamento.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **B. API Gateway (16-30)** — #23 Implementar rotas de analytics com consultas agregadas reais.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **B. API Gateway (16-30)** — #24 Implementar webhook idempotency key para todos provedores.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **B. API Gateway (16-30)** — #25 Validar assinatura de webhook por provedor (svix/stripe/docusign etc.).
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **B. API Gateway (16-30)** — #26 Implementar autorização por escopo/role além do JWT básico.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **B. API Gateway (16-30)** — #27 Adicionar limites por rota e por tenant.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **B. API Gateway (16-30)** — #28 Padronizar erros HTTP com códigos de domínio.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **B. API Gateway (16-30)** — #29 Adicionar testes de contrato OpenAPI para endpoints críticos.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **B. API Gateway (16-30)** — #30 Publicar documentação operacional de uso da API.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **C. Orquestrador e Filas (31-45)** — #31 Implementar fluxos DEAL_CLOSED_WON de forma executável (não textual).
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **C. Orquestrador e Filas (31-45)** — #32 Implementar fluxo HEALTH_ALERT executável.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **C. Orquestrador e Filas (31-45)** — #33 Implementar fluxo CHURN_RISK_HIGH executável.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **C. Orquestrador e Filas (31-45)** — #34 Implementar fluxo BOARD_REPORT executável com agendamento.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **C. Orquestrador e Filas (31-45)** — #35 Remover blocos `pass` e exceções silenciosas.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **C. Orquestrador e Filas (31-45)** — #36 Adicionar retries com backoff nos nós do grafo.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **C. Orquestrador e Filas (31-45)** — #37 Persistir estado intermediário dos fluxos.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **C. Orquestrador e Filas (31-45)** — #40 Definir prioridade por tipo de evento.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **C. Orquestrador e Filas (31-45)** — #41 Medir throughput e tempo médio por fluxo.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **C. Orquestrador e Filas (31-45)** — #42 Adicionar idempotência por evento recebido.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #46 Padronizar formato de output de ferramentas entre todos agentes.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #47 Implementar validação estrita de entrada em cada `tools.py`.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #48 Criar fallback consistente quando LLM/provider falhar.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #49 Definir política de timeout por ferramenta.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #50 Adicionar cache de respostas para operações idempotentes.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #51 Implementar avaliação automática de qualidade das respostas dos agentes.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #52 Incluir métricas de custo por execução de agente.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #53 Implementar controle de versão de prompts por agente.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #54 Adicionar testes unitários reais para ferramentas com placeholder.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #55 Melhorar testes de integração multiagente.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #56 Implementar transcrição real + sincronização CRM no AE com provider estável.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #57 Evoluir `schedule_meeting` para disponibilidade real multi-calendário.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #58 Incluir detecção de PII em entradas/saídas dos agentes.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #59 Adicionar redaction de dados sensíveis em logs.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #60 Criar sandbox de execução de ferramentas externas.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #61 Definir limites de tokens e budget por tenant.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #62 Implementar avaliação offline de prompts (benchmarks internos).
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #63 Introduzir observabilidade por etapa do grafo em cada agente.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #64 Documentar comportamento esperado por ferramenta e edge cases.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **D. Agentes de IA (46-65)** — #65 Criar suíte de regressão para outputs críticos de negócio.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **E. Banco de Dados e Dados (66-75)** — #66 Executar migration inicial em ambiente validado.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **E. Banco de Dados e Dados (66-75)** — #67 Adicionar migrations incrementais com processo de revisão.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **E. Banco de Dados e Dados (66-75)** — #68 Criar índices para consultas críticas (leads/deals/invoices/logs).
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **E. Banco de Dados e Dados (66-75)** — #69 Definir estratégia de particionamento para AgentLog em escala.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **E. Banco de Dados e Dados (66-75)** — #70 Implementar retenção e arquivamento de logs antigos.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **E. Banco de Dados e Dados (66-75)** — #71 Adicionar constraints de integridade faltantes por domínio.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **E. Banco de Dados e Dados (66-75)** — #72 Criar política de soft-delete/auditoria para entidades críticas.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **E. Banco de Dados e Dados (66-75)** — #73 Implementar seed determinístico para ambientes de teste.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **E. Banco de Dados e Dados (66-75)** — #74 Criar política de backup e restore testado periodicamente.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **E. Banco de Dados e Dados (66-75)** — #75 Definir data quality checks automáticos.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **F. Dashboard e Front-end (76-85)** — #76 Implementar página de pipeline de vendas com filtros.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **F. Dashboard e Front-end (76-85)** — #77 Implementar health score board de clientes.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **F. Dashboard e Front-end (76-85)** — #78 Implementar visão financeira (MRR, churn, inadimplência).
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **F. Dashboard e Front-end (76-85)** — #79 Implementar tela de analytics/attribution.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **F. Dashboard e Front-end (76-85)** — #80 Implementar tela de contratos e status de assinatura.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **F. Dashboard e Front-end (76-85)** — #81 Implementar tela de log de atividades dos agentes.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **F. Dashboard e Front-end (76-85)** — #82 Conectar realtime com Supabase para eventos relevantes.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **F. Dashboard e Front-end (76-85)** — #83 Adicionar autenticação e controle de sessão no dashboard.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **F. Dashboard e Front-end (76-85)** — #84 Implementar design system básico e componentes reutilizáveis.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **F. Dashboard e Front-end (76-85)** — #85 Adicionar testes de UI e smoke tests de navegação.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **G. Integrações Externas (86-92)** — #86 Finalizar integração Gemini com controles de fallback e custo.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **G. Integrações Externas (86-92)** — #87 Finalizar integrações de pagamento (Stripe/Pagar.me/Asaas).
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **G. Integrações Externas (86-92)** — #88 Implementar integração fiscal (Focus NFe).
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **G. Integrações Externas (86-92)** — #89 Implementar assinatura eletrônica (Clicksign/DocuSign).
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **G. Integrações Externas (86-92)** — #90 Implementar CRM sync (HubSpot/Pipedrive).
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **G. Integrações Externas (86-92)** — #91 Implementar comunicação transacional (Resend + WhatsApp).
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **G. Integrações Externas (86-92)** — #92 Implementar ingestão de Ads (Google/Meta) com reconciliação.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **H. Segurança, Compliance e Observabilidade (93-100)** — #93 Implementar gestão de segredos por ambiente (sem credenciais em texto puro).
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **H. Segurança, Compliance e Observabilidade (93-100)** — #94 Adicionar varredura de vulnerabilidades em dependências (SCA) no CI.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **H. Segurança, Compliance e Observabilidade (93-100)** — #95 Implementar SAST para TS/Python no pipeline.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **H. Segurança, Compliance e Observabilidade (93-100)** — #96 Adicionar WAF/rate limiting avançado para endpoints expostos.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **H. Segurança, Compliance e Observabilidade (93-100)** — #97 Implementar trilha de auditoria para ações administrativas.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **H. Segurança, Compliance e Observabilidade (93-100)** — #98 Configurar dashboards de métricas por serviço no Grafana.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **H. Segurança, Compliance e Observabilidade (93-100)** — #99 Configurar alertas com thresholds orientados a SLO.
+- 🔴 **docs/REPO_ANALISE_E_CHECKLIST_100.md** · **H. Segurança, Compliance e Observabilidade (93-100)** — #100 Implementar testes periódicos de recuperação de desastre.
+
+**Totais:** 🟡 14 itens · 🔴 116 itens · **Total exibido:** 130 itens

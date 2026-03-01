@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Buscador de Vagas">
+  <rect width="128" height="128" rx="16" fill="#0e2a47"/>
+  <circle cx="58" cy="58" r="28" fill="none" stroke="#ffffff" stroke-width="10"/>
+  <line x1="78" y1="78" x2="106" y2="106" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+</svg>

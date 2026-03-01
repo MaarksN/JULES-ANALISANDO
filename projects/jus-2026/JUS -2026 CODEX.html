@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JusArtificial · Codex — IA & Produto</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg:      #080e10;
+    --surface: #0d1620;
+    --border:  rgba(255,255,255,0.06);
+    --text:    #dde8f0;
+    --muted:   #6a8a9a;
+    --acc:     #5c9cf5;
+    --acc-s:   #93c4fb;
+    --danger:  #e05555;
+    --warn:    #e0a030;
+    --ok:      #3dba72;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; overflow: hidden;
+    padding: 64px 32px 48px; text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(92,156,245,0.08) 0%, transparent 70%);
+  }
+  .hero::before {
+    content: '⚡'; position: absolute;
+    font-size: 380px; opacity: 0.025;
+    top: -40px; left: 50%; transform: translateX(-50%);
+    pointer-events: none; user-select: none; line-height: 1;
+  }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--acc); border: 1px solid rgba(92,156,245,0.3);
+    padding: 4px 16px; border-radius: 3px; margin-bottom: 22px;
+  }
+  .eyebrow::before, .eyebrow::after { content:''; width:18px; height:1px; background:rgba(92,156,245,0.4); }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px,4vw,54px); font-weight: 900;
+    line-height: 1.06; letter-spacing: -0.02em;
+    background: linear-gradient(150deg, var(--acc-s) 0%, #fff 50%, #b0d5fb 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 14px;
+  }
+
+  .hero-sub { max-width: 580px; margin: 0 auto 24px; color: var(--muted); font-size: 15px; }
+
+  .pills { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .pill {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+    padding: 4px 12px; border-radius: 3px; border: 1px solid;
+  }
+  .p0  { color: var(--danger); border-color: rgba(224,85,85,0.35);  background: rgba(224,85,85,0.08); }
+  .p1  { color: var(--warn);   border-color: rgba(224,160,48,0.35); background: rgba(224,160,48,0.08); }
+  .ok  { color: var(--ok);     border-color: rgba(61,186,114,0.35); background: rgba(61,186,114,0.08); }
+
+  /* ── AGENT BADGE ── */
+  .agent-bar {
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    padding: 16px 24px; border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .agent-ico {
+    width: 42px; height: 42px; border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    background: linear-gradient(135deg,#0a1a38,#1a3a78);
+    box-shadow: 0 0 24px rgba(92,156,245,0.2);
+  }
+  .agent-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; }
+  .agent-desc { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  /* ── CONTAINER ── */
+  .wrap { max-width: 960px; margin: 0 auto; padding: 44px 24px 64px; }
+
+  /* ── PROMPT CARD ── */
+  .pcard {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden; margin-bottom: 32px;
+    position: relative;
+  }
+  .pcard::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background: linear-gradient(90deg, var(--acc), var(--acc-s), var(--acc));
+  }
+
+  .pcard-top {
+    padding: 14px 24px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 10px; background: rgba(0,0,0,0.2);
+  }
+  .plabel { font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .tags { display:flex; gap:7px; flex-wrap:wrap; }
+  .tag {
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px;
+    padding:2px 9px; border-radius:3px; border:1px solid;
+    color:var(--acc); border-color:rgba(92,156,245,0.3); background:rgba(92,156,245,0.07);
+  }
+
+  /* ── TOOLBAR ── */
+  .toolbar {
+    display: flex; align-items: center; justify-content: flex-end;
+    padding: 10px 24px; background: rgba(0,0,0,0.3);
+    border-bottom: 1px solid var(--border);
+  }
+  .copy-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 500;
+    padding: 7px 18px; border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04);
+    color: var(--muted); cursor: pointer; transition: all 0.18s ease;
+  }
+  .copy-btn:hover { background: rgba(255,255,255,0.09); color: var(--text); transform: translateY(-1px); }
+  .copy-btn svg { width:12px; height:12px; flex-shrink:0; }
+  .copy-btn.done { background:rgba(92,156,245,0.12); border-color:rgba(92,156,245,0.4); color:var(--acc); }
+
+  /* ── PROMPT BODY ── */
+  .pbody {
+    padding: 28px; font-family:'IBM Plex Mono',monospace;
+    font-size: 13px; line-height: 1.85; white-space: pre-wrap; color: #b8c8d8;
+  }
+
+  /* ── CHIPS ── */
+  .chips-title {
+    font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--muted);
+    margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--border);
+  }
+  .chips { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:8px; }
+  .chip {
+    background:rgba(255,255,255,0.03); border:1px solid var(--border);
+    border-radius:8px; padding:9px 12px;
+    display:flex; flex-direction:column; gap:3px;
+  }
+  .cid { font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; color:var(--acc); }
+  .cid.p0 { color:var(--danger) !important; }
+  .cdesc { color:var(--muted); font-size:11.5px; line-height:1.3; }
+
+  /* ── DIVIDER ── */
+  .div-sep { display:flex; align-items:center; gap:16px; margin:48px 0; }
+  .div-line { flex:1; height:1px; background:var(--border); }
+  .div-mid { font-family:'Playfair Display',serif; font-size:20px; color:rgba(92,156,245,0.2); }
+
+  /* ══ CHECKLIST ══ */
+  .cl-wrap {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:14px; overflow:hidden; margin-top:8px;
+  }
+  .cl-head {
+    padding:16px 24px; background:rgba(0,0,0,0.35);
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+  }
+  .cl-title-row { display:flex; align-items:center; gap:12px; }
+  .cl-ico {
+    width:38px; height:38px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center; font-size:17px;
+    background:linear-gradient(135deg,#0a1020,#0a1a38);
+    border:1px solid rgba(92,156,245,0.2);
+  }
+  .cl-title { font-family:'Playfair Display',serif; font-size:15px; font-weight:700; }
+  .cl-sub { font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); margin-top:2px; }
+
+  .cl-legend { display:flex; gap:14px; flex-wrap:wrap; }
+  .lg-item { display:flex; align-items:center; gap:6px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--muted); }
+  .lgdot { width:9px; height:9px; border-radius:50%; }
+  .lg-g { background:var(--ok);     box-shadow:0 0 5px rgba(61,186,114,0.5); }
+  .lg-y { background:var(--warn);   box-shadow:0 0 5px rgba(224,160,48,0.5); }
+  .lg-r { background:var(--danger); box-shadow:0 0 5px rgba(224,85,85,0.5); }
+
+  .cl-reset {
+    font-family:'IBM Plex Mono',monospace; font-size:11px; padding:5px 12px;
+    border-radius:5px; border:1px solid var(--border); background:transparent;
+    color:var(--muted); cursor:pointer; transition:all .15s;
+  }
+  .cl-reset:hover { border-color:rgba(224,85,85,0.4); color:var(--danger); }
+
+  .cl-body { padding:18px 24px; }
+  .cl-grp { margin-bottom:22px; }
+  .cl-glbl {
+    font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.12em;
+    text-transform:uppercase; color:#25354a;
+    margin-bottom:9px; padding-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.03);
+  }
+  .cl-list { display:flex; flex-direction:column; gap:5px; }
+
+  .cl-row {
+    display:flex; align-items:center; gap:13px;
+    padding:10px 13px; border-radius:8px; border:1px solid transparent;
+    cursor:pointer; transition:all .15s ease; user-select:none;
+    background:rgba(255,255,255,0.015);
+  }
+  .cl-row:hover { background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.05); }
+  .cl-row[data-state="green"]  { background:rgba(61,186,114,0.07);  border-color:rgba(61,186,114,0.2); }
+  .cl-row[data-state="yellow"] { background:rgba(224,160,48,0.07);  border-color:rgba(224,160,48,0.2); }
+  .cl-row[data-state="red"]    { background:rgba(224,85,85,0.07);   border-color:rgba(224,85,85,0.2); }
+
+  .tl {
+    width:18px; height:18px; border-radius:50%; flex-shrink:0;
+    border:2px solid rgba(255,255,255,0.07); background:rgba(255,255,255,0.05); transition:all .2s;
+  }
+  .cl-row[data-state="green"]  .tl { background:var(--ok);     border-color:#2a9a56; box-shadow:0 0 8px rgba(61,186,114,0.5); }
+  .cl-row[data-state="yellow"] .tl { background:var(--warn);   border-color:#b07a18; box-shadow:0 0 8px rgba(224,160,48,0.5); }
+  .cl-row[data-state="red"]    .tl { background:var(--danger); border-color:#a03030; box-shadow:0 0 8px rgba(224,85,85,0.5); }
+
+  .cl-txt { flex:1; }
+  .cl-t { font-size:13px; color:var(--text); line-height:1.3; }
+  .cl-d { font-size:11px; color:var(--muted); font-family:'IBM Plex Mono',monospace; margin-top:2px; }
+
+  .cl-row[data-state="green"]  .cl-t { color:#86efac; }
+  .cl-row[data-state="yellow"] .cl-t { color:#fde68a; }
+  .cl-row[data-state="red"]    .cl-t { color:#fca5a5; }
+
+  .cl-badge {
+    font-family:'IBM Plex Mono',monospace; font-size:10px;
+    padding:2px 7px; border-radius:3px; white-space:nowrap; opacity:0; transition:opacity .15s;
+  }
+  .cl-row[data-state="green"]  .cl-badge { opacity:1; background:rgba(61,186,114,0.15); color:#86efac; }
+  .cl-row[data-state="yellow"] .cl-badge { opacity:1; background:rgba(224,160,48,0.15); color:#fde68a; }
+  .cl-row[data-state="red"]    .cl-badge { opacity:1; background:rgba(224,85,85,0.15);  color:#fca5a5; }
+
+  .sc-bar {
+    margin:14px 0 0; background:rgba(0,0,0,0.3); border-radius:8px;
+    padding:11px 16px; display:flex; align-items:center; gap:13px;
+    border:1px solid var(--border);
+  }
+  .sc-lbl { font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); white-space:nowrap; }
+  .sc-track { flex:1; height:5px; background:rgba(255,255,255,0.05); border-radius:999px; overflow:hidden; }
+  .sc-fill  { height:100%; border-radius:999px; transition:width .4s ease, background .4s; background:var(--ok); }
+  .sc-num   { font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:600; color:var(--text); min-width:36px; text-align:right; }
+
+  footer {
+    text-align:center; padding:24px;
+    color:var(--muted); font-size:12px; font-family:'IBM Plex Mono',monospace;
+    border-top:1px solid var(--border); letter-spacing:.04em;
+  }
+
+  @media(max-width:600px) { .pbody{font-size:11.5px;} .chips{grid-template-columns:1fr 1fr;} }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">JusArtificial · IA & Produto</div>
+  <h1>Codex<br>Engenheiro de IA & Produto</h1>
+  <p class="hero-sub">Responsável por transformar sistemas simulados em implementações reais — RAG semântico, validação jurídica verdadeira e experiência de produto.</p>
+  <div class="pills">
+    <span class="pill p0">🔴 P0 — RAG simulado (keyword simples)</span>
+    <span class="pill p0">🔴 P0 — Vector store no localStorage (limite 5MB)</span>
+    <span class="pill p0">🔴 P0 — Validator de citações com regex falsa</span>
+    <span class="pill p0">🔴 P0 — Google Search não injetado no Gemini</span>
+    <span class="pill p1">🟡 P1 — Sem controle de custo Flash vs Pro</span>
+    <span class="pill ok">🟢 Prompts (CoT, Personas): 85% prontos</span>
+  </div>
+</div>
+
+<div class="agent-bar">
+  <div class="agent-ico">⚡</div>
+  <div>
+    <div class="agent-name">Codex — OpenAI Coding Agent</div>
+    <div class="agent-desc">RAG Real · Validator Jurídico · Vector Store · Custo de IA · APIs · Produto</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="pcard">
+  <div class="pcard-top">
+    <span class="plabel">prompt · codex · JusArtificial · pt-BR</span>
+    <div class="tags">
+      <span class="tag">RAG Real</span>
+      <span class="tag">Validator Jurídico</span>
+      <span class="tag">Vector Store</span>
+      <span class="tag">Custo IA</span>
+      <span class="tag">Produto</span>
+    </div>
+  </div>
+  <div class="toolbar">
+    <button class="copy-btn" id="copy-btn" onclick="doCopy()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      Copiar Prompt Codex
+    </button>
+  </div>
+  <div class="pbody" id="prompt"># CONTEXTO — JusArtificial
+Plataforma SaaS jurídica com IA para advogados. Stack:
+  Backend : Node.js + Express.js (Monolito Modular)
+  Frontend : React 19 + Vite + TailwindCSS
+  IA       : Google Gemini API (@google/genai) — Flash e Pro
+  RAG      : contextRanker.js (ATUAL: keyword simples — NÃO é RAG semântico)
+  Vectors  : vectorStore.ts (ATUAL: localStorage do browser — INVIÁVEL)
+  Validator: validator.ts (ATUAL: regex/listas estáticas — NÃO valida leis reais)
+  OCR      : pdf-parse / Tesseract
+
+O sistema tem prompts excelentes (Chain of Thought, Personas, Few-Shot),
+mas a camada de recuperação de contexto (RAG) e validação jurídica são
+completamente simuladas. Isso expõe advogados ao risco de peças com
+leis revogadas ou inexistentes — risco profissional e sanção da OAB.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# MISSÃO (Codex)
+Você é o engenheiro de IA e produto responsável por transformar sistemas
+simulados em implementações reais e seguras. Foco: RAG semântico com
+embeddings reais, vector store server-side, validação jurídica com APIs
+oficiais, controle de custo de IA e módulos essenciais de produto.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ITENS ATRIBUÍDOS AO CODEX
+
+━━━━━━ 🔴 CRÍTICO P0 — INTEGRIDADE JURÍDICA ━━━━━━
+
+### C01 — Implementar RAG Semântico Real
+CONTEXTO: contextRanker.js usa query.includes(term) — busca por string simples.
+"Veículo" não encontra documentos com "automóvel". "Réu" não encontra "acusado".
+Sem contexto semântico relevante, o Gemini alucina e cita leis erradas.
+
+ARQUIVO ALVO: backend/services/contextRanker.js (substituir completamente)
+
+TAREFA:
+1. Criar backend/services/embeddings.js:
+   - Função embedText(text): Promise<number[]>
+   - Usar @google/genai modelo text-embedding-004 (Google Gecko).
+   - Alternativa aceita: openai SDK com text-embedding-3-small.
+
+2. Criar backend/services/vectorStore.js (server-side):
+   - storeChunks(chunks, userId, firmId, documentId): salva vetores no BD.
+   - searchSimilar(queryVector, userId, firmId, topK=5): busca por cosseno.
+   - Fase 1 MVP: similaridade de cosseno em memória (aceitável até ~500 chunks).
+   - Fase 2 produção: integrar Pinecone SDK ou pgvector.
+
+3. Pipeline de ingestão de documentos (chamado após OCR):
+   texto bruto → chunking (512 tokens, 50 tokens overlap)
+   → embedding por chunk → armazenar (chunkId, firmId, userId, text, vector)
+
+4. Pipeline de retrieval (chamado no chat):
+   mensagem do usuário → embed query → busca por similaridade
+   → top-5 chunks → injetar como contexto no prompt do Gemini
+
+5. contextRanker.js antigo: SUBSTITUÍDO, não expandido.
+
+ENTREGÁVEL:
+  - backend/services/embeddings.js com embedText() + JSDoc.
+  - backend/services/vectorStore.js com storeChunks() e searchSimilar().
+  - backend/services/contextRanker.js refatorado usando RAG semântico.
+  - Teste: "veículo" encontra documentos com "automóvel" (similaridade > 0.7).
+  - Documentação do modelo de embedding e custo estimado por query.
+
+CRITÉRIO: Recall semântico > 80% em queries jurídicas com sinônimos.
+Zero keyword matching no fluxo de RAG.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### C02 — Migrar vectorStore de localStorage para servidor
+CONTEXTO: services/vectorStore.ts (FRONTEND) salva embeddings no localStorage.
+Limite do browser: ~5MB. Um escritório com 10 processos de 50 páginas cada
+= ~50MB de texto embedado → localStorage estoura → app quebra silenciosamente.
+
+ARQUIVO ALVO: services/vectorStore.ts (frontend) — DELETAR
+
+TAREFA:
+1. Deletar COMPLETAMENTE services/vectorStore.ts do frontend.
+2. Frontend nunca armazena embeddings ou vetores.
+3. Acesso a vetores via POST /api/chat → backend faz o retrieval (C01).
+4. Limpar dados residuais no localStorage dos usuários existentes:
+   Object.keys(localStorage)
+     .filter(k => k.startsWith('vector_') || k.startsWith('embed_'))
+     .forEach(k => localStorage.removeItem(k));
+5. Documentar migração em MIGRATION.md.
+
+ENTREGÁVEL:
+  - services/vectorStore.ts deletado.
+  - Script de limpeza de localStorage para usuários existentes.
+  - MIGRATION.md explicando a mudança e impacto.
+
+CRITÉRIO: Zero embedding em localStorage. Sem limite de tamanho para documentos.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### C03 — Validador de Citações Jurídicas Real
+CONTEXTO: services/validator.ts usa regex simples como "Lei > 20000 é suspeita".
+O sistema pode aprovar leis revogadas ou completamente inexistentes.
+Um advogado com peça contendo lei errada pode perder o processo + sanção da OAB.
+
+ARQUIVO ALVO: services/validator.ts → backend/services/legalValidator.js
+
+TAREFA:
+1. Criar backend/services/legalValidator.js integrando APIs reais:
+
+   OPÇÃO A — LexML.gov.br (API pública e gratuita):
+   GET https://www.lexml.gov.br/urn/urn:lex:br:federal:lei:{ano};{numero}
+   Retorna: vigência, data de revogação, ementa da lei.
+
+   OPÇÃO B — Planalto.gov.br (scraping estruturado da legislação federal):
+   Verificar existência e vigência da norma na base oficial.
+
+   OPÇÃO C — Jusbrasil/Digesto API (para planos enterprise):
+   Documentar configuração via JUSBRASIL_API_KEY no .env.
+
+2. Fluxo de validação:
+   Gemini gera peça → extrair todas as referências a leis/artigos
+   → para cada citação: consultar API → verificar existência e vigência
+   → retornar: { citation, valid, status: 'vigente'|'revogada'|'not_found',
+                 explanation, suggestedReplacement }
+
+3. Cache de 24h dos resultados (leis raramente mudam diariamente).
+
+4. Regra crítica: lei não verificável (timeout, API fora) → status: 'não_verificada'
+   NUNCA marcar como 'válida' por omissão.
+
+5. Frontend: citações inválidas marcadas em vermelho inline na peça gerada,
+   com tooltip da explanation e botão "Substituir" sugerindo a lei correta.
+
+ENTREGÁVEL:
+  - backend/services/legalValidator.js com ao menos 1 API real integrada.
+  - Cache de resultados no Firestore ou Redis.
+  - Endpoint POST /api/validate/citations recebendo array de citações.
+  - Testes:
+    Lei 8.666/93 → status: 'revogada' (revogada pela Lei 14.133/2021).
+    Lei 14.133/2021 → status: 'vigente'.
+    Lei 12.999/2099 → status: 'not_found'.
+  - Frontend: marcação visual de citações inválidas + tooltip + botão substituir.
+
+CRITÉRIO: Zero peça aprovada com lei revogada ou inexistente.
+Validação real, não heurística. Latência < 3s para validar até 10 citações.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### C04 — Google Search real no Gemini (eliminar alucinação de busca)
+CONTEXTO: Os prompts instruem o modelo a usar "Busca do Google", mas se a
+ferramenta googleSearch não for injetada na chamada à API, o modelo ALUCINA
+que pesquisou — inventa resultados fictícios de jurisprudência.
+
+ARQUIVO ALVO: backend/services/aiOrchestrator.js (criado pelo Jules J03)
+
+TAREFA:
+1. Injetar ferramenta google_search em todas as chamadas de chat Pro/Enterprise:
+   const response = await genAI.models.generateContent({
+     model: 'gemini-1.5-pro',
+     contents: [...messages],
+     tools: [{ googleSearch: {} }],
+     config: { temperature: 0.2 }
+   });
+
+2. Processar groundingMetadata da resposta:
+   - Extrair fontes consultadas (STJ, STF, TRFs, Planalto).
+   - Incluir no retorno ao frontend: sources: [{ title, url, snippet }].
+
+3. Frontend exibe as fontes abaixo de cada resposta para o advogado verificar.
+
+4. Toggle por plano:
+   - Free: sem busca web (usa apenas contexto dos documentos uploaded).
+   - Pro e Enterprise: busca web habilitada.
+
+ENTREGÁVEL:
+  - Gemini com googleSearch tool injetada para planos Pro/Enterprise.
+  - Frontend exibe sources após resposta.
+  - Testes: resposta com groundingMetadata inclui sources no response body.
+
+CRITÉRIO: Zero "alucinação de busca". Modelo ou usa a ferramenta real ou
+declara explicitamente que não pode buscar — nunca inventa resultados.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━ 🟡 P1 — PRODUTO VENDÁVEL ━━━━━━
+
+### C05 — Model Router: Flash vs Pro (controle de custo)
+CONTEXTO: Sem roteamento de modelo, o Critic Loop pode triplicar chamadas ao Pro.
+Um contrato complexo pode custar > $0.50 USD por execução.
+Para SaaS em BRL com margem estreita, isso é insustentável.
+
+TAREFA:
+1. Criar backend/services/modelRouter.js:
+
+   Usar Gemini Flash (barato):
+   - Resumos de documentos curtos (< 5 páginas)
+   - Perguntas simples de contexto
+   - Extração de metadados de processos
+   - RAG retrieval (embedding + ranqueamento)
+
+   Usar Gemini Pro (caro, alta qualidade):
+   - Geração de peças processuais completas
+   - Análise jurídica complexa
+   - Critic Loop (apenas para geração de peças)
+   - Contratos com mais de 10 páginas
+
+2. Critic Loop: disparado APENAS para geração de peças — não para chat simples.
+
+3. Budget diário por plano:
+   - Free: 10 chamadas Pro/dia, 50 Flash/dia.
+   - Pro: 50 Pro/dia, Flash ilimitado.
+   - Enterprise: sem limite.
+
+4. Endpoint GET /api/usage/today com tokens usados e custo estimado.
+
+ENTREGÁVEL:
+  - backend/services/modelRouter.js com roteamento documentado.
+  - Budget por plano implementado no Firestore.
+  - Endpoint /api/usage/today.
+
+CRITÉRIO: Custo de chat simples reduzido ≥ 70% usando Flash.
+Pro reservado para geração de peças — Critic Loop não duplica custo no chat.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### C06 — Padronizar erros da API com RFC 7807
+CONTEXTO: Erros retornam formatos inconsistentes — string, objeto, código HTTP errado.
+Dificulta tratamento de erros no frontend e em integrações futuras.
+
+TAREFA:
+1. Middleware global de erro no Express:
+   app.use((err, req, res, next) => {
+     res.status(err.status || 500).json({
+       type: `https://jusartificial.com.br/errors/${err.code || 'internal'}`,
+       title: err.title || 'Erro interno',
+       status: err.status || 500,
+       detail: err.message,
+       requestId: req.id,
+       firmId: req.firmId
+     });
+   });
+
+2. Classes de erro tipadas em backend/errors/:
+   AuthError, ForbiddenError, NotFoundError, ValidationError,
+   AIQuotaError, LegalValidationError.
+
+3. Todos os controllers refatorados com throw tipado.
+4. Frontend trata erros pelo campo type da resposta.
+5. Mensagens de erro SEMPRE em português para o advogado.
+
+CRITÉRIO: 100% dos erros em formato RFC 7807 com requestId.
+Zero JSON de erro sem type.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### C07 — Validação de inputs com Zod em todos os endpoints
+CONTEXTO: Controllers recebem dados sem validação de schema.
+Campos ausentes ou com tipos errados causam crashes silenciosos.
+
+TAREFA:
+1. Schemas em backend/schemas/:
+   - chatSchema.js: { sessionId: string, message: string (max 10000) }
+   - uploadSchema.js: { documentType: enum, sessionId: string }
+   - sessionSchema.js: { title: string (max 200), caseType: enum }
+   - firmSchema.js: { name: string, cnpj: string (validar formato BR) }
+
+2. Middleware de validação central:
+   const validate = (schema) => (req, res, next) => {
+     const r = schema.safeParse(req.body);
+     if (!r.success) return next(new ValidationError(r.error.flatten()));
+     req.body = r.data;
+     next();
+   };
+
+3. Aplicar validate(schema) em todos os endpoints que recebem body.
+4. Mensagens de erro em português para o advogado.
+
+CRITÉRIO: Nenhum controller processa input sem validação.
+Crash por input inválido: zero.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### C08 — Explicabilidade do validador jurídico (UX)
+CONTEXTO: Mesmo após C03, o advogado precisa saber EXATAMENTE qual citação
+está errada e por quê — não apenas ver um ícone de erro sem contexto.
+
+TAREFA (complementar ao C03):
+1. Retorno da validação com explanation em português:
+   {
+     "citation": "Lei 8.666/93, art. 25",
+     "valid": false,
+     "status": "revogada",
+     "explanation": "A Lei 8.666/93 foi revogada pela Lei 14.133/2021
+                     (Nova Lei de Licitações). Verifique se a lei aplicável
+                     ao caso é a Lei 14.133/2021.",
+     "suggestedReplacement": "Lei 14.133/2021"
+   }
+
+2. Editor de peças: citações inválidas marcadas em vermelho inline.
+3. Hover/clique na citação: tooltip com explanation completa.
+4. Botão "Substituir" aplica suggestedReplacement automaticamente no editor.
+
+CRITÉRIO: Advogado vê qual citação está errada e por quê.
+Zero citação inválida sem explanation em português.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### C09 — Sistema de planos Free / Pro / Enterprise
+CONTEXTO: Todos os usuários acessam todas as features sem controle.
+Sem planos, não há como monetizar ou limitar uso da Gemini Pro.
+
+TAREFA:
+1. backend/services/planService.js com feature gates:
+   free:       aiModel=flash, webSearch=false, collab=1, docs/mês=10, legalValidation=false
+   pro:        aiModel=pro, webSearch=true, collab=5, docs/mês=100, legalValidation=true
+   enterprise: tudo ilimitado + customPrompts + ssoEnabled
+
+2. Middleware checkPlan(feature):
+   Lê plano do req.user, bloqueia (403) se feature indisponível.
+
+3. Integração básica Stripe:
+   - Stripe Checkout para upgrade para Pro.
+   - Webhook invoice.paid ativa plano no Firestore.
+
+4. Frontend: upsell contextual ao tentar usar feature bloqueada.
+
+CRITÉRIO: Feature gates funcionais. Usuário Free não acessa Gemini Pro.
+Stripe Checkout funcional para upgrade.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━ 🟢 P2 — DOCUMENTAÇÃO ━━━━━━
+
+### C10 — Documentação técnica completa para onboarding
+TAREFA:
+  docs/ARCHITECTURE.md  — diagrama Mermaid atualizado + descrição de módulos.
+  docs/AI-SYSTEM.md     — como o RAG funciona, como Critic Loop opera,
+                          como o Model Router decide qual modelo usar.
+  docs/LGPD.md          — o que é coletado, por quanto tempo, como solicitar
+                          exclusão ou exportação.
+  docs/SECURITY.md      — práticas adotadas, IDOR policy, auditoria de acesso.
+  README.md             — setup local, envs obrigatórias, testes, deploy.
+  .env.example          — completo e comentado, NUNCA com valores reais.
+
+CRITÉRIO: Dev sênior faz setup local e entende a arquitetura em < 1 hora
+usando apenas a documentação.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# PADRÕES OBRIGATÓRIOS — Codex
+
+1. TypeScript estrito onde já há TypeScript. JavaScript com JSDoc onde é JS puro.
+2. Toda função de IA com timeout de 30s + fallback documentado.
+3. Nunca gravar conteúdo de peças jurídicas em logs sem criptografia.
+4. Embeddings de documentos: criptografar em repouso (dados sensíveis do cliente).
+5. Mensagens de erro SEMPRE em português para o advogado.
+6. Commits: feat/ · fix/ · ai/ · docs/ · test/
+7. Toda PR com [CODEX-C0x] no título.
+
+# SEQUÊNCIA OBRIGATÓRIA
+P0 primeiro (integridade jurídica): C01 → C02 → C03 → C04
+P1 em paralelo após P0:             C05, C06, C07, C08, C09
+P2 após P1:                         C10
+
+ATENÇÃO: C01 depende do Jules ter concluído J03 (orquestrador backend).
+Coordenar com Jules antes de integrar C01 no pipeline de chat.</div>
+</div>
+
+<!-- chips -->
+<div style="margin-top:28px;">
+  <div class="chips-title">📋 10 itens atribuídos ao Codex — ordenados por prioridade</div>
+  <div class="chips">
+    <div class="chip"><span class="cid p0">C01 🔴 P0</span><span class="cdesc">RAG semântico real (embeddings)</span></div>
+    <div class="chip"><span class="cid p0">C02 🔴 P0</span><span class="cdesc">Vector store → servidor (remove localStorage)</span></div>
+    <div class="chip"><span class="cid p0">C03 🔴 P0</span><span class="cdesc">Validador de leis real (Planalto/LexML)</span></div>
+    <div class="chip"><span class="cid p0">C04 🔴 P0</span><span class="cdesc">Google Search real injetado no Gemini</span></div>
+    <div class="chip"><span class="cid">C05 🟡 P1</span><span class="cdesc">Model Router Flash vs Pro (custo)</span></div>
+    <div class="chip"><span class="cid">C06 🟡 P1</span><span class="cdesc">Erros RFC 7807 padronizados</span></div>
+    <div class="chip"><span class="cid">C07 🟡 P1</span><span class="cdesc">Validação Zod em todos os endpoints</span></div>
+    <div class="chip"><span class="cid">C08 🟡 P1</span><span class="cdesc">Validator jurídico + explicabilidade UX</span></div>
+    <div class="chip"><span class="cid">C09 🟡 P1</span><span class="cdesc">Planos Free / Pro / Enterprise</span></div>
+    <div class="chip"><span class="cid">C10 🟢 P2</span><span class="cdesc">Documentação técnica completa</span></div>
+  </div>
+</div>
+
+<div class="div-sep"><div class="div-line"></div><div class="div-mid">§</div><div class="div-line"></div></div>
+
+<!-- CHECKLIST -->
+<div class="cl-wrap">
+  <div class="cl-head">
+    <div class="cl-title-row">
+      <div class="cl-ico">🚦</div>
+      <div>
+        <div class="cl-title">Checklist de Interação — Codex</div>
+        <div class="cl-sub">Preencha em TODA sessão com Codex · Clique para alternar estado</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+      <div class="cl-legend">
+        <div class="lg-item"><div class="lgdot lg-g"></div>Concluído</div>
+        <div class="lg-item"><div class="lgdot lg-y"></div>Em andamento</div>
+        <div class="lg-item"><div class="lgdot lg-r"></div>Bloqueado</div>
+      </div>
+      <button class="cl-reset" onclick="resetAll()">↺ Resetar</button>
+    </div>
+  </div>
+
+  <div class="cl-body">
+
+    <div class="cl-grp">
+      <div class="cl-glbl">📋 Antes de enviar</div>
+      <div class="cl-list">
+        <div class="cl-row" data-state="none" data-key="c01" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">ID do item referenciado (C01–C10)</div>
+            <div class="cl-d">sem ID a IA não sabe qual sistema simualado está sendo substituído</div>
+          </div><div class="cl-badge" id="b-c01">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="c02" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Arquivo alvo explicitado (ex: services/vectorStore.ts)</div>
+            <div class="cl-d">sempre o path relativo do arquivo que será substituído ou criado</div>
+          </div><div class="cl-badge" id="b-c02">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="c03" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Risco jurídico descrito quando a tarefa envolve IA</div>
+            <div class="cl-d">ex: "lei inválida = perda de processo + sanção OAB" — não apenas "melhorar qualidade"</div>
+          </div><div class="cl-badge" id="b-c03">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="c04" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Dependência com Jules verificada (C01 depende de J03)</div>
+            <div class="cl-d">J03 (orquestrador backend) deve estar concluído antes de integrar C01</div>
+          </div><div class="cl-badge" id="b-c04">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="c05" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Critério de aceite com teste concreto definido</div>
+            <div class="cl-d">ex: "veículo encontra documentos com automóvel com score > 0.7"</div>
+          </div><div class="cl-badge" id="b-c05">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cl-grp">
+      <div class="cl-glbl">⚙️ Durante a execução</div>
+      <div class="cl-list">
+        <div class="cl-row" data-state="none" data-key="c06" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Lei não verificável → 'não_verificada', nunca 'válida'</div>
+            <div class="cl-d">timeout ou API fora = incerteza — nunca assumir validade por omissão</div>
+          </div><div class="cl-badge" id="b-c06">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="c07" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Embeddings e vetores: zero no localStorage do browser</div>
+            <div class="cl-d">toda persistência de IA é server-side — localStorage só para preferências de UI</div>
+          </div><div class="cl-badge" id="b-c07">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="c08" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Gemini Flash para RAG, Pro apenas para geração de peças</div>
+            <div class="cl-d">Critic Loop não deve ser chamado no chat simples — controle de custo</div>
+          </div><div class="cl-badge" id="b-c08">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="c09" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Conteúdo de peças jurídicas nunca em logs ou cache sem criptografia</div>
+            <div class="cl-d">dados do processo = sigilosos — criptografia em repouso obrigatória</div>
+          </div><div class="cl-badge" id="b-c09">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cl-grp">
+      <div class="cl-glbl">✅ Antes de fechar</div>
+      <div class="cl-list">
+        <div class="cl-row" data-state="none" data-key="c10" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">PR aberta com [CODEX-C0x] no título</div>
+            <div class="cl-d">sem prefixo a PR não é revisada — rastreabilidade obrigatória</div>
+          </div><div class="cl-badge" id="b-c10">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="c11" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Testes de IA escritos com casos jurídicos reais</div>
+            <div class="cl-d">lei revogada → marcada como revogada. Lei inventada → not_found. Sinônimo → encontrado.</div>
+          </div><div class="cl-badge" id="b-c11">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="c12" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">Mensagens de erro todas em português para o advogado</div>
+            <div class="cl-d">nenhuma mensagem técnica em inglês visível ao usuário final</div>
+          </div><div class="cl-badge" id="b-c12">—</div>
+        </div>
+        <div class="cl-row" data-state="none" data-key="c13" onclick="cycle(this)">
+          <div class="tl"></div><div class="cl-txt">
+            <div class="cl-t">C01+C02+C03+C04 concluídos antes de iniciar P1</div>
+            <div class="cl-d">os 4 P0 de integridade jurídica devem estar verdes primeiro</div>
+          </div><div class="cl-badge" id="b-c13">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sc-bar">
+      <div class="sc-lbl">Progresso da sessão Codex</div>
+      <div class="sc-track"><div class="sc-fill" id="sc-fill" style="width:0%"></div></div>
+      <div class="sc-num" id="sc-num">0 / 13</div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<footer>JusArtificial · Codex · 10 itens · 4 P0 de integridade jurídica · RAG simulado → RAG real</footer>
+
+<script>
+function doCopy() {
+  const text = document.getElementById('prompt').innerText.trim();
+  const btn = document.getElementById('copy-btn');
+  navigator.clipboard.writeText(text).then(() => {
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><polyline points="20 6 9 17 4 12"/></svg> Copiado!`;
+    btn.classList.add('done');
+    setTimeout(() => {
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copiar Prompt Codex`;
+      btn.classList.remove('done');
+    }, 2200);
+  });
+}
+
+const STATES = ['none','green','yellow','red'];
+const LABELS = { none:'—', green:'✓ OK', yellow:'⚠ Atenção', red:'✗ Bloqueado' };
+
+function cycle(row) {
+  const key = row.dataset.key;
+  const next = STATES[(STATES.indexOf(row.dataset.state) + 1) % STATES.length];
+  row.dataset.state = next;
+  const b = document.getElementById('b-' + key);
+  if (b) b.textContent = LABELS[next];
+  try { localStorage.setItem('jus_c_' + key, next); } catch(e) {}
+  updateScore();
+}
+
+function updateScore() {
+  const rows = document.querySelectorAll('.cl-row[data-key]');
+  let done = 0; rows.forEach(r => { if (r.dataset.state === 'green') done++; });
+  const pct = Math.round(done / rows.length * 100);
+  const f = document.getElementById('sc-fill');
+  const n = document.getElementById('sc-num');
+  if (f) { f.style.width = pct + '%'; f.style.background = pct===100?'#3dba72':pct>=60?'#e0a030':'#e05555'; }
+  if (n) n.textContent = done + ' / ' + rows.length;
+}
+
+function resetAll() {
+  document.querySelectorAll('.cl-row[data-key]').forEach(r => {
+    r.dataset.state = 'none';
+    const b = document.getElementById('b-' + r.dataset.key);
+    if (b) b.textContent = '—';
+    try { localStorage.removeItem('jus_c_' + r.dataset.key); } catch(e) {}
+  });
+  updateScore();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.cl-row[data-key]').forEach(r => {
+    let s = 'none';
+    try { s = localStorage.getItem('jus_c_' + r.dataset.key) || 'none'; } catch(e) {}
+    if (!STATES.includes(s)) s = 'none';
+    r.dataset.state = s;
+    const b = document.getElementById('b-' + r.dataset.key);
+    if (b) b.textContent = LABELS[s];
+  });
+  updateScore();
+});
+</script>
+</body>
+</html>

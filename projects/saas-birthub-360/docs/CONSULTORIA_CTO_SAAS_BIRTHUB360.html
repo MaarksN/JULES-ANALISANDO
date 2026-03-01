@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plano Mestre CTO - BirtHub 360</title>
+  <style>
+    body { font-family: Inter, Arial, sans-serif; margin: 32px; line-height: 1.5; color: #0f172a; background: #f8fafc; }
+    h1, h2, h3 { color: #0b3b8f; }
+    .card { background: #fff; border: 1px solid #dbeafe; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+    .critical { border-left: 6px solid #b91c1c; padding-left: 12px; }
+    .strong { border-left: 6px solid #15803d; padding-left: 12px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; }
+    th { background: #e2e8f0; }
+    ol li { margin-bottom: 8px; }
+    code { background: #e2e8f0; padding: 2px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>Consultoria Definitiva de Engenharia de Software e Arquitetura SaaS - BirtHub 360</h1>
+
+  <section class="card">
+    <h2>1) Checklist Executivo de Evolução (Item #1 obrigatório)</h2>
+    <p>Use este checklist semanalmente para governar os 100 pontos de ação. Regra operacional: cada item só muda para <strong>Concluído</strong> com evidência objetiva (PR, teste e métrica).</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Campo</th>
+          <th>Critério obrigatório</th>
+          <th>Status permitido</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>ID do item</td><td>001 a 100, sem duplicidade</td><td>Aberto / Em execução / Bloqueado / Concluído</td></tr>
+        <tr><td>Responsável técnico</td><td>Owner nominal por domínio</td><td>Obrigatório antes de iniciar</td></tr>
+        <tr><td>Escopo fechado</td><td>Descrição objetiva + arquivo(s) alvo + risco</td><td>Obrigatório antes do primeiro commit</td></tr>
+        <tr><td>Evidência de código</td><td>Commit + diff revisável + migração quando aplicável</td><td>Obrigatório para concluir</td></tr>
+        <tr><td>Validação automática</td><td>Teste unitário/integrado/e2e relevante</td><td>Obrigatório para concluir</td></tr>
+        <tr><td>Validação de segurança</td><td>SAST/SCA e revisão de superfície de ataque</td><td>Obrigatório para itens críticos</td></tr>
+        <tr><td>Métrica de impacto</td><td>latência, erro, throughput, conversão ou custo LLM</td><td>Obrigatório para concluir</td></tr>
+        <tr><td>Critério de rollback</td><td>Plano de reversão executável</td><td>Obrigatório para itens de produção</td></tr>
+        <tr><td>Dependências</td><td>Itens predecessores mapeados</td><td>Sem pendência para concluir</td></tr>
+        <tr><td>Decisão arquitetural</td><td>Link para RFC quando houver trade-off relevante</td><td>Obrigatório em mudanças estruturais</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Cadência recomendada:</strong> daily de 15 minutos por stream + revisão quinzenal com dashboard de progresso (itens concluídos, lead time, taxa de regressão).</p>
+  </section>
+
+  <section class="card strong">
+    <h2>2) Diagnóstico técnico honesto</h2>
+    <ul>
+      <li><strong>Pontos fortes reais:</strong> monorepo bem estruturado (pnpm + turborepo), separação clara entre gateway/orquestrador/dashboard, presença de documentação operacional e de auditoria robusta.</li>
+      <li><strong>Gaps críticos atuais:</strong> governança de execução ainda muito documental em relação à validação contínua em produção, risco de drift entre o que está “declarado como implementado” e o comportamento real sob carga multi-tenant.</li>
+      <li><strong>Risco de escala global:</strong> sem disciplina rígida de budget LLM, isolamento forte por tenant, e SLOs efetivamente monitorados por rota/fluxo, a operação tende a degradar custo e previsibilidade.</li>
+      <li><strong>Conclusão de CTO:</strong> a base é promissora e acima da média, mas ainda não está no patamar de “melhor SaaS do mundo” sem hardening extremo em confiabilidade, segurança e engenharia de produto orientada a métricas.</li>
+    </ul>
+  </section>
+
+  <section class="card critical">
+    <h2>3) 50 Itens de Melhoria (qualidade, eficiência, robustez)</h2>
+    <ol>
+      <li>Implementar score de maturidade por serviço (0-5) e bloquear deploy de serviços com score &lt; 3 em critérios críticos.</li>
+      <li>Trocar validação ad-hoc por contrato schema-first versionado para todos os payloads externos.</li>
+      <li>Padronizar taxonomia de erros com códigos de domínio e rastreabilidade por <code>trace_id</code>.</li>
+      <li>Reduzir acoplamento entre agentes e provedores externos via camada de adapters plugáveis.</li>
+      <li>Aplicar timeout explícito em 100% das chamadas externas (HTTP, fila, banco, LLM).</li>
+      <li>Adicionar circuit breaker com half-open controlado para integrações instáveis.</li>
+      <li>Criar matriz de idempotência por endpoint/evento e teste automático de repetição.</li>
+      <li>Forçar paginação defensiva e limites máximos em consultas de alto volume.</li>
+      <li>Revisar queries N+1 no gateway e dashboard com telemetria de banco em produção.</li>
+      <li>Adicionar profilagem contínua de latência por rota e por tenant para detectar noisy neighbor.</li>
+      <li>Separar rigorosamente dados operacionais e analíticos para evitar contenção de workload.</li>
+      <li>Implementar política de retenção de logs com trilhas auditáveis e custo previsível.</li>
+      <li>Padronizar retries com jitter exponencial e budget máximo por operação.</li>
+      <li>Garantir saneamento centralizado de conteúdo renderizado no dashboard.</li>
+      <li>Aprimorar RBAC para modelo híbrido role + scope + policy contextual por tenant.</li>
+      <li>Reforçar proteção anti-replay em webhooks com nonce e janela temporal curta.</li>
+      <li>Adicionar assinatura e validação criptográfica de eventos internos sensíveis.</li>
+      <li>Instrumentar tracing distribuído ponta a ponta (gateway → orquestrador → agente).</li>
+      <li>Formalizar SLO por jornada de negócio, não apenas por serviço técnico isolado.</li>
+      <li>Automatizar chaos tests periódicos para fila, banco e provedores críticos.</li>
+      <li>Versionar prompts críticos como artefatos auditáveis com histórico de mudança.</li>
+      <li>Estabelecer orçamento de tokens por tenant com alarme de estouro.</li>
+      <li>Adicionar avaliação offline de qualidade semântica de outputs dos agentes.</li>
+      <li>Bloquear merges sem evidência de teste para caminhos de receita.</li>
+      <li>Reforçar cobertura de testes de autorização negativa (acesso indevido).</li>
+      <li>Adicionar contract tests entre gateway e dashboard para evitar drift de payload.</li>
+      <li>Implementar health checks profundos (não apenas liveness) em todos os serviços.</li>
+      <li>Definir estratégia de zero-downtime migration com rollback de schema.</li>
+      <li>Centralizar configuração de rate limiting por plano com auditoria de overrides.</li>
+      <li>Medir custo por feature e por tenant, incluindo custo indireto de observabilidade.</li>
+      <li>Introduzir feature flags com expiração obrigatória para evitar dívida oculta.</li>
+      <li>Padronizar convenções de log estruturado para facilitar investigação forense.</li>
+      <li>Adicionar Data Quality Checks para campos críticos (valor, completude, consistência).</li>
+      <li>Aplicar mascaramento de PII em logs, traces e eventos armazenados.</li>
+      <li>Expandir testes e2e para cenários de falha parcial e degradação controlada.</li>
+      <li>Implementar política de cache com invalidação determinística por domínio.</li>
+      <li>Criar scorecard de observabilidade (logs, métricas, traces, alertas, runbooks).</li>
+      <li>Habilitar detecção de dependências órfãs e bibliotecas sem manutenção.</li>
+      <li>Consolidar catálogo de eventos assíncronos com owner e SLA por tópico.</li>
+      <li>Impor política de segredo por ambiente com rotação automática periódica.</li>
+      <li>Adicionar bloqueio de deploy quando erro 5xx exceder budget em canário.</li>
+      <li>Criar validações de consistência financeira cruzando faturas, pagamentos e contratos.</li>
+      <li>Fortalecer modelo de permissões administrativas com trilha de aprovação.</li>
+      <li>Introduzir estratégia de multi-região para componentes de missão crítica.</li>
+      <li>Implementar compressão e particionamento para armazenamento histórico de eventos.</li>
+      <li>Padronizar uso de UUIDv7 para ordenação temporal eficiente em escala.</li>
+      <li>Adicionar simulação de carga sintética diária para detectar regressões de capacidade.</li>
+      <li>Criar programa de correção de vulnerabilidades com SLA por severidade.</li>
+      <li>Aplicar revisão arquitetural trimestral orientada por indicadores de negócio.</li>
+      <li>Substituir métricas vaidosas por KPIs de confiabilidade percebida pelo cliente.</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>4) 50 Itens de Implementação (entregáveis concretos de produção)</h2>
+    <ol>
+      <li>Entregar painel único de governança dos 100 itens com API de progresso e histórico.</li>
+      <li>Criar endpoint <code>/v1/health/deep</code> com verificação de banco, fila e provedores críticos.</li>
+      <li>Implementar middleware obrigatório de <code>trace_id</code> em todas as rotas do gateway.</li>
+      <li>Construir biblioteca compartilhada de erros de domínio com serialização padronizada.</li>
+      <li>Adicionar adaptador resiliente para Stripe com idempotência e reconciliação automática.</li>
+      <li>Adicionar adaptador resiliente para Pagar.me e Asaas com normalização de status.</li>
+      <li>Implementar integração fiscal Focus NFe com fila dedicada e retries compensatórios.</li>
+      <li>Implementar integração de assinatura (Clicksign/DocuSign) com webhook validado.</li>
+      <li>Criar serviço de sincronização CRM (HubSpot/Pipedrive) com deduplicação por chave natural.</li>
+      <li>Implementar ingestão de Ads (Google/Meta) com reconciliação diária de gasto e conversão.</li>
+      <li>Entregar módulo de orçamento de tokens por tenant no runtime de agentes.</li>
+      <li>Implementar avaliação automática de respostas dos agentes via rubricas objetivas.</li>
+      <li>Criar cache Redis para chamadas determinísticas de ferramentas de agentes.</li>
+      <li>Implementar assinatura de eventos internos com chave rotativa por ambiente.</li>
+      <li>Construir DLQ com reprocessamento seletivo por <code>event_id</code> e motivo de falha.</li>
+      <li>Adicionar endpoint de replay seguro para eventos órfãos no orquestrador.</li>
+      <li>Criar prioridade dinâmica de jobs por criticidade de receita e SLA contratado.</li>
+      <li>Implementar isolamento de filas por tenant enterprise para workloads intensivos.</li>
+      <li>Persistir estado intermediário de cada fluxo LangGraph com trilha temporal.</li>
+      <li>Entregar fluxo executável completo para <code>DEAL_CLOSED_WON</code> com observabilidade.</li>
+      <li>Entregar fluxo executável completo para <code>HEALTH_ALERT</code> com ações de contenção.</li>
+      <li>Entregar fluxo executável completo para <code>CHURN_RISK_HIGH</code> com plano de retenção.</li>
+      <li>Entregar fluxo executável completo para <code>BOARD_REPORT</code> agendado e auditável.</li>
+      <li>Implementar política de cancelamento seguro de execução com compensações.</li>
+      <li>Criar dashboard operacional de filas (throughput, erro, atraso, reprocesso).</li>
+      <li>Implementar tabela de auditoria administrativa imutável com trilha de autoria.</li>
+      <li>Adicionar autenticação forte no dashboard com sessão rotativa e revogação ativa.</li>
+      <li>Implementar autorização por policy no frontend para esconder ações sem permissão.</li>
+      <li>Entregar visão de pipeline com filtros por estágio, owner, tenant e período.</li>
+      <li>Entregar visão de saúde de clientes com score, tendências e risco de churn.</li>
+      <li>Entregar visão financeira com MRR, inadimplência, churn de receita e aging.</li>
+      <li>Entregar visão de contratos com status de assinatura e vencimentos críticos.</li>
+      <li>Entregar visão de atividades dos agentes com trilha temporal e latência por etapa.</li>
+      <li>Publicar OpenAPI versionado com testes de contrato no CI para rotas críticas.</li>
+      <li>Implementar testes e2e de jornada completa lead → deal → contrato → cobrança.</li>
+      <li>Implementar testes de carga automatizados para API Gateway e Orquestrador.</li>
+      <li>Adicionar alertas SLO no Grafana com roteamento por severidade e domínio.</li>
+      <li>Implementar deploy canário com rollback automático baseado em error budget.</li>
+      <li>Criar política de backup com restore testado mensalmente e evidenciado.</li>
+      <li>Entregar migrações com validação pré e pós deploy em ambiente de staging.</li>
+      <li>Aplicar índices compostos nas consultas de maior cardinalidade em produção.</li>
+      <li>Implementar mascaramento automático de PII em logs no pipeline de observabilidade.</li>
+      <li>Adicionar SAST e SCA obrigatórios com bloqueio de merge para severidade alta.</li>
+      <li>Implementar WAF e rate limiting avançado para endpoints públicos sensíveis.</li>
+      <li>Entregar runbooks de incidentes P0/P1 com tempo alvo de contenção definido.</li>
+      <li>Criar scorecard mensal de arquitetura com metas de redução de risco técnico.</li>
+      <li>Instrumentar custo por tenant (infra + LLM + integrações pagas) com alertas.</li>
+      <li>Adicionar feature flag platform-wide com trilha de auditoria e expiração.</li>
+      <li>Implementar rotina de revisão de dependências com atualização segura contínua.</li>
+      <li>Publicar portal interno de engenharia com padrões, exemplos e decisões vigentes.</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>5) Prompts especializados para CODEX (foco em execução máxima)</h2>
+
+    <h3>Prompt CODEX 1 - Auditoria brutal de produção com plano de correção</h3>
+    <pre>Você é GPT-5.2-Codex atuando como Principal Engineer e Staff Security Engineer.
+Analise integralmente o repositório /workspace/SAAS-BIRTHUB-AGENTES-360 e entregue:
+1) diagnóstico técnico objetivo por domínio (gateway, orchestrator, dashboard, agents, infra);
+2) riscos priorizados por impacto em receita, segurança e disponibilidade;
+3) plano de correção em 30, 60 e 90 dias;
+4) diffs de código para os 10 problemas mais críticos;
+5) comandos de validação executados localmente.
+Restrições: não use conteúdo genérico; cite arquivos e linhas; proponha apenas mudanças prontas para produção.</pre>
+
+    <h3>Prompt CODEX 2 - Hardening de confiabilidade e filas</h3>
+    <pre>Atue como Arquiteto de Sistemas Distribuídos focado em SaaS multi-tenant global.
+No repositório /workspace/SAAS-BIRTHUB-AGENTES-360, implemente hardening no orquestrador:
+- idempotência por event_id;
+- retries com backoff + jitter;
+- DLQ com replay seletivo;
+- cancelamento seguro de execução;
+- métricas por fluxo (latência p95/p99, erro, throughput).
+Entregue código, testes e documentação operacional. Rode testes e apresente resultados por comando.</pre>
+
+    <h3>Prompt CODEX 3 - Segurança e compliance enterprise</h3>
+    <pre>Atue como Security Architect para SaaS enterprise.
+No repositório /workspace/SAAS-BIRTHUB-AGENTES-360:
+- fortaleça RBAC/ABAC;
+- implemente auditoria imutável de ações administrativas;
+- valide assinatura de webhooks críticos;
+- aplique mascaramento de PII em logs;
+- integre SAST/SCA com gate de CI para severidade alta.
+Forneça patch completo, testes automáticos, e checklist de conformidade operacional.</pre>
+
+    <h3>Prompt CODEX 4 - Evolução de produto orientada a receita</h3>
+    <pre>Atue como CTO focado em crescimento previsível.
+No repositório /workspace/SAAS-BIRTHUB-AGENTES-360, implemente uma jornada ponta a ponta:
+lead -> oportunidade -> contrato -> cobrança -> monitoramento de saúde.
+Exigências:
+- API e dashboard conectados a dados reais;
+- métricas de conversão por etapa;
+- alertas automáticos de risco de churn;
+- testes e2e cobrindo a jornada completa.
+Ao final, entregue plano de rollout com feature flags e rollback.</pre>
+  </section>
+</body>
+</html>

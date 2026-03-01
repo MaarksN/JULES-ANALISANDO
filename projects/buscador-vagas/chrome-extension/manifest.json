@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Buscador de Vagas Automático",
+  "version": "1.0.1",
+  "description": "Busque vagas de emprego em múltiplas plataformas simultaneamente, com filtros inteligentes e scoring de relevância.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Buscar Vagas"
+  },
+  "permissions": ["storage", "tabs", "alarms", "notifications"],
+  "host_permissions": [
+    "https://*.workers.dev/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_page": "options.html"
+}

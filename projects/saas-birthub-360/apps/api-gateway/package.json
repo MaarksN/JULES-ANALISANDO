@@ -1,0 +1,39 @@
+{
+  "name": "@birthub/api-gateway",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "test": "node --import tsx --test \"src/**/*.test.ts\"",
+    "test:contract": "node --import tsx --test \"src/**/*.contract.test.ts\"",
+    "lint": "node --import tsx src/scripts/check-conventions.ts"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "express-rate-limit": "^7.4.0",
+    "jsonwebtoken": "^9.0.2",
+    "swagger-ui-express": "^5.0.0",
+    "yamljs": "^0.3.0",
+    "@birthub/db": "workspace:*",
+    "@birthub/queue": "workspace:*",
+    "@birthub/utils": "workspace:*",
+    "@birthub/shared-types": "workspace:*",
+    "bullmq": "^5.7.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.10.3",
+    "typescript": "^5.4.5",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.12",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/cors": "^2.8.17",
+    "@types/morgan": "^1.9.9",
+    "@types/swagger-ui-express": "^4.1.6",
+    "@types/yamljs": "^0.2.34"
+  }
+}

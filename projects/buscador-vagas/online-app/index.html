@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buscador de Vagas</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Buscador de Vagas</h1>
+      <div id="workerStatus">Status do Worker: <span>checando...</span></div>
+    </header>
+    <main>
+      <h1>Buscador de Vagas 100% Online</h1>
+      <p class="sub">Sem script local ligado: frontend estático + API serverless.</p>
+
+      <label for="apiUrl">URL da API (Cloudflare Worker)</label>
+      <div class="inline">
+        <input id="apiUrl" placeholder="https://seu-worker.workers.dev/search" />
+        <button id="healthBtn" class="secondary">Testar API</button>
+      </div>
+
+      <label for="resumeText">Texto do currículo</label>
+      <textarea id="resumeText" rows="8" placeholder="Cole aqui o texto do currículo..."></textarea>
+
+      <div class="row four">
+        <div><label for="location">Localização principal</label><input id="location" value="Ribeirão Preto, SP" /></div>
+        <div><label for="locations">Localizações extras (;)</label><input id="locations" placeholder="São Paulo, SP; Campinas, SP" /></div>
+        <div><label for="maxResults">Máx/site</label><input id="maxResults" type="number" min="1" max="20" value="8" /></div>
+        <div><label for="keywordLimit">Qtd. keywords</label><input id="keywordLimit" type="number" min="10" max="60" value="30" /></div>
+      </div>
+
+      <label for="extraQuery">Consulta extra</label>
+      <input id="extraQuery" placeholder="Ex.: python analista de dados" />
+
+      <div class="row four">
+        <div><label for="minScore">Score mínimo</label><input id="minScore" type="number" value="0" /></div>
+        <div><label for="pageSize">Resultados/página</label><input id="pageSize" type="number" min="1" max="100" value="20" /></div>
+        <div><label for="seniority">Senioridade</label><select id="seniority"><option value="any">Qualquer</option><option value="junior">Júnior</option><option value="pleno">Pleno</option><option value="senior">Sênior</option></select></div>
+        <div><label for="contractType">Contrato</label><select id="contractType"><option value="any">Qualquer</option><option value="clt">CLT</option><option value="pj">PJ</option><option value="estagio">Estágio</option><option value="temporario">Temporário</option></select></div>
+      </div>
+
+      <div class="row four">
+        <div><label for="sortBy">Ordenar por</label><select id="sortBy"><option value="score">Score</option><option value="title">Título</option><option value="site">Plataforma</option><option value="recency">Recência</option></select></div>
+        <div><label for="sortDir">Direção</label><select id="sortDir"><option value="desc">Desc</option><option value="asc">Asc</option></select></div>
+        <div><label for="language">Idioma</label><select id="language"><option value="any">Qualquer</option><option value="pt">Português</option><option value="en">English</option></select></div>
+        <div><label for="includeSites">Incluir sites (csv)</label><input id="includeSites" placeholder="Indeed,Gupy" /></div>
+      </div>
+
+      <div class="row three">
+        <div><label for="excludeSites">Excluir sites (csv)</label><input id="excludeSites" placeholder="Catho" /></div>
+        <div><label for="includeKeywords">Incluir palavras (csv)</label><input id="includeKeywords" placeholder="python,dados" /></div>
+        <div><label for="excludeKeywords">Excluir palavras (csv)</label><input id="excludeKeywords" placeholder="estágio,temporário" /></div>
+      </div>
+
+      <label class="check"><input id="remoteOnly" type="checkbox" /> Somente remoto/híbrido</label>
+      <label class="check"><input id="autoRefresh" type="checkbox" /> Auto refresh (60s)</label>
+
+      <div class="buttons">
+        <button id="searchBtn">Buscar vagas</button>
+        <button id="cancelSearchBtn" class="secondary" disabled>Cancelar busca</button>
+        <button id="prevPageBtn" class="secondary" disabled>← Página anterior</button>
+        <button id="nextPageBtn" class="secondary" disabled>Próxima página →</button>
+        <button id="openTopBtn" class="secondary" disabled>Abrir Top 5</button>
+        <button id="bookmarkBtn" class="secondary" disabled>Salvar favoritos (Top 3)</button>
+      </div>
+
+      <div class="buttons">
+        <button id="downloadBtn" class="secondary" disabled>Baixar JSON</button>
+        <button id="csvBtn" class="secondary" disabled>Baixar CSV</button>
+        <button id="copyBtn" class="secondary" disabled>Copiar JSON</button>
+        <button id="shareBtn" class="secondary">Copiar Link</button>
+        <button id="exportSettingsBtn" class="secondary">Exportar Config</button>
+        <button id="importSettingsBtn" class="secondary">Importar Config</button>
+        <input id="importSettingsFile" type="file" accept="application/json" hidden />
+        <button id="clearSettingsBtn" class="secondary">Limpar Config</button>
+      </div>
+
+      <p id="status"></p>
+      <section><h2>Avisos da busca</h2><ul id="warnings"></ul></section>
+      <section><h2>Diagnóstico da execução</h2><ul id="diagnostics"></ul></section>
+      <section><h2>Status por plataforma</h2><ul id="siteStats"></ul></section>
+      <section><h2>Favoritos locais</h2><ul id="favorites"></ul></section>
+      <section><h2>Resultados</h2><input id="resultFilter" placeholder="Filtrar títulos desta página" /><ul id="results"></ul></section>
+    </main>
+    <footer>Versão: <span id="version">-</span></footer>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

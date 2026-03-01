@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CODEX // Execution Engine — BirthHub 360</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080b0f;
+    --bg2: #0d1117;
+    --bg3: #161b22;
+    --border: #21262d;
+    --green: #39d353;
+    --green-dim: #238636;
+    --amber: #e3b341;
+    --red: #f85149;
+    --blue: #58a6ff;
+    --purple: #bc8cff;
+    --text: #e6edf3;
+    --text-dim: #7d8590;
+    --text-muted: #484f58;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Scanline overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* Matrix rain canvas */
+  #matrix-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0.04;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ═══ HEADER ═══ */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    background: rgba(8,11,15,0.95);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: var(--green);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(57,211,83,0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(57,211,83,0); }
+  }
+
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .logo-text span { color: var(--green); }
+
+  .logo-sub {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .status-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border: 1px solid var(--green-dim);
+    border-radius: 20px;
+    font-size: 11px;
+    color: var(--green);
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: blink 1.5s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .version-tag {
+    font-size: 11px;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  /* ═══ HERO ═══ */
+  .hero {
+    padding: 60px 0 40px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 16px;
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(40px, 5vw, 72px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+  }
+
+  .hero-title .accent { color: var(--green); }
+  .hero-title .dim { color: var(--text-muted); }
+
+  .hero-desc {
+    font-size: 14px;
+    color: var(--text-dim);
+    max-width: 680px;
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+
+  /* Prompt block */
+  .prompt-block {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--green);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .prompt-block::before {
+    content: '$ MASTER_PROMPT';
+    position: absolute;
+    top: 12px; right: 16px;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+  }
+
+  .prompt-block h3 {
+    font-size: 11px;
+    color: var(--green);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .prompt-block pre {
+    font-size: 12.5px;
+    line-height: 1.8;
+    color: var(--text-dim);
+    white-space: pre-wrap;
+  }
+
+  .prompt-block pre .kw { color: var(--amber); }
+  .prompt-block pre .str { color: var(--green); }
+  .prompt-block pre .cmt { color: var(--text-muted); font-style: italic; }
+  .prompt-block pre .num { color: var(--purple); }
+
+  /* Copy button */
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--green-dim);
+    border-radius: 6px;
+    color: var(--green);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .copy-btn:hover {
+    background: rgba(57,211,83,0.1);
+    border-color: var(--green);
+  }
+
+  /* ═══ STATS BAR ═══ */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .stat-cell {
+    background: var(--bg2);
+    padding: 20px 24px;
+    transition: background 0.2s;
+  }
+
+  .stat-cell:hover { background: var(--bg3); }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .s-green { color: var(--green); }
+  .s-amber { color: var(--amber); }
+  .s-red { color: var(--red); }
+  .s-blue { color: var(--blue); }
+  .s-purple { color: var(--purple); }
+
+  /* ═══ CONTROLS ═══ */
+  .controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .control-group {
+    display: flex;
+    gap: 4px;
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--green);
+    color: var(--green);
+    background: rgba(57,211,83,0.08);
+  }
+
+  .filter-btn.p0.active { border-color: var(--red); color: var(--red); background: rgba(248,81,73,0.08); }
+  .filter-btn.p1.active { border-color: var(--amber); color: var(--amber); background: rgba(227,179,65,0.08); }
+  .filter-btn.p2.active { border-color: var(--blue); color: var(--blue); background: rgba(88,166,255,0.08); }
+
+  .search-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 6px 14px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-input:focus { border-color: var(--green); }
+  .search-input::placeholder { color: var(--text-muted); }
+
+  /* ═══ SECTIONS ═══ */
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .section-count {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 2px 8px;
+    background: var(--bg3);
+    border-radius: 4px;
+  }
+
+  .section-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .badge-impl { background: rgba(57,211,83,0.15); color: var(--green); }
+  .badge-arch { background: rgba(88,166,255,0.15); color: var(--blue); }
+
+  /* ═══ TASK GRID ═══ */
+  .task-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 12px;
+  }
+
+  .task-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    position: relative;
+    transition: all 0.2s;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .task-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+  }
+
+  .task-card.p0::before { background: var(--red); }
+  .task-card.p1::before { background: var(--amber); }
+  .task-card.p2::before { background: var(--blue); }
+
+  .task-card:hover {
+    border-color: var(--text-muted);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+
+  .task-card.done {
+    opacity: 0.45;
+  }
+
+  .task-card.done .task-title {
+    text-decoration: line-through;
+    text-decoration-color: var(--green);
+  }
+
+  .task-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .task-checkbox {
+    width: 18px; height: 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .task-card.done .task-checkbox {
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  .task-checkbox::after {
+    content: '✓';
+    font-size: 11px;
+    color: var(--bg);
+    opacity: 0;
+  }
+
+  .task-card.done .task-checkbox::after { opacity: 1; }
+
+  .task-meta {
+    flex: 1;
+  }
+
+  .task-id-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .task-id {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--bg3);
+    color: var(--amber);
+  }
+
+  .priority-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+  }
+
+  .pb-p0 { background: rgba(248,81,73,0.2); color: var(--red); }
+  .pb-p1 { background: rgba(227,179,65,0.2); color: var(--amber); }
+  .pb-p2 { background: rgba(88,166,255,0.2); color: var(--blue); }
+
+  .task-domain {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    background: var(--bg3);
+    border-radius: 3px;
+  }
+
+  .task-title {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .task-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+
+  .task-evidence {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .task-metric {
+    font-size: 11px;
+    color: var(--green);
+    text-align: right;
+    max-width: 200px;
+  }
+
+  /* Inputs inside cards */
+  .task-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .task-input-group label {
+    display: block;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .task-input-group input {
+    width: 100%;
+    padding: 5px 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .task-input-group input:focus { border-color: var(--green-dim); }
+  .task-input-group input::placeholder { color: var(--text-muted); }
+
+  /* ═══ ARCHITECTURE RULES ═══ */
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 12px;
+  }
+
+  .rule-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+
+  .rule-card:hover { border-color: var(--text-muted); }
+
+  .rule-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .rule-icon {
+    font-size: 20px;
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg3);
+    border-radius: 6px;
+  }
+
+  .rule-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .rule-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .rule-body {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .rule-code {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--green);
+    line-height: 1.6;
+  }
+
+  /* ═══ PROGRESS ═══ */
+  .progress-section {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 40px;
+  }
+
+  .progress-title {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .progress-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .pbar-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 60px;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .pbar-label {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .pbar-track {
+    height: 6px;
+    background: var(--bg3);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .pbar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 1s ease-out;
+  }
+
+  .pbar-value {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: right;
+  }
+
+  /* ═══ GOLD RULES ═══ */
+  .gold-rules {
+    background: linear-gradient(135deg, rgba(227,179,65,0.05) 0%, rgba(227,179,65,0.02) 100%);
+    border: 1px solid rgba(227,179,65,0.2);
+    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 48px;
+  }
+
+  .gold-rules h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    color: var(--amber);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .gold-rule-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(227,179,65,0.1);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .gold-rule-item:last-child { border-bottom: none; }
+
+  .gold-rule-num {
+    color: var(--amber);
+    font-weight: 700;
+    flex-shrink: 0;
+    width: 24px;
+  }
+
+  .gold-rule-text { color: var(--text-dim); }
+
+  /* ═══ FOOTER ═══ */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    margin-top: 64px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  footer strong { color: var(--green); }
+
+  /* Hidden class */
+  .hidden { display: none !important; }
+
+  /* Transition for cards */
+  .task-card { transition: all 0.2s, opacity 0.3s; }
+  .task-card.filtered-out { opacity: 0; pointer-events: none; height: 0; overflow: hidden; padding: 0; margin: 0; border: none; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .task-grid { grid-template-columns: 1fr; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .pbar-row { grid-template-columns: 120px 1fr 40px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="matrix-bg"></canvas>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <div>
+        <div class="logo-text"><span>CODEX</span> // Execution</div>
+        <div class="logo-sub">BirthHub 360 · Patch Engine</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-pill"><div class="status-dot"></div>SYSTEM ONLINE</div>
+      <div class="version-tag">v3.1 · 2025-Q1</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">// CODEX MISSION BRIEF</div>
+    <h1 class="hero-title">
+      Implement.<br>
+      <span class="accent">Ship.</span> <span class="dim">No Mocks.</span>
+    </h1>
+    <p class="hero-desc">
+      Você é o engenheiro principal do monorepo SaaS BirthHub 360. Sua missão: implementar blocos de ações do checklist CTO com qualidade de produção. TypeScript strict, Python 3.12, sem breaking change externa, evidência técnica obrigatória em cada entrega.
+    </p>
+  </section>
+
+  <!-- MASTER PROMPT -->
+  <div class="prompt-block">
+    <h3>// Master Prompt · Cole direto no CODEX</h3>
+    <pre><span class="kw">ROLE:</span> Engenheiro principal do monorepo SaaS BirthHub 360.
+
+<span class="kw">STACK:</span> TypeScript strict, Python 3.12, Prisma ORM, Redis/BullMQ,
+       Cloud Run, Zod/Pydantic, Playwright, OpenAPI, Stripe/Pagar.me
+
+<span class="kw">OBJECTIVE:</span> Implementar bloco de ações com qualidade de <span class="str">PRODUÇÃO</span>.
+
+<span class="kw">WORKFLOW:</span>
+<span class="num">1.</span> Diagnóstico rápido do código existente (arquivos e funções exatos)
+<span class="num">2.</span> Implementar o MENOR conjunto de mudanças p/ comportamento real
+   <span class="cmt">   → sem mocks · sem placeholders · sem TODO residual</span>
+<span class="num">3.</span> Incluir: validação de entrada, erro tipado, idempotência,
+   logs estruturados com trace_id
+<span class="num">4.</span> Adicionar testes unitários + integração (happy path + falhas)
+<span class="num">5.</span> Atualizar docs operacional + marcar checklist com evidência
+<span class="num">6.</span> Entregar diff + resumo técnico + riscos residuais + próximos passos
+
+<span class="kw">GOLDEN RULE:</span>
+<span class="str">→ Decisão que afeta contrato entre serviços = atualizar schema +
+  versionamento + testes de contrato no MESMO PR. Sem exceção.</span>
+
+<span class="kw">ACTIONS_TARGET:</span> <span class="amber">[ liste IDs ex: I11, I15, I16, I20, M05, M07 ]</span></pre>
+    <button class="copy-btn" onclick="copyPrompt(this)">
+      <span>📋</span> Copiar Prompt
+    </button>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-cell">
+      <div class="stat-label">Total de Ações CODEX</div>
+      <div class="stat-value s-green" id="totalCount">0</div>
+      <div class="stat-sub">implementação + arquitetura técnica</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">Críticas P0</div>
+      <div class="stat-value s-red" id="p0Count">0</div>
+      <div class="stat-sub">bloqueiam escala global</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">Importantes P1</div>
+      <div class="stat-value s-amber" id="p1Count">0</div>
+      <div class="stat-sub">incrementais de valor</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">Oportunidades P2</div>
+      <div class="stat-value s-blue" id="p2Count">0</div>
+      <div class="stat-sub">otimização futura</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">Concluídas</div>
+      <div class="stat-value s-purple" id="doneCount">0</div>
+      <div class="stat-sub">evidência verificada</div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-section">
+    <div class="progress-title">// progresso por domínio técnico</div>
+    <div class="progress-bars">
+      <div class="pbar-row">
+        <div class="pbar-label">Backend · Core APIs</div>
+        <div class="pbar-track"><div class="pbar-fill" style="width:0%;background:var(--green)" id="prog-backend"></div></div>
+        <div class="pbar-value" id="prog-backend-val">0%</div>
+      </div>
+      <div class="pbar-row">
+        <div class="pbar-label">Orquestração · Flows</div>
+        <div class="pbar-track"><div class="pbar-fill" style="width:0%;background:var(--amber)" id="prog-orch"></div></div>
+        <div class="pbar-value" id="prog-orch-val">0%</div>
+      </div>
+      <div class="pbar-row">
+        <div class="pbar-label">Integrações Externas</div>
+        <div class="pbar-track"><div class="pbar-fill" style="width:0%;background:var(--blue)" id="prog-int"></div></div>
+        <div class="pbar-value" id="prog-int-val">0%</div>
+      </div>
+      <div class="pbar-row">
+        <div class="pbar-label">IA · Agentes · LLM</div>
+        <div class="pbar-track"><div class="pbar-fill" style="width:0%;background:var(--purple)" id="prog-ai"></div></div>
+        <div class="pbar-value" id="prog-ai-val">0%</div>
+      </div>
+      <div class="pbar-row">
+        <div class="pbar-label">Front-end · Dashboard</div>
+        <div class="pbar-track"><div class="pbar-fill" style="width:0%;background:#f97583" id="prog-fe"></div></div>
+        <div class="pbar-value" id="prog-fe-val">0%</div>
+      </div>
+      <div class="pbar-row">
+        <div class="pbar-label">Segurança · Auth · CI</div>
+        <div class="pbar-track"><div class="pbar-fill" style="width:0%;background:#79c0ff" id="prog-sec"></div></div>
+        <div class="pbar-value" id="prog-sec-val">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="control-group">
+      <button class="filter-btn active" data-filter="all" onclick="filterTasks(this,'all')">ALL</button>
+      <button class="filter-btn p0" data-filter="p0" onclick="filterTasks(this,'p0')">P0 CRÍTICO</button>
+      <button class="filter-btn p1" data-filter="p1" onclick="filterTasks(this,'p1')">P1 ALTO</button>
+      <button class="filter-btn p2" data-filter="p2" onclick="filterTasks(this,'p2')">P2 FUTURO</button>
+    </div>
+    <div class="control-group">
+      <button class="filter-btn" data-filter="impl" onclick="filterTasks(this,'impl')">⚙ IMPL</button>
+      <button class="filter-btn" data-filter="arch" onclick="filterTasks(this,'arch')">🔷 ARCH</button>
+      <button class="filter-btn" data-filter="pending" onclick="filterTasks(this,'pending')">⬜ PENDENTE</button>
+      <button class="filter-btn" data-filter="done" onclick="filterTasks(this,'done')">✅ DONE</button>
+    </div>
+    <input type="text" class="search-input" placeholder="buscar por ID ou descrição..." oninput="searchTasks(this.value)">
+    <button class="filter-btn" onclick="resetAll()">↺ RESET</button>
+  </div>
+
+  <!-- SECTION: IMPLEMENTATION TASKS -->
+  <section class="section" id="section-impl">
+    <div class="section-header">
+      <h2 class="section-title">⚙ Implementação</h2>
+      <span class="section-count" id="impl-count">50 ações</span>
+      <span class="section-badge badge-impl">I01 → I50</span>
+      <span style="font-size:11px;color:var(--text-muted);margin-left:auto">Core do produto · entregas diretas de valor</span>
+    </div>
+    <div class="task-grid" id="impl-grid"></div>
+  </section>
+
+  <!-- SECTION: ARCHITECTURE TECH TASKS -->
+  <section class="section" id="section-arch">
+    <div class="section-header">
+      <h2 class="section-title">🔷 Arquitetura Técnica</h2>
+      <span class="section-count" id="arch-count">ações</span>
+      <span class="section-badge badge-arch">M-series · código</span>
+      <span style="font-size:11px;color:var(--text-muted);margin-left:auto">fundações de engenharia · executadas por CODEX</span>
+    </div>
+    <div class="task-grid" id="arch-grid"></div>
+  </section>
+
+  <!-- GOLD RULES -->
+  <div class="gold-rules">
+    <h3>⚡ Regras de Ouro do CODEX</h3>
+    <div class="gold-rule-item">
+      <div class="gold-rule-num">01</div>
+      <div class="gold-rule-text"><strong style="color:var(--text)">Zero mocks em produção.</strong> Cada entrega tem comportamento real, testado e observável. Se não tem evidência técnica (PR + teste + métrica), não fecha.</div>
+    </div>
+    <div class="gold-rule-item">
+      <div class="gold-rule-num">02</div>
+      <div class="gold-rule-text"><strong style="color:var(--text)">Contrato entre serviços = PR único.</strong> Schema + versionamento + testes de contrato viajam juntos. Nunca separados.</div>
+    </div>
+    <div class="gold-rule-item">
+      <div class="gold-rule-num">03</div>
+      <div class="gold-rule-text"><strong style="color:var(--text)">Idempotência transversal.</strong> Todo endpoint e evento usa request_id/event_id. Duplicidade operacional = zero.</div>
+    </div>
+    <div class="gold-rule-item">
+      <div class="gold-rule-num">04</div>
+      <div class="gold-rule-text"><strong style="color:var(--text)">Logs estruturados com trace_id.</strong> Todo request rastreável fim a fim. Sem log = sem observabilidade = sem produção.</div>
+    </div>
+    <div class="gold-rule-item">
+      <div class="gold-rule-num">05</div>
+      <div class="gold-rule-text"><strong style="color:var(--text)">Menor diff possível.</strong> Implementa exatamente o necessário. Sem refatorações não solicitadas. Sem escopo creep. Foco cirúrgico.</div>
+    </div>
+    <div class="gold-rule-item">
+      <div class="gold-rule-num">06</div>
+      <div class="gold-rule-text"><strong style="color:var(--text)">Incidente → Checklist.</strong> Toda falha em produção vira item de aprendizado institucional documentado e priorizado.</div>
+    </div>
+  </div>
+
+  <!-- ARCHITECTURE PRINCIPLES -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">🔩 Princípios de Implementação</h2>
+    </div>
+    <div class="rules-grid">
+      <div class="rule-card">
+        <div class="rule-header">
+          <div class="rule-icon">🛡️</div>
+          <div>
+            <div class="rule-title">Validação de Entrada</div>
+            <div class="rule-sub">Zod (TS) / Pydantic (Python)</div>
+          </div>
+        </div>
+        <div class="rule-body">Todo payload externo e interno passa por schema validation antes de qualquer lógica de negócio. Rejeição consistente com erro tipado e mensagem legível.</div>
+        <div class="rule-code">const schema = z.object({ ... });<br>const result = schema.safeParse(payload);<br>if (!result.success) throw new ValidationError(result.error);</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-header">
+          <div class="rule-icon">🔁</div>
+          <div>
+            <div class="rule-title">Idempotência Universal</div>
+            <div class="rule-sub">request_id + event_id obrigatórios</div>
+          </div>
+        </div>
+        <div class="rule-body">Middleware centralizado verifica chave de idempotência (Redis) antes de processar. Resposta cacheada para duplicatas. Garante exatamente uma execução.</div>
+        <div class="rule-code">const key = `idem:${request_id}`;<br>const cached = await redis.get(key);<br>if (cached) return JSON.parse(cached);</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-header">
+          <div class="rule-icon">📊</div>
+          <div>
+            <div class="rule-title">Observabilidade Obrigatória</div>
+            <div class="rule-sub">logs + métricas + traces</div>
+          </div>
+        </div>
+        <div class="rule-body">Cada implementação adiciona logs estruturados (JSON), incrementa counters Prometheus e propaga trace_id via OpenTelemetry. Sem observabilidade = bloqueado.</div>
+        <div class="rule-code">logger.info('action.executed', {<br>  trace_id, tenant_id, duration_ms,<br>  action: 'DEAL_CLOSED_WON' });</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-header">
+          <div class="rule-icon">⚡</div>
+          <div>
+            <div class="rule-title">Resiliência por Padrão</div>
+            <div class="rule-sub">timeout · retry · circuit breaker</div>
+          </div>
+        </div>
+        <div class="rule-body">Toda chamada externa usa timeout explícito, retry com backoff exponencial e circuit breaker (Resilience4j / cockatiel). Falhas transitórias recuperáveis > 95%.</div>
+        <div class="rule-code">const result = await withCircuitBreaker(<br>  () => externalService.call(payload),<br>  { timeout: 5000, retries: 3 });</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-header">
+          <div class="rule-icon">🔐</div>
+          <div>
+            <div class="rule-title">Multi-tenant Isolation</div>
+            <div class="rule-sub">tenant_id em toda query</div>
+          </div>
+        </div>
+        <div class="rule-body">Toda query ao banco inclui WHERE tenant_id = :tenantId obrigatoriamente via middleware Prisma. Zero possibilidade de vazamento cross-tenant por esquecimento.</div>
+        <div class="rule-code">prisma.$use(async (params, next) => {<br>  params.args.where = { ...params.args.where,<br>    tenant_id: ctx.tenantId }; return next(params); });</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-header">
+          <div class="rule-icon">🧪</div>
+          <div>
+            <div class="rule-title">Test Coverage Obrigatória</div>
+            <div class="rule-sub">happy path + edge cases + erros</div>
+          </div>
+        </div>
+        <div class="rule-body">Cada PR inclui testes unitários para lógica crítica, testes de integração para APIs e testes de contrato para interfaces entre serviços. Sem testes = sem merge.</div>
+        <div class="rule-code">describe('DEAL_CLOSED_WON flow', () => {<br>  it('executes atomically', async () => {});<br>  it('handles duplicate event', async () => {});<br>  it('rolls back on error', async () => {}); });</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="container">
+    <strong>CODEX // Execution Engine</strong> — BirthHub 360 CTO Playbook · Gerado com precisão cirúrgica · Cada evidência verificável, cada entrega rastreável.
+  </div>
+</footer>
+
+<script>
+// ═══ DATA ═══
+const implTasks = [
+  { id:'I01', title:'Criar camada service/repository no gateway para leads', p:'p0', domain:'BACKEND', evidence:'PR com testes unitários e integração', metric:'CRUD real em produção' },
+  { id:'I02', title:'Implementar rotas de deals com transições válidas (state machine)', p:'p0', domain:'BACKEND', evidence:'state machine + testes', metric:'zero transição inválida' },
+  { id:'I03', title:'Implementar customers health com cálculo real e jobs de atualização', p:'p1', domain:'BACKEND', evidence:'endpoint + jobs atualização', metric:'health score confiável' },
+  { id:'I04', title:'Implementar billing summary via agregações SQL otimizadas', p:'p0', domain:'BACKEND', evidence:'query otimizada + teste', metric:'p95 endpoint < 300ms' },
+  { id:'I05', title:'Implementar contratos com versionamento e trilha de auditoria', p:'p0', domain:'BACKEND', evidence:'tabelas + API + auditoria', metric:'rastreabilidade jurídica completa' },
+  { id:'I06', title:'Implementar API de analytics com filtros por tenant e índices', p:'p1', domain:'BACKEND', evidence:'endpoints + índice', metric:'consultas previsíveis em escala' },
+  { id:'I07', title:'Adicionar validação Zod/Pydantic em todos os payloads críticos', p:'p0', domain:'BACKEND', evidence:'schemas + testes negativos', metric:'rejeição consistente de payload inválido' },
+  { id:'I08', title:'Centralizar middleware de idempotência e rate limit reutilizável', p:'p0', domain:'BACKEND', evidence:'middleware reutilizável', metric:'proteção uniforme em APIs' },
+  { id:'I09', title:'Publicar OpenAPI assinado, versionado e consumível por clientes', p:'p1', domain:'BACKEND', evidence:'pipeline geração docs', metric:'contrato consumível por clientes' },
+  { id:'I10', title:'Implementar webhook receiver robusto com assinatura, retries e DLQ', p:'p0', domain:'BACKEND', evidence:'assinatura + retries + DLQ', metric:'perda de evento = 0' },
+  { id:'I11', title:'Completar fluxo DEAL_CLOSED_WON executável ponta a ponta', p:'p0', domain:'ORQUESTRAÇÃO', evidence:'grafo + persistência de estado', metric:'fluxo automatizado ponta a ponta' },
+  { id:'I12', title:'Completar fluxo HEALTH_ALERT com ações CS e workers ativos', p:'p0', domain:'ORQUESTRAÇÃO', evidence:'workers + regras', metric:'resposta proativa a risco' },
+  { id:'I13', title:'Completar fluxo CHURN_RISK_HIGH com playbook CRM integrado', p:'p0', domain:'ORQUESTRAÇÃO', evidence:'grafo + integração CRM', metric:'churn evitável reduzido' },
+  { id:'I14', title:'Completar fluxo BOARD_REPORT agendado com geração automática', p:'p1', domain:'ORQUESTRAÇÃO', evidence:'cron + geração relatório', metric:'reporte executivo automático' },
+  { id:'I15', title:'Persistir estado intermediário do orquestrador para reprocessamento', p:'p0', domain:'ORQUESTRAÇÃO', evidence:'tabela state + APIs consulta', metric:'reprocessamento determinístico' },
+  { id:'I16', title:'Implementar DLQ e endpoint de reprocessamento manual de eventos', p:'p0', domain:'ORQUESTRAÇÃO', evidence:'filas + endpoint retry', metric:'incidentes recuperáveis sem engenharia' },
+  { id:'I17', title:'Priorização de fila por evento/plano para SLA premium', p:'p1', domain:'ORQUESTRAÇÃO', evidence:'políticas de prioridade', metric:'SLA premium sustentado' },
+  { id:'I18', title:'Isolamento de fila por tenant enterprise com namespaces e quotas', p:'p1', domain:'ORQUESTRAÇÃO', evidence:'namespaces + quotas', metric:'ruído entre tenants eliminado' },
+  { id:'I19', title:'Implementar endpoint de cancelamento de execução de jobs', p:'p2', domain:'ORQUESTRAÇÃO', evidence:'API cancel + teste', metric:'jobs órfãos reduzidos' },
+  { id:'I20', title:'Implementar métricas de throughput/latência por fluxo em tempo real', p:'p0', domain:'ORQUESTRAÇÃO', evidence:'exportadores + dashboards', metric:'gargalos visíveis em tempo real' },
+  { id:'I21', title:'Integrar Stripe com eventos de cobrança completos e reconciliação', p:'p0', domain:'INTEGRAÇÕES', evidence:'client + webhooks + reconciliação', metric:'faturamento automatizado confiável' },
+  { id:'I22', title:'Integrar Pagar.me/Asaas com fallback de adquirência automático', p:'p1', domain:'INTEGRAÇÕES', evidence:'adapters + failover', metric:'continuidade de cobrança' },
+  { id:'I23', title:'Integrar Focus NFe para emissão e consulta de status fiscal', p:'p0', domain:'INTEGRAÇÕES', evidence:'emissão + consulta status', metric:'compliance fiscal operacional' },
+  { id:'I24', title:'Integrar Clicksign/DocuSign para contratos com callbacks', p:'p0', domain:'INTEGRAÇÕES', evidence:'assinatura + callbacks', metric:'ciclo contratual digitalizado' },
+  { id:'I25', title:'Integrar HubSpot/Pipedrive com sync incremental e reconciliação', p:'p1', domain:'INTEGRAÇÕES', evidence:'jobs sync + reconciliação', metric:'CRM sem divergência crítica' },
+  { id:'I26', title:'Integrar Resend/WhatsApp para comunicações transacionais com tracking', p:'p1', domain:'INTEGRAÇÕES', evidence:'templates + tracking', metric:'entregabilidade monitorada' },
+  { id:'I27', title:'Integrar Google/Meta Ads para attribution e CAC por canal', p:'p2', domain:'INTEGRAÇÕES', evidence:'ingestão + modelo atribuição', metric:'CAC por canal confiável' },
+  { id:'I28', title:'Implementar conector Calendar para agendamento SDR sem conflitos', p:'p1', domain:'INTEGRAÇÕES', evidence:'booking + conflitos', metric:'aumento de reuniões válidas' },
+  { id:'I29', title:'Implementar conector Drive/Storage para anexos com ACL auditável', p:'p2', domain:'INTEGRAÇÕES', evidence:'upload seguro + ACL', metric:'gestão documental auditável' },
+  { id:'I30', title:'Implementar fallback de LLM (Gemini + modelo secundário)', p:'p1', domain:'IA/LLM', evidence:'roteador + health check', metric:'disponibilidade IA elevada' },
+  { id:'I31', title:'Implementar orçamento de tokens por tenant com alertas', p:'p1', domain:'IA/LLM', evidence:'quotas + alertas', metric:'custo de IA previsível' },
+  { id:'I32', title:'Implementar avaliação offline de prompts com scorecards', p:'p1', domain:'IA/LLM', evidence:'benchmark + scorecards', metric:'melhora contínua de qualidade' },
+  { id:'I33', title:'Implementar sandbox de tools de agentes com isolamento e políticas', p:'p0', domain:'IA/LLM', evidence:'isolamento + políticas', metric:'redução de risco operacional' },
+  { id:'I34', title:'Implementar cache semântico para tarefas repetidas (custo/latência)', p:'p2', domain:'IA/LLM', evidence:'cache + invalidação', metric:'custo/latência de IA reduzidos' },
+  { id:'I35', title:'Implementar dashboards operacionais em tempo real (SRE + negócio)', p:'p1', domain:'FRONT-END', evidence:'painéis SRE + negócio', metric:'decisão assistida por dados ao vivo' },
+  { id:'I36', title:'Implementar tela pipeline com drag/drop e SLAs comerciais', p:'p1', domain:'FRONT-END', evidence:'página + API + testes', metric:'operação comercial centralizada' },
+  { id:'I37', title:'Implementar tela financeiro com MRR/churn/inadimplência', p:'p1', domain:'FRONT-END', evidence:'página + consultas', metric:'visibilidade financeira diária' },
+  { id:'I38', title:'Implementar tela contratos com status de assinatura em tempo real', p:'p1', domain:'FRONT-END', evidence:'página + webhook status', metric:'fechamento jurídico acelerado' },
+  { id:'I39', title:'Implementar tela logs de agentes com filtros avançados e busca', p:'p1', domain:'FRONT-END', evidence:'página + busca', metric:'troubleshooting rápido' },
+  { id:'I40', title:'Implementar tela health score com alertas acionáveis e regras', p:'p1', domain:'FRONT-END', evidence:'página + regras', metric:'churn preventivo operacional' },
+  { id:'I41', title:'Implementar autenticação robusta dashboard com MFA opcional', p:'p0', domain:'SEGURANÇA', evidence:'fluxos auth + sessão', metric:'risco de takeover reduzido' },
+  { id:'I42', title:'Implementar controle de acesso granular por módulo (RBAC frontend/backend)', p:'p0', domain:'SEGURANÇA', evidence:'RBAC frontend/backend', metric:'segregação de função real' },
+  { id:'I43', title:'Implementar testes E2E dos fluxos críticos com Playwright', p:'p0', domain:'QA/CI', evidence:'suíte Playwright', metric:'regressão crítica bloqueada' },
+  { id:'I44', title:'Implementar testes de contrato OpenAPI no CI com gates', p:'p0', domain:'QA/CI', evidence:'pipeline com gates', metric:'quebra de API detectada cedo' },
+  { id:'I45', title:'Implementar testes de carga BullMQ e API Gateway (k6/artillery)', p:'p1', domain:'QA/CI', evidence:'cenários k6/artillery', metric:'baseline de escala validado' },
+  { id:'I46', title:'Implementar cobertura mínima de segurança no CI (SAST/SCA/secrets)', p:'p0', domain:'SEGURANÇA', evidence:'SAST/SCA/secret scanning', metric:'vulnerabilidade crítica bloqueada' },
+  { id:'I47', title:'Implementar política de backup/restore automatizada com drill', p:'p0', domain:'INFRA', evidence:'jobs + restore drill', metric:'resiliência comprovada' },
+  { id:'I48', title:'Implementar runbook de incidentes P0/P1 com game days', p:'p0', domain:'INFRA', evidence:'runbooks + game days', metric:'resposta padronizada e rápida' },
+  { id:'I49', title:'Implementar deploy canary para serviços críticos com health gates', p:'p1', domain:'CI/CD', evidence:'pipeline + health gates', metric:'risco de release reduzido' },
+  { id:'I50', title:'Implementar DR drill trimestral multi-serviço documentado', p:'p1', domain:'INFRA', evidence:'relatório drill', metric:'continuidade de negócio garantida' },
+];
+
+const archTasks = [
+  { id:'M03', title:'Contratos internos versionados: schema registry + changelog de eventos e APIs', p:'p0', domain:'CONTRATOS', evidence:'schema registry + changelog', metric:'100% eventos versionados' },
+  { id:'M05', title:'Estratégia de resiliência: lib comum de timeout/retry/circuit breaker com testes caos', p:'p0', domain:'RESILIÊNCIA', evidence:'lib comum + testes caos', metric:'falhas transitórias recuperadas > 95%' },
+  { id:'M06', title:'Idempotência de ponta a ponta via middleware com request/event id universal', p:'p0', domain:'RESILIÊNCIA', evidence:'middleware + testes', metric:'duplicidade operacional = 0' },
+  { id:'M07', title:'Observabilidade full-stack: logs estruturados, métricas Prometheus, traces OTEL', p:'p0', domain:'OBSERVABILIDADE', evidence:'dashboards + alertas', metric:'cobertura de tracing > 90%' },
+  { id:'M08', title:'SLO/SLI por domínio e serviço com error budget monitorado semanalmente', p:'p0', domain:'OBSERVABILIDADE', evidence:'docs/slo + alert rules', metric:'erro budget monitorado semanalmente' },
+  { id:'M10', title:'Governança de segredos com rotação automática (Vault/Secret Manager)', p:'p0', domain:'SEGURANÇA', evidence:'policy + jobs rotação', metric:'100% segredos com rotação' },
+  { id:'M11', title:'Hardening de autenticação, sessão e RBAC com testes de autorização', p:'p0', domain:'SEGURANÇA', evidence:'testes de autorização', metric:'0 endpoint sensível sem RBAC' },
+  { id:'M12', title:'Auditoria imutável para ações administrativas críticas (append-only)', p:'p0', domain:'COMPLIANCE', evidence:'tabela audit + trilha', metric:'100% ações administrativas auditadas' },
+  { id:'M15', title:'Gestão de schema evolutivo com padrão expand-contract e playbook de migração', p:'p0', domain:'DADOS', evidence:'playbook de migração', metric:'zero downtime em migrações' },
+  { id:'M16', title:'Estratégia de índices e plano de capacidade SQL com explain plans', p:'p0', domain:'DADOS', evidence:'explain plans + índices', metric:'p95 consultas críticas < 150ms' },
+  { id:'M19', title:'Segurança de supply chain: SCA + SAST + Secrets scanning nos CI gates', p:'p0', domain:'SEGURANÇA', evidence:'CI gates', metric:'vulnerabilidade crítica em prod = 0' },
+  { id:'M20', title:'Testes de contrato consumer-driven entre todos os serviços', p:'p0', domain:'QA', evidence:'suíte consumer-driven', metric:'regressão de contrato = 0' },
+  { id:'M21', title:'Qualidade de teste por risco (pirâmide balanceada, flakiness < 2%)', p:'p1', domain:'QA', evidence:'estratégia QA', metric:'flakiness e2e < 2%' },
+  { id:'M22', title:'Testes de carga periódicos em filas BullMQ e APIs críticas', p:'p1', domain:'QA', evidence:'relatório perf', metric:'throughput alvo sustentado' },
+  { id:'M23', title:'Chaos engineering para dependências externas (degradação graciosa)', p:'p2', domain:'RESILIÊNCIA', evidence:'cenários caos', metric:'degradação graciosa validada' },
+  { id:'M24', title:'Feature flags com rollout progressivo e rollback < 5 min', p:'p1', domain:'DEPLOYMENT', evidence:'framework FF', metric:'rollback < 5 min' },
+  { id:'M26', title:'Estratégia antifraude para pagamentos e webhooks com regras e monitoria', p:'p0', domain:'SEGURANÇA', evidence:'regras + monitoria', metric:'chargeback/fraude sob controle' },
+  { id:'M27', title:'Padronização de erros de domínio e catálogo de erros com observabilidade', p:'p0', domain:'BACKEND', evidence:'catálogo de erros', metric:'TTR de incidentes reduzido' },
+  { id:'M28', title:'Arquitetura multi-tenant isolada por dados e filas (desenho de tenancy)', p:'p0', domain:'ARQUITETURA', evidence:'desenho tenancy', metric:'ausência de vazamento cross-tenant' },
+  { id:'M30', title:'Guardrails de IA: PII, toxicidade, jailbreak — filtros + testes', p:'p0', domain:'IA/SEGURANÇA', evidence:'filtros + testes', metric:'incidentes de segurança de IA = 0' },
+  { id:'M31', title:'Observabilidade por token/custo/latência de LLM com dashboards', p:'p1', domain:'IA/LLM', evidence:'dashboards LLM', metric:'otimização contínua de custo' },
+  { id:'M32', title:'Estratégia de fallback multi-modelo com roteador e health check', p:'p1', domain:'IA/LLM', evidence:'roteador de modelos', metric:'disponibilidade IA > 99,5%' },
+  { id:'M33', title:'Golden datasets para validação de agentes com suíte de avaliação', p:'p1', domain:'IA/LLM', evidence:'suíte de avaliação', metric:'precisão mínima definida por tarefa' },
+  { id:'M34', title:'Segurança de front-end: CSP, sanitização, headers (auditoria OWASP)', p:'p0', domain:'FRONT-END', evidence:'auditoria OWASP', metric:'XSS/CSRF críticos = 0' },
+  { id:'M35', title:'Performance front-end com Core Web Vitals e relatórios Lighthouse', p:'p1', domain:'FRONT-END', evidence:'relatórios Lighthouse', metric:'LCP < 2.5s em páginas-chave' },
+  { id:'M38', title:'Pipeline CI/CD com gates por risco e políticas de qualidade obrigatórias', p:'p0', domain:'CI/CD', evidence:'workflow com políticas', metric:'lead time sem sacrificar qualidade' },
+  { id:'M39', title:'Release train com canary deployment e rollback automático por health', p:'p1', domain:'CI/CD', evidence:'pipeline deployment', metric:'MTTD/MTTR de release reduzidos' },
+  { id:'M42', title:'Política de logs estruturados com correlação única e rastreabilidade fim a fim', p:'p0', domain:'OBSERVABILIDADE', evidence:'logger padrão', metric:'rastreabilidade fim a fim' },
+  { id:'M44', title:'Modelo de ownership técnico por pasta/serviço com CODEOWNERS ativo', p:'p1', domain:'PROCESSO', evidence:'CODEOWNERS ativo', metric:'redução de filas de revisão' },
+];
+
+// ═══ STATE ═══
+const state = {
+  done: new Set(JSON.parse(localStorage.getItem('codex-done') || '[]')),
+  owners: JSON.parse(localStorage.getItem('codex-owners') || '{}'),
+  sprints: JSON.parse(localStorage.getItem('codex-sprints') || '{}'),
+};
+
+function save() {
+  localStorage.setItem('codex-done', JSON.stringify([...state.done]));
+  localStorage.setItem('codex-owners', JSON.stringify(state.owners));
+  localStorage.setItem('codex-sprints', JSON.stringify(state.sprints));
+  updateStats();
+}
+
+// ═══ RENDER ═══
+function renderCard(t, type) {
+  const isDone = state.done.has(t.id);
+  const owner = state.owners[t.id] || '';
+  const sprint = state.sprints[t.id] || '';
+  return `
+    <div class="task-card ${t.p} ${isDone?'done':''}"
+         data-id="${t.id}" data-p="${t.p}" data-type="${type}" data-title="${t.title.toLowerCase()}">
+      <div class="task-header">
+        <div class="task-checkbox" onclick="toggleDone('${t.id}')"></div>
+        <div class="task-meta">
+          <div class="task-id-row">
+            <span class="task-id">${t.id}</span>
+            <span class="priority-badge pb-${t.p}">${t.p.toUpperCase()}</span>
+            <span class="task-domain">${t.domain}</span>
+          </div>
+          <div class="task-title">${t.title}</div>
+        </div>
+      </div>
+      <div class="task-inputs">
+        <div class="task-input-group">
+          <label>Owner</label>
+          <input type="text" value="${owner}" placeholder="@engenheiro"
+                 onchange="setOwner('${t.id}', this.value)">
+        </div>
+        <div class="task-input-group">
+          <label>Sprint</label>
+          <input type="text" value="${sprint}" placeholder="S01"
+                 onchange="setSprint('${t.id}', this.value)">
+        </div>
+      </div>
+      <div class="task-footer">
+        <div class="task-evidence">📁 ${t.evidence}</div>
+        <div class="task-metric">🎯 ${t.metric}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderAll() {
+  document.getElementById('impl-grid').innerHTML = implTasks.map(t => renderCard(t,'impl')).join('');
+  document.getElementById('arch-grid').innerHTML = archTasks.map(t => renderCard(t,'arch')).join('');
+  updateStats();
+}
+
+// ═══ ACTIONS ═══
+function toggleDone(id) {
+  if (state.done.has(id)) state.done.delete(id);
+  else state.done.add(id);
+  save();
+  const card = document.querySelector(`[data-id="${id}"]`);
+  if (card) card.classList.toggle('done', state.done.has(id));
+  updateStats();
+}
+
+function setOwner(id, val) { state.owners[id] = val; save(); }
+function setSprint(id, val) { state.sprints[id] = val; save(); }
+
+// ═══ STATS ═══
+function updateStats() {
+  const all = [...implTasks, ...archTasks];
+  const total = all.length;
+  const p0 = all.filter(t=>t.p==='p0').length;
+  const p1 = all.filter(t=>t.p==='p1').length;
+  const p2 = all.filter(t=>t.p==='p2').length;
+  const done = state.done.size;
+
+  document.getElementById('totalCount').textContent = total;
+  document.getElementById('p0Count').textContent = p0;
+  document.getElementById('p1Count').textContent = p1;
+  document.getElementById('p2Count').textContent = p2;
+  document.getElementById('doneCount').textContent = done;
+  document.getElementById('impl-count').textContent = implTasks.length + ' ações';
+  document.getElementById('arch-count').textContent = archTasks.length + ' ações';
+
+  // Domain progress
+  const domains = {
+    backend: ['I01','I02','I03','I04','I05','I06','I07','I08','I09','I10','M27'],
+    orch: ['I11','I12','I13','I14','I15','I16','I17','I18','I19','I20'],
+    int: ['I21','I22','I23','I24','I25','I26','I27','I28','I29'],
+    ai: ['I30','I31','I32','I33','I34','M30','M31','M32','M33'],
+    fe: ['I35','I36','I37','I38','I39','I40','M34','M35'],
+    sec: ['I41','I42','I43','I44','I45','I46','I47','I48','I49','I50','M10','M11','M19','M26','M38','M39','M42'],
+  };
+
+  Object.entries(domains).forEach(([key, ids]) => {
+    const pct = Math.round(ids.filter(id => state.done.has(id)).length / ids.length * 100);
+    const fill = document.getElementById(`prog-${key}`);
+    const val = document.getElementById(`prog-${key}-val`);
+    if (fill) { fill.style.width = pct + '%'; }
+    if (val) { val.textContent = pct + '%'; }
+  });
+}
+
+// ═══ FILTERS ═══
+let activeFilter = 'all';
+let searchQuery = '';
+
+function filterTasks(btn, filter) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeFilter = filter;
+  applyFilter();
+}
+
+function searchTasks(q) {
+  searchQuery = q.toLowerCase();
+  applyFilter();
+}
+
+function applyFilter() {
+  const cards = document.querySelectorAll('.task-card');
+  cards.forEach(card => {
+    const p = card.dataset.p;
+    const type = card.dataset.type;
+    const title = card.dataset.title;
+    const isDone = card.classList.contains('done');
+
+    let show = true;
+    if (activeFilter === 'p0') show = p === 'p0';
+    else if (activeFilter === 'p1') show = p === 'p1';
+    else if (activeFilter === 'p2') show = p === 'p2';
+    else if (activeFilter === 'impl') show = type === 'impl';
+    else if (activeFilter === 'arch') show = type === 'arch';
+    else if (activeFilter === 'done') show = isDone;
+    else if (activeFilter === 'pending') show = !isDone;
+
+    if (show && searchQuery) {
+      show = title.includes(searchQuery) || card.dataset.id.toLowerCase().includes(searchQuery);
+    }
+
+    card.style.display = show ? '' : 'none';
+  });
+}
+
+function resetAll() {
+  activeFilter = 'all';
+  searchQuery = '';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('[data-filter="all"]').classList.add('active');
+  document.querySelector('.search-input').value = '';
+  document.querySelectorAll('.task-card').forEach(c => c.style.display = '');
+}
+
+// ═══ COPY PROMPT ═══
+function copyPrompt(btn) {
+  const text = document.querySelector('.prompt-block pre').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.innerHTML = '<span>✅</span> Copiado!';
+    setTimeout(() => btn.innerHTML = '<span>📋</span> Copiar Prompt', 2000);
+  });
+}
+
+// ═══ MATRIX RAIN ═══
+const canvas = document.getElementById('matrix-bg');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノ';
+const fontSize = 14;
+let columns = Math.floor(window.innerWidth / fontSize);
+let drops = Array(columns).fill(1);
+
+function drawMatrix() {
+  ctx.fillStyle = 'rgba(8,11,15,0.05)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#39d353';
+  ctx.font = fontSize + 'px JetBrains Mono';
+  drops.forEach((y, i) => {
+    const c = chars[Math.floor(Math.random() * chars.length)];
+    ctx.fillText(c, i * fontSize, y * fontSize);
+    if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  });
+}
+
+setInterval(drawMatrix, 60);
+
+// ═══ INIT ═══
+renderAll();
+</script>
+</body>
+</html>

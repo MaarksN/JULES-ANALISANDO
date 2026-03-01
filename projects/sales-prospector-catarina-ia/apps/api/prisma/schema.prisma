@@ -1,0 +1,200 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// --- IDENTITY & ACCESS CONTROL ---
+
+model Organization {
+  id       String  @id @default(uuid())
+  name     String
+  slug     String  @unique
+  plan     String  @default("FREE") // FREE, PRO, ENTERPRISE
+  stripeId String?
+  settings Json? // Branding, Configs
+
+  members        Member[]
+  wallet         Wallet?
+  contacts       Contact[]
+  communications Communication[]
+  prompts        Prompt[]
+  documents      Document[]
+  tags           Tag[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id          String   @id @default(uuid()) // Supabase UID if possible
+  email       String   @unique
+  name        String?
+  memberships Member[]
+
+  createdAt DateTime @default(now())
+}
+
+model Member {
+  id           String       @id @default(uuid())
+  userId       String
+  user         User         @relation(fields: [userId], references: [id])
+  orgId        String
+  organization Organization @relation(fields: [orgId], references: [id])
+  role         String       @default("MEMBER") // OWNER, ADMIN, MEMBER
+
+  @@unique([userId, orgId])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  orgId     String
+  actorId   String
+  action    String
+  target    String
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([orgId, createdAt]) // Partitioning Prep
+}
+
+// --- AI ENGINE ---
+
+model Prompt {
+  id           String          @id @default(uuid())
+  orgId        String
+  organization Organization    @relation(fields: [orgId], references: [id])
+  slug         String
+  versions     PromptVersion[]
+
+  createdAt DateTime @default(now())
+
+  @@unique([orgId, slug])
+}
+
+model PromptVersion {
+  id        String   @id @default(uuid())
+  promptId  String
+  prompt    Prompt   @relation(fields: [promptId], references: [id])
+  template  String
+  version   Int
+  isLive    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([promptId])
+}
+
+model Document {
+  id           String       @id @default(uuid())
+  orgId        String
+  organization Organization @relation(fields: [orgId], references: [id])
+  title        String
+  content      String
+  embeddings   Embedding[]
+
+  createdAt DateTime @default(now())
+
+  @@index([orgId])
+}
+
+model Embedding {
+  id         String                       @id @default(uuid())
+  documentId String
+  document   Document                     @relation(fields: [documentId], references: [id])
+  vector     Unsupported("vector(1536)")? // PgVector
+  chunk      String
+
+  @@index([documentId])
+}
+
+// --- COMMUNICATION & SALES ---
+
+model Contact {
+  id           String       @id @default(uuid())
+  orgId        String
+  organization Organization @relation(fields: [orgId], references: [id])
+
+  name     String
+  email    String?
+  phone    String?
+  linkedin String?
+
+  score  Int    @default(0)
+  status String @default("NEW")
+
+  tags           Tag[]
+  communications Communication[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([orgId, email])
+  @@index([orgId, createdAt]) // Optimized for listing by org and sorting by date
+}
+
+model Communication {
+  id           String       @id @default(uuid())
+  orgId        String
+  organization Organization @relation(fields: [orgId], references: [id])
+  contactId    String?
+  contact      Contact?     @relation(fields: [contactId], references: [id])
+
+  type      String // CALL, EMAIL, WHATSAPP
+  direction String // INBOUND, OUTBOUND
+  status    String // SENT, DELIVERED, READ, COMPLETED, MISSED
+
+  content  String? // Body or Transcript
+  metadata Json? // Duration, RecordingURL, ProviderID
+
+  createdAt DateTime @default(now())
+
+  @@index([orgId, createdAt]) // Partitioning Prep
+  @@index([contactId, createdAt])
+}
+
+model Tag {
+  id           String       @id @default(uuid())
+  orgId        String
+  organization Organization @relation(fields: [orgId], references: [id])
+  name         String
+  color        String?
+  contacts     Contact[]
+
+  @@unique([orgId, name])
+}
+
+// --- BILLING ---
+
+model Wallet {
+  id           String       @id @default(uuid())
+  orgId        String       @unique
+  organization Organization @relation(fields: [orgId], references: [id])
+  balance      Decimal      @default(0.00)
+  currency     String       @default("BRL")
+  ledger       Ledger[]
+
+  updatedAt DateTime @updatedAt
+}
+
+model Ledger {
+  id          String   @id @default(uuid())
+  walletId    String
+  wallet      Wallet   @relation(fields: [walletId], references: [id])
+  amount      Decimal
+  type        String // CREDIT, DEBIT
+  description String
+  referenceId String? // Transaction ID or Usage ID
+  createdAt   DateTime @default(now())
+
+  @@index([walletId, createdAt])
+}
+
+model Plan {
+  id     String  @id @default(uuid())
+  name   String  @unique
+  limits Json // { "voice_minutes": 100, "ai_tokens": 10000 }
+  price  Decimal
+}

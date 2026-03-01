@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diagnóstico Técnico SaaS — Sales Prospector Catarina IA</title>
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; background: #0b1020; color: #e6ecff; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 28px; }
+    h1,h2,h3 { color: #b9cbff; }
+    .card { background: #121a33; border: 1px solid #24315f; border-radius: 12px; padding: 20px; margin-bottom: 18px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+    th, td { border: 1px solid #2d3e77; padding: 8px; vertical-align: top; }
+    th { background: #1b2851; text-align: left; }
+    code, pre { background: #0c1430; color: #b8d4ff; border-radius: 8px; }
+    pre { padding: 14px; overflow: auto; white-space: pre-wrap; }
+    .pill { display: inline-block; padding: 4px 10px; border-radius: 999px; background:#1e2e64; border:1px solid #3550a0; margin-right:8px; font-size:12px; }
+    ul { margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Diagnóstico CTO de Elite — Sales Prospector Catarina IA</h1>
+    <p><span class="pill">Escopo: API NestJS + Prisma + Web React</span><span class="pill">Objetivo: evolução para SaaS global</span><span class="pill">Modo: direto, honesto e acionável</span></p>
+
+    <div class="card">
+      <h2>1) Checklist Executivo Detalhado (controle dos 100 pontos)</h2>
+      <p>Use esta matriz em cada sprint. Defina dono, data-alvo, criticidade, dependências e evidência (PR, dashboard, teste, runbook).</p>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Tipo</th><th>Item</th><th>Dono</th><th>Prazo</th><th>Status</th><th>Criticidade</th><th>Evidência</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Governança</td><td>Criar board de programa com os 100 itens, swimlanes por domínio (Core API, Dados, Billing, IA, Frontend, SRE, Segurança).</td><td>CTO</td><td>Sprint 0</td><td>☐</td><td>Alta</td><td>Jira/Linear + OKRs</td></tr>
+          <tr><td>2</td><td>Governança</td><td>Definir RACI por domínio e SLA de decisão arquitetural (ADR em até 48h para itens críticos).</td><td>Arquiteto</td><td>Sprint 0</td><td>☐</td><td>Alta</td><td>ADR-000</td></tr>
+          <tr><td>3</td><td>Entrega</td><td>Planejar execução em 5 ondas: Fundação, Segurança, Escala, Monetização, Inteligência.</td><td>PM Tech</td><td>Sprint 0</td><td>☐</td><td>Alta</td><td>Roadmap trimestral</td></tr>
+          <tr><td>4</td><td>Qualidade</td><td>Definir Definition of Done: testes + observabilidade + segurança + documentação de operação.</td><td>Eng Manager</td><td>Sprint 0</td><td>☐</td><td>Alta</td><td>Playbook de entrega</td></tr>
+          <tr><td>5</td><td>Medição</td><td>Instrumentar KPIs: MRR, churn, WAU, p95 API, taxa de erro, custo por tenant, latência IA.</td><td>Data Lead</td><td>Sprint 1</td><td>☐</td><td>Alta</td><td>Dashboard único</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Instrução operacional:</strong> os itens #6 a #100 estão listados nas seções 2 e 3 abaixo e devem ser copiados para a mesma planilha, mantendo rastreabilidade por ID.</p>
+    </div>
+
+    <div class="card">
+      <h2>2) 50 Itens de Melhoria (hardening do que já existe)</h2>
+      <ol>
+        <li>Autenticação está inconsistente: <code>AuthService.signIn</code> não valida senha/identidade de forma real. Integrar Supabase/Auth provider com verificação de token de identidade, não login mock.</li>
+        <li>Eliminar segredo JWT de fallback em desenvolvimento; padronizar rotação de chaves via KMS e expiração curta com refresh token.</li>
+        <li>Substituir leitura direta de <code>process.env</code> em múltiplos pontos por config tipada centralizada com schema (Zod/Env validation).</li>
+        <li>Aplicar RBAC real: decorator de papéis existe, mas enforcement deve ser obrigatório por guard e policy service.</li>
+        <li>Corrigir multi-tenancy: <code>x-tenant-id</code> não pode ser confiado sem vínculo criptograficamente atrelado ao token do usuário.</li>
+        <li>Aplicar Row-Level Security por tenant no PostgreSQL para camada de defesa adicional contra vazamento cross-tenant.</li>
+        <li>Rever middleware de whitelist de IP; hoje está permissivo. Implementar allowlist por organização com CIDR e bypass auditado.</li>
+        <li>Desacoplar <code>AppModule</code> monolítico em módulos verticais com boundaries explícitas e contratos internos.</li>
+        <li>Fortalecer tratamento de exceções: padronizar erro de domínio, código interno e correlation-id em 100% dos endpoints.</li>
+        <li>Adicionar versionamento de API (<code>/v1</code>) e política de depreciação para evitar quebra de clientes.</li>
+        <li>Habilitar compressão e tuning de keep-alive para reduzir latência e custo de infra.</li>
+        <li>Implementar health checks profundos (DB, cache, provider IA, fila, webhook endpoints).</li>
+        <li>Trocar logs ad-hoc por logging estruturado com máscara de PII obrigatória e trilha de auditoria consistente.</li>
+        <li>Mapear todos os campos de PII e implementar classificação (P0/P1/P2) + políticas de retenção.</li>
+        <li>Aplicar criptografia em repouso para dados sensíveis (tokens externos, gravações, transcrições, metadados críticos).</li>
+        <li>Melhorar modelagem de <code>Communication</code> com enums fortes e constraint para evitar estados inválidos.</li>
+        <li>Adicionar índices compostos para queries frequentes de CRM (status+updatedAt, score+createdAt, orgId+status).</li>
+        <li>Revisar unique de email por tenant para tratar nulos e múltiplos canais de contato sem colisões indevidas.</li>
+        <li>Implementar paginação cursor-based em todas as listagens críticas; evitar paginação por offset em bases grandes.</li>
+        <li>Aplicar idempotência em endpoints financeiros e webhooks para evitar duplicidade de cobrança/evento.</li>
+        <li>Blindar Stripe webhook com verificação de assinatura + replay protection + janela temporal.</li>
+        <li>Introduzir saga/outbox para consistência entre transações internas e efeitos externos (billing, mensagens, CRM).</li>
+        <li>Separar escrita e leitura em casos de alto volume (CQRS leve) para timelines e analytics.</li>
+        <li>Implementar circuit breaker e retry exponencial com jitter para integrações externas (HubSpot, voz, IA).</li>
+        <li>Adicionar cache semântico para respostas de IA por tenant/contexto para reduzir custo de tokens.</li>
+        <li>Revisar RAG: chunking atual simplista; usar chunk semântico, overlap e score threshold configurável.</li>
+        <li>Adicionar re-ranking de contexto (BM25 + vetor ou cross-encoder) para melhorar precisão das respostas.</li>
+        <li>Garantir isolamento de embeddings por tenant com testes automáticos de não-vazamento de contexto.</li>
+        <li>Trocar retorno de embedding zerado sem API key por falha explícita controlada; mock silencioso mascara problemas.</li>
+        <li>Padronizar contratos DTO de entrada/saída com validação em runtime para cada endpoint público.</li>
+        <li>Melhorar cobertura de testes no backend (unitário, integração Prisma, contrato HTTP, carga).</li>
+        <li>Adicionar testes de segurança automatizados (SAST, dependency scan, secret scan, DAST básico).</li>
+        <li>Implementar rate limit por tenant/plano e não apenas global por IP.</li>
+        <li>Introduzir quotas dinâmicas por recurso (chamadas de voz, tokens IA, requisições API, armazenamento).</li>
+        <li>Criar trilha de custos por tenant para mapear margem unitária e detectar clientes deficitários.</li>
+        <li>Melhorar front-end: store Zustand com tipos incompletos (<code>updateLeadStatus</code> fora da interface) deve ser corrigido.</li>
+        <li>Eliminar comentários de “placeholder” no front e transformar em fluxos navegáveis reais com router e tracking.</li>
+        <li>Implementar camada de API client tipado no web, com retry/backoff e tratamento de erros homogêneo.</li>
+        <li>Adicionar estados de loading/skeleton e empty states consistentes em toda a UI.</li>
+        <li>Instrumentar observabilidade de frontend (Web Vitals, erros JS, traces de jornada crítica).</li>
+        <li>Habilitar feature flags para rollout progressivo de funcionalidades de alto risco.</li>
+        <li>Aplicar estratégia blue/green ou canary para deploy da API com rollback em minutos.</li>
+        <li>Criar pipeline de migração segura Prisma: precheck, migração online, validação pós-deploy e rollback.</li>
+        <li>Estabelecer backup/restore testado periodicamente com RTO/RPO formais.</li>
+        <li>Definir SLO/SLI por serviço (API, IA, ingestão, webhook) com error budget operacional.</li>
+        <li>Criar runbooks de incidentes (queda de provider IA, falha de cobrança, atraso em fila, degradação DB).</li>
+        <li>Implementar política de compliance (LGPD): consentimento, direito ao esquecimento, exportação de dados.</li>
+        <li>Adicionar trilha de auditoria assinada para ações administrativas sensíveis.</li>
+        <li>Formalizar arquitetura alvo (diagramas C4 + eventos + contratos) versionada no repositório.</li>
+        <li>Introduzir processo de revisão arquitetural quinzenal baseado em métricas e dívida técnica monetizada.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2>3) 50 Itens de Implementação (novas capacidades para liderança global)</h2>
+      <ol>
+        <li>Implementar serviço de identidade unificado (OIDC/SAML + SCIM) para clientes enterprise.</li>
+        <li>Criar módulo de onboarding self-serve com wizard, templates de playbook e dados iniciais automáticos.</li>
+        <li>Construir engine de permissionamento ABAC (atributos de usuário, tenant, recurso e contexto).</li>
+        <li>Lançar billing metered completo: medição por evento, fatura consolidada, overage e dunning.</li>
+        <li>Criar portal de administração de tenant (usuários, limites, integrações, segurança, auditoria).</li>
+        <li>Implementar event bus (Kafka/Redpanda/SQS) para desacoplamento entre módulos.</li>
+        <li>Adicionar fila robusta de jobs (BullMQ/Temporal) para tarefas assíncronas de alta latência.</li>
+        <li>Construir serviço de webhooks outbound com assinatura HMAC e retries configuráveis.</li>
+        <li>Implementar ingestão omnichannel: email, WhatsApp, voz, forms e importação CSV/API.</li>
+        <li>Criar serviço de normalização/enriquecimento de leads (domínio, cargo, firmografia, dedupe).</li>
+        <li>Desenvolver deduplicação inteligente com regras determinísticas + fuzzy matching.</li>
+        <li>Criar motor de scoring preditivo com features comportamentais e explicabilidade.</li>
+        <li>Implementar workflow builder visual (gatilho-condição-ação) para automações de outbound.</li>
+        <li>Adicionar cadência multicanal com janelas de envio, limites por provider e A/B testing.</li>
+        <li>Criar dialer com priorização por score, timezone e probabilidade de conexão.</li>
+        <li>Implementar gravação/transcrição de chamadas com consentimento e redaction automática.</li>
+        <li>Construir QA de conversas com scorecard (aderência a script, objeções, next steps).</li>
+        <li>Lançar assistente de vendas em tempo real com sugestões contextuais durante chamadas.</li>
+        <li>Adicionar biblioteca de prompts versionada por segmento, idioma e objetivo comercial.</li>
+        <li>Implementar avaliação offline de prompts/modelos com dataset gold e métricas de qualidade.</li>
+        <li>Construir roteamento multi-LLM (Gemini/OpenAI/Anthropic) por custo, latência e qualidade.</li>
+        <li>Implementar guardrails de IA: filtros de política, groundedness, PII leak detector e fallback seguro.</li>
+        <li>Criar data warehouse analítico (BigQuery/Snowflake/Postgres OLAP) para BI de negócio.</li>
+        <li>Implementar modelo semântico de métricas (MRR, ARR, CAC payback, funil por coorte).</li>
+        <li>Adicionar alertas inteligentes de churn risk e queda de performance de equipe comercial.</li>
+        <li>Criar módulo de forecast de receita com cenários (base, otimista, conservador).</li>
+        <li>Desenvolver painéis executivos em tempo real com drill-down por tenant/time/canal.</li>
+        <li>Implementar marketplace de integrações (CRM, ERP, calendar, messaging, pagamento).</li>
+        <li>Adicionar conector bidirecional com HubSpot/Salesforce com resolução de conflito de campo.</li>
+        <li>Criar SDK público + webhooks + documentação OpenAPI/AsyncAPI de nível enterprise.</li>
+        <li>Implementar trilha completa de observabilidade (OpenTelemetry traces, metrics, logs correlacionados).</li>
+        <li>Adicionar detecção de anomalias operacionais para latência, erro, custo e fraude.</li>
+        <li>Construir centro de confiabilidade com status page e comunicação proativa de incidentes.</li>
+        <li>Implementar multi-região ativo-passivo para DR e latência global.</li>
+        <li>Adicionar estratégia de particionamento de dados por tenant em escala (schema/db sharding-ready).</li>
+        <li>Construir camada de compliance contínuo (evidências SOC2/ISO, trilha de controle automatizada).</li>
+        <li>Implementar gestão de segredos com rotação automática e política de least privilege.</li>
+        <li>Lançar cofre de credenciais de integrações com escopo mínimo e expiração.</li>
+        <li>Adicionar trilha de aprovação para ações críticas (ex.: exportação massiva de dados).</li>
+        <li>Criar sistema de templates de playbooks por vertical (SaaS, educação, saúde, serviços).</li>
+        <li>Implementar internacionalização total (UI, templates, moedas, timezone, legislação local).</li>
+        <li>Construir módulo de metas e gamificação de SDR/closer com leaderboard auditável.</li>
+        <li>Adicionar simulador de ROI para demonstrar valor do produto em pré-vendas e expansão.</li>
+        <li>Implementar API de relatórios assíncronos com exportação segura e trilha de auditoria.</li>
+        <li>Criar mecanismo de custom objects por tenant sem quebrar performance do core.</li>
+        <li>Desenvolver busca unificada global (contatos, empresas, conversas, tarefas, documentos).</li>
+        <li>Implementar governança de dados: catálogo, lineage, qualidade e contrato de dados.</li>
+        <li>Adicionar testes de caos periódicos para validar resiliência em falhas reais.</li>
+        <li>Construir programa de performance engineering contínuo (custo por request e por feature).</li>
+        <li>Institucionalizar Architecture Fitness Functions no CI para manter qualidade ao escalar.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2>4) Prompts Especializados para IA (CODEX, Jules, Claude)</h2>
+
+      <h3>Prompt para CODEX (execução técnica orientada a commit)</h3>
+      <pre>Você é o engenheiro principal do monorepo Sales Prospector Catarina IA. Objetivo: executar um plano de hardening em produção com PRs pequenos e seguros.
+
+Contexto obrigatório:
+- Backend: NestJS + Prisma + PostgreSQL + módulos de auth, sales, billing, AI e webhooks.
+- Frontend: React + Zustand.
+- Requisito crítico: isolamento multi-tenant e segurança de autenticação.
+
+Tarefa desta execução:
+1) Corrigir autenticação para remover login mock e validar identidade real via provider externo (JWT/OIDC).
+2) Aplicar guard de tenant consistente com claim de organização no token.
+3) Adicionar testes automatizados cobrindo: acesso permitido, acesso negado cross-tenant, token inválido.
+4) Entregar migração e documentação operacional.
+
+Restrições de implementação:
+- Não usar placeholders.
+- Não quebrar endpoints públicos sem versionamento.
+- Criar commits atômicos com mensagens convencionais.
+
+Formato de saída:
+- Plano objetivo em passos.
+- Lista exata de arquivos alterados.
+- Diff resumido por arquivo.
+- Comandos de validação executados e resultado.
+- Riscos residuais e plano de rollback.</pre>
+
+      <h3>Prompt para Jules (otimização de fluxo e product engineering)</h3>
+      <pre>Atue como Staff Product Engineer focado em acelerar entrega com qualidade no SaaS Sales Prospector Catarina IA.
+
+Missão:
+Desenhar e implementar uma trilha de evolução em 3 sprints para aumentar conversão e confiabilidade.
+
+Sprint 1 (fundação):
+- API client tipado no frontend com tratamento unificado de erro.
+- Estados de loading/skeleton/empty consistentes.
+- Instrumentação de eventos de funil (captura, qualificação, contato, reunião, ganho).
+
+Sprint 2 (escala):
+- Fila assíncrona para tarefas pesadas.
+- Idempotência em webhooks e billing.
+- Dashboard de latência p95 e taxa de erro por rota.
+
+Sprint 3 (inteligência):
+- RAG melhorado com chunking semântico e threshold configurável.
+- Re-ranking híbrido para respostas mais precisas.
+- Medição de custo de IA por tenant e por recurso.
+
+Entregáveis exigidos:
+- Backlog priorizado (impacto x esforço x risco).
+- Critérios de aceite mensuráveis.
+- Plano de rollout com feature flags e rollback.
+- Métricas de sucesso por sprint (baseline e meta).</pre>
+
+      <h3>Prompt para Claude (arquitetura, segurança e governança)</h3>
+      <pre>Você é Principal Architect & Security Lead avaliando o monorepo Sales Prospector Catarina IA para readiness enterprise global.
+
+Produza:
+1) Arquitetura alvo em texto (contexto C4 + fluxos de dados + fronteiras de confiança).
+2) Threat model STRIDE com priorização por probabilidade x impacto.
+3) Plano de compliance pragmático (LGPD, SOC2) com controles técnicos e evidências.
+4) Estratégia de dados multi-tenant (RLS, criptografia, retenção, deleção, auditoria).
+5) SLO/SLI e plano de confiabilidade operacional (on-call, runbooks, postmortem).
+
+Regras rígidas:
+- Sem generalidades: para cada recomendação, inclua mecanismo técnico concreto.
+- Para cada risco crítico, inclua mitigação, dono, prazo e métrica de fechamento.
+- Estruture como documento executivo para aprovação de comitê técnico em 30 minutos.</pre>
+    </div>
+
+    <div class="card">
+      <h2>5) Parecer Final (honesto e direto)</h2>
+      <p>O projeto tem fundamentos promissores: stack moderna, estrutura modular inicial, visão de IA aplicada ao processo comercial e preocupação inicial com tenant/billing. Porém, no estado atual, ainda não está pronto para escala SaaS global sem risco operacional e de segurança. O salto de qualidade virá ao tratar autenticação real, isolamento multi-tenant, observabilidade profunda, disciplina de entrega e monetização metered como prioridades absolutas. Execute os 100 pontos em ondas curtas, com métricas duras e governança técnica semanal.</p>
+    </div>
+  </div>
+</body>
+</html>
