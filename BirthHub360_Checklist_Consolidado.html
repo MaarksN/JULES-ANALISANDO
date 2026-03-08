@@ -1,0 +1,2092 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BirthHub360 - Checklist Consolidado de 100 Itens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #080c10;
+  --bg2:      #0d1117;
+  --bg3:      #111820;
+  --border:   #1a2535;
+  --border2:  #243040;
+  --red:      #ff3b3b;
+  --red-dim:  #3a1010;
+  --red-mid:  #7a2020;
+  --yellow:   #f0b429;
+  --yellow-dim:#2e2000;
+  --yellow-mid:#5a3d00;
+  --green:    #2ecc71;
+  --green-dim:#072014;
+  --green-mid:#0e4a28;
+  --jules:    #4fc3f7;
+  --jules-dim:#092436;
+  --codex:    #ce93d8;
+  --codex-dim:#1e0928;
+  --muted:    #3a4a5a;
+  --text:     #c8d8e8;
+  --text2:    #6a8aaa;
+  --glow-r:   0 0 20px rgba(255,59,59,0.3);
+  --glow-y:   0 0 20px rgba(240,180,41,0.3);
+  --glow-g:   0 0 20px rgba(46,204,113,0.3);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── SCANLINES OVERLAY ── */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── HEADER ── */
+.masthead {
+  background: linear-gradient(135deg, #050810 0%, #0a1520 50%, #050810 100%);
+  border-bottom: 1px solid var(--border2);
+  padding: 40px 40px 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.masthead::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 100% at 80% 50%, rgba(79,195,247,0.06) 0%, transparent 70%),
+              radial-gradient(ellipse 40% 80% at 20% 50%, rgba(206,147,216,0.04) 0%, transparent 70%);
+}
+
+.masthead-inner { position: relative; z-index: 1; }
+
+.sys-line {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  margin-bottom: 16px;
+}
+
+.sys-line .blink { animation: blink 1.2s step-end infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.master-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: 0.9;
+  letter-spacing: 0.03em;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.master-title span.accent { color: var(--yellow); }
+
+.master-sub {
+  font-size: 12px;
+  color: var(--text2);
+  letter-spacing: 0.1em;
+  margin-bottom: 30px;
+}
+
+/* ── LEGEND ── */
+.legend {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text2);
+  letter-spacing: 0.1em;
+}
+
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-dot.red { background: var(--red); box-shadow: var(--glow-r); }
+.legend-dot.yellow { background: var(--yellow); box-shadow: var(--glow-y); }
+.legend-dot.green { background: var(--green); box-shadow: var(--glow-g); }
+.legend-dot.jules { background: var(--jules); }
+.legend-dot.codex { background: var(--codex); }
+
+.legend-sep { color: var(--border2); margin: 0 5px; }
+
+/* ── STATS BAR ── */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-bottom: 1px solid var(--border);
+}
+
+.stat-block {
+  padding: 20px 24px;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+
+.stat-block:last-child { border-right: none; }
+
+.stat-label {
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.stat-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  line-height: 1;
+  color: #fff;
+}
+
+.stat-val.red { color: var(--red); }
+.stat-val.yellow { color: var(--yellow); }
+.stat-val.green { color: var(--green); }
+
+.stat-bar-track {
+  height: 3px;
+  background: var(--border);
+  margin-top: 8px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.stat-bar-fill.red { background: var(--red); }
+.stat-bar-fill.yellow { background: var(--yellow); }
+.stat-bar-fill.green { background: var(--green); }
+
+/* ── TOOLBAR ── */
+.toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 14px 40px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.toolbar-label {
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+
+.filter-btn {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.filter-btn:hover {
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+
+.filter-btn.active {
+  background: var(--yellow);
+  border-color: var(--yellow);
+  color: var(--bg);
+  font-weight: 700;
+}
+
+.filter-btn.active.jules-btn { background: var(--jules); border-color: var(--jules); color: var(--bg); }
+.filter-btn.active.codex-btn { background: var(--codex); border-color: var(--codex); color: var(--bg); }
+.filter-btn.active.red-btn { background: var(--red); border-color: var(--red); color: #fff; }
+.filter-btn.active.yellow-btn { background: var(--yellow); border-color: var(--yellow); color: var(--bg); }
+.filter-btn.active.green-btn { background: var(--green); border-color: var(--green); color: var(--bg); }
+
+.toolbar-sep { width: 1px; height: 20px; background: var(--border); margin: 0 6px; }
+
+.reset-btn {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--red-mid);
+  color: var(--red);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.1em;
+}
+
+.reset-btn:hover { background: var(--red-dim); }
+
+/* ── PHASE 0 ── */
+.phase-zero {
+  margin: 30px 40px;
+  border: 1px solid var(--yellow);
+  background: linear-gradient(135deg, #0a0c00 0%, #0d1000 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.phase-zero::before {
+  content: 'FASE 0';
+  position: absolute;
+  right: 30px; top: 20px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 80px;
+  color: rgba(240,180,41,0.05);
+  line-height: 1;
+}
+
+.phase-zero-header {
+  padding: 20px 28px 16px;
+  border-bottom: 1px solid rgba(240,180,41,0.3);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.phase-tag {
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  padding: 3px 10px;
+  text-transform: uppercase;
+}
+
+.phase-tag.yellow { background: var(--yellow-dim); color: var(--yellow); border: 1px solid var(--yellow-mid); }
+.phase-tag.red { background: var(--red-dim); color: var(--red); border: 1px solid var(--red-mid); }
+
+.phase-zero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  color: var(--yellow);
+  letter-spacing: 0.1em;
+}
+
+.phase-zero-body { padding: 24px 28px; }
+
+.phase-zero-desc {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 20px;
+  max-width: 700px;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.project-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 14px;
+}
+
+.project-card-num {
+  font-size: 9px;
+  color: var(--yellow);
+  letter-spacing: 0.2em;
+  margin-bottom: 4px;
+}
+
+.project-card-name {
+  font-size: 11px;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+
+.project-card-repo {
+  font-size: 9px;
+  color: var(--muted);
+  word-break: break-all;
+}
+
+.code-block {
+  background: #020408;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--yellow);
+  padding: 20px 24px;
+  font-size: 12px;
+  line-height: 1.9;
+  overflow-x: auto;
+}
+
+.code-block .comment { color: #2a4a2a; }
+.code-block .cmd { color: var(--green); }
+.code-block .arg { color: var(--jules); }
+.code-block .str { color: var(--yellow); }
+.code-block .section { color: var(--yellow); font-size: 11px; letter-spacing: 0.2em; border-top: 1px solid #1a2010; padding-top: 12px; margin-top: 8px; }
+
+/* ── MAIN CONTENT ── */
+.main { padding: 0 40px 40px; }
+
+/* ── CYCLE BLOCK ── */
+.cycle-block {
+  margin-top: 24px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+}
+
+.cycle-block.hidden { display: none; }
+
+.cycle-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+  user-select: none;
+}
+
+.cycle-header:hover { background: #131d28; }
+
+.cycle-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  color: var(--muted);
+  line-height: 1;
+  min-width: 50px;
+}
+
+.cycle-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.03em;
+}
+
+.cycle-subtitle {
+  font-size: 10px;
+  color: var(--text2);
+  letter-spacing: 0.1em;
+  margin-top: 2px;
+}
+
+.cycle-agents {
+  display: flex;
+  gap: 6px;
+}
+
+.agent-pip {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.agent-pip.jules { background: var(--jules-dim); color: var(--jules); border: 1px solid rgba(79,195,247,0.3); }
+.agent-pip.codex { background: var(--codex-dim); color: var(--codex); border: 1px solid rgba(206,147,216,0.3); }
+
+.cycle-progress {
+  width: 100px;
+  text-align: right;
+}
+
+.cycle-progress-bar {
+  height: 2px;
+  background: var(--border);
+  border-radius: 1px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.cycle-progress-fill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 1px;
+  transition: width 0.4s ease;
+}
+
+.cycle-toggle {
+  font-size: 9px;
+  color: var(--muted);
+  transition: transform 0.2s;
+}
+
+.cycle-block.collapsed .cycle-toggle { transform: rotate(-90deg); }
+
+.cycle-items { padding: 4px 0; }
+.cycle-block.collapsed .cycle-items { display: none; }
+
+/* ── ITEM ROW ── */
+.item-row {
+  display: grid;
+  grid-template-columns: 28px 40px 60px 1fr auto auto;
+  align-items: start;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(26,37,53,0.5);
+  cursor: pointer;
+  transition: background 0.1s;
+  position: relative;
+}
+
+.item-row:last-child { border-bottom: none; }
+.item-row:hover { background: rgba(255,255,255,0.02); }
+
+.item-row.filter-hidden { display: none; }
+
+/* Status states */
+.item-row[data-status="red"] { border-left: 3px solid var(--red); }
+.item-row[data-status="yellow"] { border-left: 3px solid var(--yellow); }
+.item-row[data-status="green"] { border-left: 3px solid var(--green); }
+
+/* Background tints */
+.item-row[data-status="red"] { background: rgba(255,59,59,0.025); }
+.item-row[data-status="yellow"] { background: rgba(240,180,41,0.025); }
+.item-row[data-status="green"] { background: rgba(46,204,113,0.02); }
+
+.item-num {
+  font-size: 10px;
+  color: var(--muted);
+  padding-top: 2px;
+}
+
+.item-status-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-top: 3px;
+  flex-shrink: 0;
+  transition: box-shadow 0.2s, background 0.2s;
+  cursor: pointer;
+}
+
+.item-row[data-status="red"] .item-status-dot {
+  background: var(--red);
+  box-shadow: var(--glow-r);
+}
+
+.item-row[data-status="yellow"] .item-status-dot {
+  background: var(--yellow);
+  box-shadow: var(--glow-y);
+}
+
+.item-row[data-status="green"] .item-status-dot {
+  background: var(--green);
+  box-shadow: var(--glow-g);
+}
+
+.item-agent {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  padding: 2px 7px;
+  text-transform: uppercase;
+  align-self: start;
+  margin-top: 1px;
+}
+
+.item-agent.jules { color: var(--jules); background: var(--jules-dim); border: 1px solid rgba(79,195,247,0.2); }
+.item-agent.codex { color: var(--codex); background: var(--codex-dim); border: 1px solid rgba(206,147,216,0.2); }
+
+.item-content { flex: 1; min-width: 0; }
+
+.item-title {
+  font-size: 12px;
+  color: #e0eef8;
+  font-weight: 600;
+  line-height: 1.4;
+  transition: color 0.2s;
+}
+
+.item-row[data-status="green"] .item-title {
+  color: rgba(46,204,113,0.7);
+  text-decoration: line-through;
+  text-decoration-color: rgba(46,204,113,0.3);
+}
+
+.item-desc {
+  font-size: 11px;
+  color: var(--text2);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.item-prompt {
+  font-size: 10px;
+  color: #3a5a3a;
+  margin-top: 6px;
+  padding: 8px 12px;
+  background: #020802;
+  border-left: 2px solid #1a3a1a;
+  display: none;
+  line-height: 1.7;
+}
+
+.item-row.expanded .item-prompt { display: block; }
+
+.item-prompt .prompt-label {
+  font-size: 9px;
+  color: #2a4a2a;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.item-prompt .prompt-text { color: var(--green); }
+
+.item-project {
+  font-size: 9px;
+  color: var(--muted);
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  align-self: start;
+}
+
+.item-expand {
+  font-size: 9px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px 6px;
+  align-self: start;
+  transition: color 0.15s;
+}
+
+.item-expand:hover { color: var(--yellow); }
+.item-row.expanded .item-expand { color: var(--yellow); }
+
+/* Status label tooltip */
+.item-status-label {
+  position: absolute;
+  top: -24px;
+  left: 50px;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  font-size: 9px;
+  color: var(--text2);
+  padding: 2px 8px;
+  letter-spacing: 0.1em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.item-row:hover .item-status-label { opacity: 1; }
+
+/* ── PROJECT PROGRESS SIDEBAR ── */
+.progress-sidebar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin: 20px 40px;
+}
+
+.proj-progress-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 16px;
+}
+
+.proj-progress-name {
+  font-size: 10px;
+  color: var(--text2);
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.proj-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.proj-bar-label {
+  font-size: 9px;
+  width: 14px;
+  flex-shrink: 0;
+}
+
+.proj-bar-label.r { color: var(--red); }
+.proj-bar-label.y { color: var(--yellow); }
+.proj-bar-label.g { color: var(--green); }
+
+.proj-bar-track {
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.proj-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.proj-bar-count {
+  font-size: 10px;
+  width: 20px;
+  text-align: right;
+}
+
+.proj-bar-count.r { color: var(--red); }
+.proj-bar-count.y { color: var(--yellow); }
+.proj-bar-count.g { color: var(--green); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1000px) {
+  .stats-bar { grid-template-columns: repeat(3, 1fr); }
+  .projects-grid { grid-template-columns: repeat(2, 1fr); }
+  .progress-sidebar { grid-template-columns: repeat(2, 1fr); }
+  .item-row { grid-template-columns: 28px 14px 60px 1fr auto; }
+}
+
+@media (max-width: 700px) {
+  .masthead, .main { padding-left: 16px; padding-right: 16px; }
+  .phase-zero { margin: 16px; }
+  .master-title { font-size: 48px; }
+  .stats-bar { grid-template-columns: 1fr 1fr; }
+  .progress-sidebar { grid-template-columns: 1fr; margin: 16px; }
+  .item-row { grid-template-columns: 20px 14px 1fr auto; gap: 8px; }
+  .item-agent { display: none; }
+  .item-project { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════ MASTHEAD ══════ -->
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="sys-line">
+      <span>// SYSTEM BOOT 2026 ·</span>
+      <span class="blink">█</span>
+      <span> MASTER IMPLEMENTATION PROMPT LOADED · BIRTHUB 360 · 100 ITEMS · 20 CYCLES</span>
+    </div>
+    <h1 class="master-title">MASTER<br>PROMPT<br><span class="accent">IMPL.</span></h1>
+    <p class="master-sub">// 100 ITENS · 20 CICLOS · JULES + CODEX · BIRTHUB 360 · FASE 0 = GITHUB SETUP</p>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot red"></span> NÃO IMPLEMENTADO</div>
+      <div class="legend-item"><span class="legend-dot yellow"></span> IMPLEMENTADO — PRECISA MELHORIA</div>
+      <div class="legend-item"><span class="legend-dot green"></span> PRONTO PARA PRODUÇÃO</div>
+      <span class="legend-sep">|</span>
+      <div class="legend-item"><span class="legend-dot jules"></span> JULES</div>
+      <div class="legend-item"><span class="legend-dot codex"></span> CODEX</div>
+      <span class="legend-sep">|</span>
+      <div class="legend-item" style="color:var(--text2); font-size:10px;">▸ Clique no item para ver o prompt · Clique no ● para mudar status</div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════ STATS BAR ══════ -->
+<div class="stats-bar">
+  <div class="stat-block">
+    <div class="stat-label">// Total Items</div>
+    <div class="stat-val" id="stat-total">100</div>
+    <div class="stat-bar-track"><div class="stat-bar-fill green" style="width:100%"></div></div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-label">// Não Impl. ●</div>
+    <div class="stat-val red" id="stat-red">100</div>
+    <div class="stat-bar-track"><div class="stat-bar-fill red" id="bar-red" style="width:100%"></div></div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-label">// Em Melhoria ●</div>
+    <div class="stat-val yellow" id="stat-yellow">0</div>
+    <div class="stat-bar-track"><div class="stat-bar-fill yellow" id="bar-yellow" style="width:0%"></div></div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-label">// Prontos ●</div>
+    <div class="stat-val green" id="stat-green">0</div>
+    <div class="stat-bar-track"><div class="stat-bar-fill green" id="bar-green" style="width:0%"></div></div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-label">// Progresso</div>
+    <div class="stat-val" id="stat-pct">0%</div>
+    <div class="stat-bar-track"><div class="stat-bar-fill green" id="bar-pct" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- ══════ TOOLBAR ══════ -->
+<div class="toolbar">
+  <span class="toolbar-label">Projeto</span>
+  <button class="filter-btn active" data-filter-type="project" data-filter-val="all">TODOS</button>
+  <div class="toolbar-sep"></div>
+  <span class="toolbar-label">Agente</span>
+  <button class="filter-btn jules-btn" data-filter-type="agent" data-filter-val="all-agent">TODOS</button>
+  <button class="filter-btn jules-btn" data-filter-type="agent" data-filter-val="jules">JULES</button>
+  <button class="filter-btn codex-btn" data-filter-type="agent" data-filter-val="codex">CODEX</button>
+  <div class="toolbar-sep"></div>
+  <span class="toolbar-label">Status</span>
+  <button class="filter-btn red-btn" data-filter-type="status" data-filter-val="all-status">TODOS</button>
+  <button class="filter-btn red-btn" data-filter-type="status" data-filter-val="red">🔴 NÃO IMPL.</button>
+  <button class="filter-btn yellow-btn" data-filter-type="status" data-filter-val="yellow">🟡 MELHORIA</button>
+  <button class="filter-btn green-btn" data-filter-type="status" data-filter-val="green">🟢 PRONTO</button>
+  <button class="reset-btn" onclick="resetAll()">↺ RESET TUDO</button>
+</div>
+
+<!-- ══════ PHASE 0 ══════ -->
+<div class="phase-zero">
+  <div class="phase-zero-header">
+    <span class="phase-tag yellow">FASE 0</span>
+    <span class="phase-tag red">PRÉ-REQUISITO</span>
+    <span class="phase-zero-title">SETUP DO GITHUB — LER ZIP E CRIAR REPOSITÓRIO</span>
+  </div>
+  <div class="phase-zero-body">
+    <p class="phase-zero-desc">
+      Antes de qualquer ciclo de implementação, o projeto BirtHub 360 deve estar em um repositório separado no GitHub com histórico limpo.
+      O agente deve ler os arquivos ZIP, extrair o conteúdo, criar o repo, fazer o commit inicial e configurar proteção de branches.
+      <strong style="color:var(--yellow)">Este passo é bloqueante — nenhum ciclo começa sem ele.</strong>
+    </p>
+    <div class="projects-grid" style="grid-template-columns: 1fr; max-width: 300px;">
+      <div class="project-card">
+        <div class="project-card-num">PROJ 01</div>
+        <div class="project-card-name">BirtHub 360</div>
+        <div class="project-card-repo">github.com/org/birthub-360-revops</div>
+      </div>
+    </div>
+    <div class="code-block">
+<span class="comment"># ═══════════════════════════════════════════════════════════════════</span>
+<span class="comment"># PROMPT PARA JULES — FASE 0: GITHUB SETUP COMPLETO</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════════</span>
+
+<span class="section">## INSTRUÇÃO PARA JULES — FASE 0</span>
+
+<span class="comment">Você vai configurar o repositório GitHub para o BirtHub 360.</span>
+<span class="comment">Execute EXATAMENTE na ordem descrita. Confirme cada etapa antes de avançar.</span>
+
+<span class="section">### PASSO 1 — EXTRAIR O ZIP</span>
+
+<span class="cmd">unzip</span> <span class="str">"SAAS-BIRTHUB-AGENTES-360.zip"</span> -d <span class="str">"./extracted/"</span>
+
+<span class="section">### PASSO 2 — CRIAR REPO VIA GITHUB CLI</span>
+
+<span class="cmd">gh repo create</span> <span class="str">birthub-360-revops</span> --private --description <span class="str">"Revenue Operations · 8 Agentes IA · LangGraph · Monorepo"</span>
+
+<span class="section">### PASSO 3 — COMMIT INICIAL</span>
+
+<span class="cmd">cd</span> extracted/SAAS-BIRTHUB-AGENTES-360
+<span class="cmd">git init</span> && <span class="cmd">git add</span> . && <span class="cmd">git commit</span> -m <span class="str">"feat: initial commit from ZIP — v0.0.1"</span>
+<span class="cmd">git remote add origin</span> <span class="arg">https://github.com/org/birthub-360-revops.git</span>
+<span class="cmd">git push</span> -u origin main
+
+<span class="section">### PASSO 4 — BRANCH PROTECTION</span>
+
+<span class="cmd">gh api</span> repos/org/<span class="arg">birthub-360-revops</span>/branches/main/protection \
+  -X PUT -f required_status_checks=null \
+  -f enforce_admins=false \
+  -F required_pull_request_reviews.required_approving_review_count=1
+
+<span class="section">### PASSO 5 — CRIAR CHECKLIST ISSUE NO GITHUB</span>
+
+<span class="cmd">gh issue create</span> --title <span class="str">"🗺️ MASTER CHECKLIST — 100 Itens de Implementação"</span> \
+  --body <span class="str">"@see: BirthHub360_Checklist_Consolidado.html"</span> \
+  --label <span class="str">"roadmap,meta"</span>
+
+<span class="section">### VALIDAÇÃO FINAL</span>
+<span class="comment"># Confirme que o repo existe e tem o código correto:</span>
+<span class="cmd">gh repo list</span> --limit 1
+<span class="comment"># Esperado: 1 repo listado com commits recentes</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MAIN CYCLES ══════ -->
+<div class="main" id="cycles-container"></div>
+
+<footer style="background:var(--bg2);border-top:1px solid var(--border);padding:20px 40px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--muted);letter-spacing:0.15em;">
+  <span>// MASTER PROMPT · 100 ITENS · 20 CICLOS · JULES + CODEX · 2026</span>
+  <span id="footer-ts"></span>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA — 100 ITEMS IN 20 CYCLES (5 ITEMS EACH)
+// ═══════════════════════════════════════════════════════
+
+const CYCLES = [
+    {
+        "num": "C01",
+        "title": "Ciclo de Implementação BirtHub 1",
+        "subtitle": "Fase de estabilização e melhorias 1",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 1,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Implementar camada real de casos de uso no API Gateway (CRUD + regras de negócio por domínio).",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar camada real de casos de uso no API Gateway (CRUD + regras de negócio por domínio)."
+            },
+            {
+                "id": 2,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Ligar rotas do gateway ao banco (Prisma) e/ou serviços internos.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Ligar rotas do gateway ao banco (Prisma) e/ou serviços internos."
+            },
+            {
+                "id": 3,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Implementar fluxos completos no orquestrador além do `LEAD_LIFECYCLE`.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar fluxos completos no orquestrador além do `LEAD_LIFECYCLE`."
+            },
+            {
+                "id": 4,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Substituir mocks por integrações reais nas funções críticas dos agentes (calendar, transcrição, pagamentos, assinatura etc.).",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Substituir mocks por integrações reais nas funções críticas dos agentes (calendar, transcrição, pagamentos, assinatura etc.)."
+            },
+            {
+                "id": 5,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Construir o dashboard operacional completo (pipeline, saúde de clientes, financeiro, analytics, contratos e logs de agentes).",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Construir o dashboard operacional completo (pipeline, saúde de clientes, financeiro, analytics, contratos e logs de agentes)."
+            }
+        ]
+    },
+    {
+        "num": "C02",
+        "title": "Ciclo de Implementação BirtHub 2",
+        "subtitle": "Fase de estabilização e melhorias 2",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 6,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Executar e validar migrations em ambientes de dev/staging/prod.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Executar e validar migrations em ambientes de dev/staging/prod."
+            },
+            {
+                "id": 7,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Consolidar seed de dados útil para QA/demo.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Consolidar seed de dados útil para QA/demo."
+            },
+            {
+                "id": 8,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Definir versionamento e governança de schema (compatibilidade retroativa e estratégia de rollout).",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Definir versionamento e governança de schema (compatibilidade retroativa e estratégia de rollout)."
+            },
+            {
+                "id": 9,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Implementar clients robustos para Stripe, Pagar.me, Asaas, Focus NFe, Clicksign, DocuSign, HubSpot, Pipedrive, Resend e APIs de Ads.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar clients robustos para Stripe, Pagar.me, Asaas, Focus NFe, Clicksign, DocuSign, HubSpot, Pipedrive, Resend e APIs de Ads."
+            },
+            {
+                "id": 10,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Padronizar autenticação, retries, idempotência e tratamento de rate limit em todos os conectores.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Padronizar autenticação, retries, idempotência e tratamento de rate limit em todos os conectores."
+            }
+        ]
+    },
+    {
+        "num": "C03",
+        "title": "Ciclo de Implementação BirtHub 3",
+        "subtitle": "Fase de estabilização e melhorias 3",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 11,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Completar execução de jobs agendados (cron) e workers em produção.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Completar execução de jobs agendados (cron) e workers em produção."
+            },
+            {
+                "id": 12,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Implementar observabilidade ponta a ponta (métricas, logs estruturados, tracing e alertas acionáveis).",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar observabilidade ponta a ponta (métricas, logs estruturados, tracing e alertas acionáveis)."
+            },
+            {
+                "id": 13,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Elevar cobertura de testes para níveis de produção e reduzir testes placeholder.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Elevar cobertura de testes para níveis de produção e reduzir testes placeholder."
+            },
+            {
+                "id": 14,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Definir contratos internos (input/output) mais rígidos entre gateway, orquestrador e agentes.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Definir contratos internos (input/output) mais rígidos entre gateway, orquestrador e agentes."
+            },
+            {
+                "id": 15,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Reduzir acoplamento entre ferramentas de agente e providers externos via adapters.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Reduzir acoplamento entre ferramentas de agente e providers externos via adapters."
+            }
+        ]
+    },
+    {
+        "num": "C04",
+        "title": "Ciclo de Implementação BirtHub 4",
+        "subtitle": "Fase de estabilização e melhorias 4",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 16,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Introduzir políticas de timeout/circuit breaker/retry consistentes em toda chamada externa.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Introduzir políticas de timeout/circuit breaker/retry consistentes em toda chamada externa."
+            },
+            {
+                "id": 17,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Fortalecer segurança (RBAC, segredo por ambiente, auditoria de ações sensíveis, validação de webhook assinada por provedor).",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Fortalecer segurança (RBAC, segredo por ambiente, auditoria de ações sensíveis, validação de webhook assinada por provedor)."
+            },
+            {
+                "id": 18,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Melhorar DX com scripts de bootstrap local e checks automatizados mais completos no CI.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Melhorar DX com scripts de bootstrap local e checks automatizados mais completos no CI."
+            },
+            {
+                "id": 19,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Melhorar qualidade de código com mais validação de entrada, erros tipados e convenções de logging.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Melhorar qualidade de código com mais validação de entrada, erros tipados e convenções de logging."
+            },
+            {
+                "id": 20,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Criar critérios de pronto (DoD) por domínio para evitar “feature marcada como pronta” sem validação de produção.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Criar critérios de pronto (DoD) por domínio para evitar “feature marcada como pronta” sem validação de produção."
+            }
+        ]
+    },
+    {
+        "num": "C05",
+        "title": "Ciclo de Implementação BirtHub 5",
+        "subtitle": "Fase de estabilização e melhorias 5",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 21,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Definir roadmap trimestral por domínio (Marketing, SDR, AE, CS, Financeiro, Jurídico, BI).",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Definir roadmap trimestral por domínio (Marketing, SDR, AE, CS, Financeiro, Jurídico, BI)."
+            },
+            {
+                "id": 22,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Definir RFC template para mudanças arquiteturais.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Definir RFC template para mudanças arquiteturais."
+            },
+            {
+                "id": 23,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Criar matriz de criticidade por serviço.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Criar matriz de criticidade por serviço."
+            },
+            {
+                "id": 24,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Mapear SLO/SLI por serviço (latência, disponibilidade, erro).",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Mapear SLO/SLI por serviço (latência, disponibilidade, erro)."
+            },
+            {
+                "id": 25,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Formalizar versionamento de APIs (externa e interna).",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Formalizar versionamento de APIs (externa e interna)."
+            }
+        ]
+    },
+    {
+        "num": "C06",
+        "title": "Ciclo de Implementação BirtHub 6",
+        "subtitle": "Fase de estabilização e melhorias 6",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 26,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Padronizar contrato de erros entre serviços.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Padronizar contrato de erros entre serviços."
+            },
+            {
+                "id": 27,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Criar padrão único de correlação (`trace_id`, `request_id`, `job_id`).",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Criar padrão único de correlação (`trace_id`, `request_id`, `job_id`)."
+            },
+            {
+                "id": 28,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Implementar policy de backward compatibility para eventos e payloads.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar policy de backward compatibility para eventos e payloads."
+            },
+            {
+                "id": 29,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Definir regras de depreciação de endpoints.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Definir regras de depreciação de endpoints."
+            },
+            {
+                "id": 30,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Criar catálogo de serviços e dependências.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Criar catálogo de serviços e dependências."
+            }
+        ]
+    },
+    {
+        "num": "C07",
+        "title": "Ciclo de Implementação BirtHub 7",
+        "subtitle": "Fase de estabilização e melhorias 7",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 31,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Especificar limites de payload por endpoint.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Especificar limites de payload por endpoint."
+            },
+            {
+                "id": 32,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Implementar validação schema-first para payloads críticos.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar validação schema-first para payloads críticos."
+            },
+            {
+                "id": 33,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Criar guardrails para uso de features experimentais.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Criar guardrails para uso de features experimentais."
+            },
+            {
+                "id": 34,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Definir ownership técnico por pasta/serviço.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Definir ownership técnico por pasta/serviço."
+            },
+            {
+                "id": 35,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Criar runbook operacional por incidente crítico.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Criar runbook operacional por incidente crítico."
+            }
+        ]
+    },
+    {
+        "num": "C08",
+        "title": "Ciclo de Implementação BirtHub 8",
+        "subtitle": "Fase de estabilização e melhorias 8",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 36,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Substituir handlers `ok(...)` por serviços reais.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Substituir handlers `ok(...)` por serviços reais."
+            },
+            {
+                "id": 37,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Implementar camada de service/repository no gateway.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar camada de service/repository no gateway."
+            },
+            {
+                "id": 38,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Conectar rotas de leads ao banco com paginação e filtros.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Conectar rotas de leads ao banco com paginação e filtros."
+            },
+            {
+                "id": 39,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Conectar rotas de deals com transições válidas de estágio.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Conectar rotas de deals com transições válidas de estágio."
+            },
+            {
+                "id": 40,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Implementar rotas de customers com dados de saúde reais.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar rotas de customers com dados de saúde reais."
+            }
+        ]
+    },
+    {
+        "num": "C09",
+        "title": "Ciclo de Implementação BirtHub 9",
+        "subtitle": "Fase de estabilização e melhorias 9",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 41,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Implementar rotas financeiras com consolidação real.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar rotas financeiras com consolidação real."
+            },
+            {
+                "id": 42,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Implementar rotas de contratos com persistência e versionamento.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar rotas de contratos com persistência e versionamento."
+            },
+            {
+                "id": 43,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Implementar rotas de analytics com consultas agregadas reais.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar rotas de analytics com consultas agregadas reais."
+            },
+            {
+                "id": 44,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Implementar webhook idempotency key para todos provedores.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar webhook idempotency key para todos provedores."
+            },
+            {
+                "id": 45,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Validar assinatura de webhook por provedor (svix/stripe/docusign etc.).",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Validar assinatura de webhook por provedor (svix/stripe/docusign etc.)."
+            }
+        ]
+    },
+    {
+        "num": "C10",
+        "title": "Ciclo de Implementação BirtHub 10",
+        "subtitle": "Fase de estabilização e melhorias 10",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 46,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Implementar autorização por escopo/role além do JWT básico.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar autorização por escopo/role além do JWT básico."
+            },
+            {
+                "id": 47,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Adicionar limites por rota e por tenant.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Adicionar limites por rota e por tenant."
+            },
+            {
+                "id": 48,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Padronizar erros HTTP com códigos de domínio.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Padronizar erros HTTP com códigos de domínio."
+            },
+            {
+                "id": 49,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Adicionar testes de contrato OpenAPI para endpoints críticos.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Adicionar testes de contrato OpenAPI para endpoints críticos."
+            },
+            {
+                "id": 50,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Publicar documentação operacional de uso da API.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Publicar documentação operacional de uso da API."
+            }
+        ]
+    },
+    {
+        "num": "C11",
+        "title": "Ciclo de Implementação BirtHub 11",
+        "subtitle": "Fase de estabilização e melhorias 11",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 51,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Implementar fluxos DEAL_CLOSED_WON de forma executável (não textual).",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar fluxos DEAL_CLOSED_WON de forma executável (não textual)."
+            },
+            {
+                "id": 52,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Implementar fluxo HEALTH_ALERT executável.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar fluxo HEALTH_ALERT executável."
+            },
+            {
+                "id": 53,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Implementar fluxo CHURN_RISK_HIGH executável.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar fluxo CHURN_RISK_HIGH executável."
+            },
+            {
+                "id": 54,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Implementar fluxo BOARD_REPORT executável com agendamento.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar fluxo BOARD_REPORT executável com agendamento."
+            },
+            {
+                "id": 55,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Remover blocos `pass` e exceções silenciosas.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Remover blocos `pass` e exceções silenciosas."
+            }
+        ]
+    },
+    {
+        "num": "C12",
+        "title": "Ciclo de Implementação BirtHub 12",
+        "subtitle": "Fase de estabilização e melhorias 12",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 56,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Adicionar retries com backoff nos nós do grafo.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Adicionar retries com backoff nos nós do grafo."
+            },
+            {
+                "id": 57,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Persistir estado intermediário dos fluxos.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Persistir estado intermediário dos fluxos."
+            },
+            {
+                "id": 58,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Implementar DLQ (dead-letter queue) para jobs falhos.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar DLQ (dead-letter queue) para jobs falhos."
+            },
+            {
+                "id": 59,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Implementar reprocessamento manual de jobs.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar reprocessamento manual de jobs."
+            },
+            {
+                "id": 60,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Definir prioridade por tipo de evento.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Definir prioridade por tipo de evento."
+            }
+        ]
+    },
+    {
+        "num": "C13",
+        "title": "Ciclo de Implementação BirtHub 13",
+        "subtitle": "Fase de estabilização e melhorias 13",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 61,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Medir throughput e tempo médio por fluxo.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Medir throughput e tempo médio por fluxo."
+            },
+            {
+                "id": 62,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Adicionar idempotência por evento recebido.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Adicionar idempotência por evento recebido."
+            },
+            {
+                "id": 63,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Isolar filas por tenant/plano quando necessário.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Isolar filas por tenant/plano quando necessário."
+            },
+            {
+                "id": 64,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Adicionar cancelamento de execução em workflows longos.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Adicionar cancelamento de execução em workflows longos."
+            },
+            {
+                "id": 65,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Criar painel operacional de jobs/falhas.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Criar painel operacional de jobs/falhas."
+            }
+        ]
+    },
+    {
+        "num": "C14",
+        "title": "Ciclo de Implementação BirtHub 14",
+        "subtitle": "Fase de estabilização e melhorias 14",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 66,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Padronizar formato de output de ferramentas entre todos agentes.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Padronizar formato de output de ferramentas entre todos agentes."
+            },
+            {
+                "id": 67,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Implementar validação estrita de entrada em cada `tools.py`.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar validação estrita de entrada em cada `tools.py`."
+            },
+            {
+                "id": 68,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Criar fallback consistente quando LLM/provider falhar.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Criar fallback consistente quando LLM/provider falhar."
+            },
+            {
+                "id": 69,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Definir política de timeout por ferramenta.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Definir política de timeout por ferramenta."
+            },
+            {
+                "id": 70,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Adicionar cache de respostas para operações idempotentes.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Adicionar cache de respostas para operações idempotentes."
+            }
+        ]
+    },
+    {
+        "num": "C15",
+        "title": "Ciclo de Implementação BirtHub 15",
+        "subtitle": "Fase de estabilização e melhorias 15",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 71,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Implementar avaliação automática de qualidade das respostas dos agentes.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar avaliação automática de qualidade das respostas dos agentes."
+            },
+            {
+                "id": 72,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Incluir métricas de custo por execução de agente.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Incluir métricas de custo por execução de agente."
+            },
+            {
+                "id": 73,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Implementar controle de versão de prompts por agente.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar controle de versão de prompts por agente."
+            },
+            {
+                "id": 74,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Adicionar testes unitários reais para ferramentas com placeholder.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Adicionar testes unitários reais para ferramentas com placeholder."
+            },
+            {
+                "id": 75,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Melhorar testes de integração multiagente.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Melhorar testes de integração multiagente."
+            }
+        ]
+    },
+    {
+        "num": "C16",
+        "title": "Ciclo de Implementação BirtHub 16",
+        "subtitle": "Fase de estabilização e melhorias 16",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 76,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Implementar transcrição real + sincronização CRM no AE com provider estável.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar transcrição real + sincronização CRM no AE com provider estável."
+            },
+            {
+                "id": 77,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Evoluir `schedule_meeting` para disponibilidade real multi-calendário.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Evoluir `schedule_meeting` para disponibilidade real multi-calendário."
+            },
+            {
+                "id": 78,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Incluir detecção de PII em entradas/saídas dos agentes.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Incluir detecção de PII em entradas/saídas dos agentes."
+            },
+            {
+                "id": 79,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Adicionar redaction de dados sensíveis em logs.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Adicionar redaction de dados sensíveis em logs."
+            },
+            {
+                "id": 80,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Criar sandbox de execução de ferramentas externas.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Criar sandbox de execução de ferramentas externas."
+            }
+        ]
+    },
+    {
+        "num": "C17",
+        "title": "Ciclo de Implementação BirtHub 17",
+        "subtitle": "Fase de estabilização e melhorias 17",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 81,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Definir limites de tokens e budget por tenant.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Definir limites de tokens e budget por tenant."
+            },
+            {
+                "id": 82,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Implementar avaliação offline de prompts (benchmarks internos).",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar avaliação offline de prompts (benchmarks internos)."
+            },
+            {
+                "id": 83,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Introduzir observabilidade por etapa do grafo em cada agente.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Introduzir observabilidade por etapa do grafo em cada agente."
+            },
+            {
+                "id": 84,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Documentar comportamento esperado por ferramenta e edge cases.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Documentar comportamento esperado por ferramenta e edge cases."
+            },
+            {
+                "id": 85,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Criar suíte de regressão para outputs críticos de negócio.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Criar suíte de regressão para outputs críticos de negócio."
+            }
+        ]
+    },
+    {
+        "num": "C18",
+        "title": "Ciclo de Implementação BirtHub 18",
+        "subtitle": "Fase de estabilização e melhorias 18",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 86,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Executar migration inicial em ambiente validado.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Executar migration inicial em ambiente validado."
+            },
+            {
+                "id": 87,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Adicionar migrations incrementais com processo de revisão.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Adicionar migrations incrementais com processo de revisão."
+            },
+            {
+                "id": 88,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Criar índices para consultas críticas (leads/deals/invoices/logs).",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Criar índices para consultas críticas (leads/deals/invoices/logs)."
+            },
+            {
+                "id": 89,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Definir estratégia de particionamento para AgentLog em escala.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Definir estratégia de particionamento para AgentLog em escala."
+            },
+            {
+                "id": 90,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Implementar retenção e arquivamento de logs antigos.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar retenção e arquivamento de logs antigos."
+            }
+        ]
+    },
+    {
+        "num": "C19",
+        "title": "Ciclo de Implementação BirtHub 19",
+        "subtitle": "Fase de estabilização e melhorias 19",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 91,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Adicionar constraints de integridade faltantes por domínio.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Adicionar constraints de integridade faltantes por domínio."
+            },
+            {
+                "id": 92,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Criar política de soft-delete/auditoria para entidades críticas.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Criar política de soft-delete/auditoria para entidades críticas."
+            },
+            {
+                "id": 93,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Implementar seed determinístico para ambientes de teste.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar seed determinístico para ambientes de teste."
+            },
+            {
+                "id": 94,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Criar política de backup e restore testado periodicamente.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Criar política de backup e restore testado periodicamente."
+            },
+            {
+                "id": 95,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Definir data quality checks automáticos.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Definir data quality checks automáticos."
+            }
+        ]
+    },
+    {
+        "num": "C20",
+        "title": "Ciclo de Implementação BirtHub 20",
+        "subtitle": "Fase de estabilização e melhorias 20",
+        "agents": [
+            "jules",
+            "codex"
+        ],
+        "items": [
+            {
+                "id": 96,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Implementar página de pipeline de vendas com filtros.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar página de pipeline de vendas com filtros."
+            },
+            {
+                "id": 97,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Implementar health score board de clientes.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar health score board de clientes."
+            },
+            {
+                "id": 98,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Implementar visão financeira (MRR, churn, inadimplência).",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar visão financeira (MRR, churn, inadimplência)."
+            },
+            {
+                "id": 99,
+                "agent": "jules",
+                "project": "birthub",
+                "title": "Implementar tela de analytics/attribution.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Jules: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar tela de analytics/attribution."
+            },
+            {
+                "id": 100,
+                "agent": "codex",
+                "project": "birthub",
+                "title": "Implementar tela de contratos e status de assinatura.",
+                "desc": "Implementação e revisão focada na arquitetura SAAS BirtHub 360",
+                "prompt": "Codex: Como especialista na plataforma BirtHub 360, elabore e implemente: Implementar tela de contratos e status de assinatura."
+            }
+        ]
+    }
+];
+
+// ═══════════════════════════════════════════════════════
+// STATE MANAGEMENT
+// ═══════════════════════════════════════════════════════
+
+const STORAGE_KEY = 'master_prompt_status_v2';
+
+function loadState() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  } catch { return {}; }
+}
+
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+let state = loadState();
+
+function getItemStatus(id) {
+  return state[id] || 'red';
+}
+
+function cycleStatus(id) {
+  const current = getItemStatus(id);
+  const next = current === 'red' ? 'yellow' : current === 'yellow' ? 'green' : 'red';
+  state[id] = next;
+  saveState(state);
+  return next;
+}
+
+function resetAll() {
+  if (!confirm('Resetar TODOS os 100 itens para vermelho (não implementado)?')) return;
+  state = {};
+  saveState(state);
+  renderAll();
+}
+
+// ═══════════════════════════════════════════════════════
+// FILTER STATE
+// ═══════════════════════════════════════════════════════
+
+let filters = { project: 'all', agent: 'all-agent', status: 'all-status' };
+
+// ═══════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════
+
+function renderAll() {
+  const container = document.getElementById('cycles-container');
+  container.innerHTML = '';
+
+  CYCLES.forEach(cycle => {
+    const block = document.createElement('div');
+    block.className = 'cycle-block';
+    block.id = `cycle-${cycle.num}`;
+
+    // Count progress
+    const counts = { red: 0, yellow: 0, green: 0 };
+    cycle.items.forEach(item => counts[getItemStatus(item.id)]++);
+    const greenPct = (counts.green / cycle.items.length) * 100;
+
+    block.innerHTML = `
+      <div class="cycle-header" onclick="toggleCycle('${cycle.num}')">
+        <div class="cycle-num">${cycle.num}</div>
+        <div>
+          <div class="cycle-title">${cycle.title}</div>
+          <div class="cycle-subtitle">${cycle.subtitle}</div>
+        </div>
+        <div class="cycle-agents">
+          ${cycle.agents.includes('jules') ? '<span class="agent-pip jules">JULES</span>' : ''}
+          ${cycle.agents.includes('codex') ? '<span class="agent-pip codex">CODEX</span>' : ''}
+        </div>
+        <div class="cycle-progress">
+          <span style="font-size:10px;color:var(--muted)">${counts.green}/${cycle.items.length} ✓</span>
+          <div class="cycle-progress-bar"><div class="cycle-progress-fill" style="width:${greenPct}%"></div></div>
+        </div>
+        <span class="cycle-toggle">▼</span>
+      </div>
+      <div class="cycle-items" id="cycle-items-${cycle.num}">
+        ${cycle.items.map(item => renderItem(item)).join('')}
+      </div>
+    `;
+
+    container.appendChild(block);
+  });
+
+  updateStats();
+  applyFilters();
+}
+
+function renderItem(item) {
+  const status = getItemStatus(item.id);
+  const statusLabel = { red: '● NÃO IMPLEMENTADO', yellow: '● EM MELHORIA', green: '● PRONTO PARA PROD' }[status];
+  const numStr = String(item.id).padStart(3, '0');
+
+  return `
+    <div class="item-row" data-id="${item.id}" data-status="${status}" data-agent="${item.agent}" data-project="${item.project}"
+      onclick="expandItem(event, ${item.id})">
+      <span class="item-status-label">${statusLabel} — clique no ● para avançar</span>
+      <span class="item-num">#${numStr}</span>
+      <div class="item-status-dot" onclick="event.stopPropagation(); advanceItem(${item.id})"></div>
+      <span class="item-agent ${item.agent}">${item.agent.toUpperCase()}</span>
+      <div class="item-content">
+        <div class="item-title">${item.title}</div>
+        <div class="item-desc">${item.desc}</div>
+        <div class="item-prompt">
+          <div class="prompt-label">// PROMPT PARA ${item.agent.toUpperCase()}</div>
+          <div class="prompt-text">${item.prompt}</div>
+        </div>
+      </div>
+      <span class="item-project">${item.project.toUpperCase()}</span>
+      <span class="item-expand">▸ PROMPT</span>
+    </div>
+  `;
+}
+
+function advanceItem(id) {
+  const newStatus = cycleStatus(id);
+  const rows = document.querySelectorAll(`.item-row[data-id="${id}"]`);
+  rows.forEach(row => {
+    row.dataset.status = newStatus;
+  });
+  updateStats();
+  applyFilters();
+}
+
+function expandItem(e, id) {
+  const row = e.currentTarget;
+  row.classList.toggle('expanded');
+}
+
+function toggleCycle(num) {
+  const block = document.getElementById(`cycle-${num}`);
+  block.classList.toggle('collapsed');
+}
+
+// ═══════════════════════════════════════════════════════
+// FILTER
+// ═══════════════════════════════════════════════════════
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const type = this.dataset.filterType;
+    const val = this.dataset.filterVal;
+
+    // Toggle active in group
+    document.querySelectorAll(`.filter-btn[data-filter-type="${type}"]`).forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+
+    filters[type] = val;
+    applyFilters();
+  });
+});
+
+function applyFilters() {
+  const { project, agent, status } = filters;
+
+  document.querySelectorAll('.item-row').forEach(row => {
+    const rProject = row.dataset.project;
+    const rAgent = row.dataset.agent;
+    const rStatus = row.dataset.status;
+
+    const pMatch = project === 'all' || project === 'all-projects' || rProject === project || rProject === 'all-projects';
+    const aMatch = agent === 'all-agent' || rAgent === agent;
+    const sMatch = status === 'all-status' || rStatus === status;
+
+    row.classList.toggle('filter-hidden', !(pMatch && aMatch && sMatch));
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════════════════════
+
+function updateStats() {
+  let counts = { red: 0, yellow: 0, green: 0 };
+  let projCounts = { vagas: {r:0,y:0,g:0}, leads: {r:0,y:0,g:0}, jus: {r:0,y:0,g:0}, birthub: {r:0,y:0,g:0}, catarina: {r:0,y:0,g:0} };
+
+  CYCLES.forEach(cycle => {
+    cycle.items.forEach(item => {
+      const s = getItemStatus(item.id);
+      counts[s === 'red' ? 'red' : s === 'yellow' ? 'yellow' : 'green']++;
+
+      // Project attribution
+
+    });
+  });
+
+  document.getElementById('stat-red').textContent = counts.red;
+  document.getElementById('stat-yellow').textContent = counts.yellow;
+  document.getElementById('stat-green').textContent = counts.green;
+  const pct = Math.round((counts.green / 100) * 100);
+  document.getElementById('stat-pct').textContent = pct + '%';
+
+  document.getElementById('bar-red').style.width = counts.red + '%';
+  document.getElementById('bar-yellow').style.width = counts.yellow + '%';
+  document.getElementById('bar-green').style.width = counts.green + '%';
+  document.getElementById('bar-pct').style.width = pct + '%';
+
+  // Update cycle headers
+  CYCLES.forEach(cycle => {
+    const block = document.getElementById(`cycle-${cycle.num}`);
+    if (!block) return;
+    const c = { red: 0, yellow: 0, green: 0 };
+    cycle.items.forEach(item => c[getItemStatus(item.id) === 'red' ? 'red' : getItemStatus(item.id) === 'yellow' ? 'yellow' : 'green']++);
+    const gPct = (c.green / cycle.items.length) * 100;
+    const fill = block.querySelector('.cycle-progress-fill');
+    const label = block.querySelector('.cycle-progress span');
+    if (fill) fill.style.width = gPct + '%';
+    if (label) label.textContent = `${c.green}/${cycle.items.length} ✓`;
+  });
+
+  // Footer
+  document.getElementById('footer-ts').textContent = `// LAST UPDATE: ${new Date().toLocaleString('pt-BR')} · ${counts.green}/100 COMPLETE`;
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+renderAll();
+</script>
+</body>
+</html>
